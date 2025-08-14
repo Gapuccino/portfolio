@@ -1,0 +1,185 @@
+{
+  "basics": {
+    "name": "Sergio Gabriel Rueda Piñón",
+    "label": "Desarrollador Web",
+    "image": "/profile.jpg",
+    "email": "gabrielpin2121@gmail.com",
+    "phone": "+52 55 4307 4944",
+    "url": "",
+    "summary": "Egresado de Ciencias de la Informática con sólida base técnica en desarrollo web, bases de datos y programación orientada a objetos. Experiencia en metodologías ágiles como Scrum, herramientas de gestión de proyectos y desarrollo de interfaces responsivas. Comprometido con el aprendizaje continuo y la innovación tecnológica.",
+    "location": {
+      "address": "Las Peñas, C.P. 09750",
+      "postalCode": "09750",
+      "city": "Iztapalapa, Ciudad de México",
+      "countryCode": "MX",
+      "region": "México"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "Gapuccino",
+        "url": "https://github.com/Gapuccino"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "gabrielruedapiñón",
+        "url": "https://www.linkedin.com/in/gabrielruedapi%C3%B1%C3%B3n"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "INEA CDMX",
+      "position": "Auxiliar de Desarrollo Web (Servicio Social)",
+      "url": "",
+      "startDate": "2025-02-17",
+      "endDate": "2025-07-31",
+      "summary": "Desarrollo e implementación de módulos web accesibles y optimización de carga de contenido educativo.",
+      "highlights": [
+        "Implementación de módulos web con React, HTML5 y CSS3",
+        "Optimización de carga en un 40% utilizando Strapi CMS",
+        "Desarrollo de interfaces responsivas para más de 500 usuarios",
+        "Gestión de requerimientos y seguimiento de tareas bajo Scrum"
+      ]
+    },
+    {
+      "name": "Human Group / AFISCO",
+      "position": "Auxiliar en Contabilidad",
+      "url": "",
+      "startDate": "2024-05-01",
+      "endDate": "2024-12-31",
+      "summary": "Automatización y gestión de procesos contables y administrativos.",
+      "highlights": [
+        "Automatización de procesos contables con SQL Server",
+        "Gestión de más de 200 registros laborales y facturación fiscal",
+        "Coordinación de pagos IMSS/INFONAVIT para 15 empresas"
+      ]
+    }
+  ],
+  "volunteer": [],
+  "education": [
+    {
+      "institution": "UPIICSA - Instituto Politécnico Nacional",
+      "url": "",
+      "area": "Ciencias de la Informática",
+      "studyType": "Licenciatura",
+      "startDate": "2021-08-01",
+      "endDate": "2025-07-31",
+      "score": "",
+      "courses": []
+    },
+    {
+      "institution": "CECyT 12 José María Morelos - Instituto Politécnico Nacional",
+      "url": "",
+      "area": "Técnico en Informática",
+      "studyType": "Técnico",
+      "startDate": "2017-01-01",
+      "endDate": "2020-12-31",
+      "score": "",
+      "courses": []
+    }
+  ],
+  "awards": [],
+  "certificates": [],
+  "publications": [],
+  "skills": [
+    {
+      "name": "Desarrollo Web",
+      "level": "Intermedio",
+      "keywords": [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "React",
+        "Diseño responsivo",
+        "REST API"
+      ]
+    },
+    {
+      "name": "Bases de Datos",
+      "level": "Intermedio",
+      "keywords": [
+        "SQL Server",
+        "PostgreSQL",
+        "MySQL",
+        "Access"
+      ]
+    },
+    {
+      "name": "Herramientas de Gestión",
+      "level": "Intermedio",
+      "keywords": [
+        "Trello",
+        "Jira",
+        "Microsoft Project",
+        "Confluence",
+        "Monday"
+      ]
+    }
+  ],
+  "languages": [
+    { "language": "Español", "fluency": "Nativo" },
+    { "language": "Inglés", "fluency": "Intermedio (B1)" }
+  ],
+  "interests": [
+    {
+      "name": "Tecnología",
+      "keywords": [
+        "Desarrollo Web",
+        "Automatización",
+        "Gestión de Proyectos"
+      ]
+    }
+  ],
+  "references": [],
+  "projects": [
+    {
+      "name": "Sistema web de compraventa de inmuebles – UPIICSA",
+      "startDate": "2025-01-01",
+      "endDate": "2025-07-31",
+      "description": "Sistema web académico para compraventa de inmuebles con gestión de backlog y sprints bajo metodología Scrum.",
+      "highlights": [
+        "Liderazgo de equipo de 5 personas",
+        "Planificación, desarrollo, pruebas funcionales y entrega final"
+      ],
+      "url": "",
+      "technologies": ["Scrum", "JavaScript", "HTML5", "CSS3"]
+    },
+    {
+      "name": "Plataforma educativa web – INEA CDMX",
+      "startDate": "2025-01-01",
+      "endDate": "2025-07-31",
+      "description": "Plataforma educativa para más de 500 usuarios con módulos accesibles y diseño responsivo.",
+      "highlights": [
+        "Implementación con React, HTML5 y CSS3",
+        "Optimización de carga con Strapi CMS"
+      ],
+      "url": "https://inea-web-frontend.vercel.app/",
+      "technologies": ["React", "HTML5", "CSS3", "Strapi"]
+    },
+    {
+      "name": "Portafolio Minimalista",
+      "startDate": "2025-08-01",
+      "endDate": "",
+      "description": "Sitio personal minimalista generado desde un cv.json central usando Astro.",
+      "highlights": [
+        "Generación dinámica de secciones desde JSON",
+        "Diseño limpio y accesible"
+      ],
+      "url": "",
+      "technologies": ["Astro", "TypeScript", "CSS"]
+    }
+  ],
+  "techStack": [
+    { "name": "React", "level": "Intermedio", "category": "Frontend" },
+    { "name": "HTML5", "level": "Avanzado", "category": "Frontend" },
+    { "name": "CSS3", "level": "Avanzado", "category": "Frontend" },
+    { "name": "JavaScript", "level": "Intermedio", "category": "Frontend" },
+    { "name": "Astro", "level": "Intermedio", "category": "Frontend" },
+    { "name": "Tailwind", "level": "Intermedio", "category": "Estilos" },
+    { "name": "Strapi", "level": "Básico", "category": "Backend / CMS" },
+    { "name": "PostgreSQL", "level": "Intermedio", "category": "Bases de Datos" },
+    { "name": "SQL Server", "level": "Intermedio", "category": "Bases de Datos" },
+    { "name": "Git", "level": "Intermedio", "category": "Control de Versiones" }
+  ]
+}
