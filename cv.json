@@ -2,7 +2,7 @@
   "basics": {
     "name": "Sergio Gabriel Rueda Piñón",
     "label": "Desarrollador Web",
-    "image": "/profile.jpg",
+    "image": "/img.jpg",
     "email": "gabrielpin2121@gmail.com",
     "phone": "+52 55 4307 4944",
     "url": "",
@@ -135,14 +135,12 @@
   "projects": [
     {
       "name": "Sistema web de compraventa de inmuebles – UPIICSA",
-      "startDate": "2025-01-01",
-      "endDate": "2025-07-31",
+      "url": "https://bienes-raices-five-olive.vercel.app/",
       "description": "Sistema web académico para compraventa de inmuebles con gestión de backlog y sprints bajo metodología Scrum.",
       "highlights": [
         "Liderazgo de equipo de 5 personas",
         "Planificación, desarrollo, pruebas funcionales y entrega final"
       ],
-      "url": "",
       "technologies": ["Scrum", "JavaScript", "HTML5", "CSS3"]
     },
     {
@@ -168,6 +166,17 @@
       ],
       "url": "",
       "technologies": ["Astro", "TypeScript", "CSS"]
+    },
+    {
+      "name": "Festival de Música",
+      "url": "https://festivalms.vercel.app/",
+      "description": "Sitio web para un festival de música, con información de artistas, horarios y compra de boletos.",
+      "highlights": [
+        "Diseño responsivo y atractivo",
+        "Integración de agenda de eventos y perfiles de artistas",
+        "Funcionalidad de compra de boletos en línea"
+      ],
+      "technologies": ["Astro", "JavaScript", "CSS3"]
     }
   ],
   "techStack": [
