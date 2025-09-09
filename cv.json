@@ -138,7 +138,6 @@
       "url": "https://bienes-raices-five-olive.vercel.app/",
       "description": "Sistema web académico para compraventa de inmuebles con gestión de backlog y sprints bajo metodología Scrum.",
       "highlights": [
-        "Liderazgo de equipo de 5 personas",
         "Planificación, desarrollo, pruebas funcionales y entrega final"
       ],
       "technologies": ["Scrum", "JavaScript", "HTML5", "CSS3"]
@@ -180,15 +179,14 @@
     }
   ],
   "techStack": [
-    { "name": "React", "level": "Intermedio", "category": "Frontend" },
-    { "name": "HTML5", "level": "Avanzado", "category": "Frontend" },
-    { "name": "CSS3", "level": "Avanzado", "category": "Frontend" },
-    { "name": "JavaScript", "level": "Intermedio", "category": "Frontend" },
-    { "name": "Astro", "level": "Intermedio", "category": "Frontend" },
-    { "name": "Tailwind", "level": "Intermedio", "category": "Estilos" },
-    { "name": "Strapi", "level": "Básico", "category": "Backend / CMS" },
-    { "name": "PostgreSQL", "level": "Intermedio", "category": "Bases de Datos" },
-    { "name": "SQL Server", "level": "Intermedio", "category": "Bases de Datos" },
-    { "name": "Git", "level": "Intermedio", "category": "Control de Versiones" }
+    { "name": "React", "category": "Frontend" },
+    { "name": "HTML5", "category": "Frontend" },
+    { "name": "CSS3", "category": "Frontend" },
+    { "name": "JavaScript", "category": "Frontend" },
+    { "name": "Astro", "category": "Frontend" },
+    { "name": "Python", "category": "Backend" },
+    { "name": "Strapi", "category": "Backend / CMS" },
+    { "name": "SQL Server", "category": "Bases de Datos" },
+    { "name": "Git", "category": "Control de Versiones" }
   ]
 }
