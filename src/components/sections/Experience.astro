@@ -1,7 +1,22 @@
 ---
-import Section from "../Section.astro"
+import Section from "../Section.astro";
 
-import { work } from "@cv"
+import { work } from "@cv";
+
+const METRO_SITES = [
+  { url: "https://www.publimetro.com.mx/", logo: "/iconos/PUBLIMETRO_MX.webp" },
+  { url: "https://www.publimetro.co/", logo: "/iconos/PUBLIMETRO_CO.webp" },
+  { url: "https://www.metroecuador.com.ec/", logo: "/iconos/METRO_EC.webp" },
+  { url: "https://www.publimetro.cl/", logo: "/iconos/PUBLIMETRO_CL.webp" },
+  { url: "https://www.publinews.gt/", logo: "/iconos/PUBLINEWS.webp" },
+  { url: "https://www.fayerwayer.com/", logo: "/iconos/FAYERWAYER.webp" },
+  { url: "https://www.nuevamujer.com/", logo: "/iconos/NUEVAMUJER.webp" },
+  { url: "https://www.ferplei.com/", logo: "/iconos/FERPLEI.webp" },
+  { url: "https://www.elcalce.com/", logo: "/iconos/ELCALCE.webp" },
+  { url: "https://www.metroworldnews.com/", logo: "/iconos/MWN_ICON.webp" },
+  { url: "https://www.metro.pr/", logo: "/iconos/METRO_PR.webp" },
+  { url: "https://www.sagrosso.com/", logo: "/iconos/SAGROSSO.webp" },
+];
 ---
 
 <Section title="Experiencia laboral">
@@ -9,9 +24,9 @@ import { work } from "@cv"
     {
       work.map(
         ({ name, startDate, endDate, position, summary, highlights, url }) => {
-          const startYear = new Date(startDate).getFullYear()
+          const startYear = new Date(startDate).getFullYear();
           const endYear =
-            endDate != null ? new Date(endDate).getFullYear() : "Actual"
+            endDate != null ? new Date(endDate).getFullYear() : "Actual";
 
           return (
             <li>
@@ -19,24 +34,30 @@ import { work } from "@cv"
                 <header>
                   <div>
                     <h3>
-                      <a href={url} title={`Ver ${name}`} target="_blank">
-                        {name}
-                      </a>
+                      {name === "Metro World News (Publimetro)" ? (
+                        <button
+                          class="metro-trigger"
+                          type="button"
+                          title={`Ver sitios de ${name}`}
+                        >
+                          {name}
+                        </button>
+                      ) : (
+                        <a href={url} title={`Ver ${name}`} target="_blank">
+                          {name}
+                        </a>
+                      )}
                     </h3>
                     <h4>{position}</h4>
                   </div>
 
                   <div>
-                    <time 
-                      datetime={startDate}
-                      data-title={startDate}>
-                        {startYear}
+                    <time datetime={startDate} data-title={startDate}>
+                      {startYear}
                     </time>
                     {" - "}
-                    <time 
-                      datetime={endDate}
-                      data-title={endDate}>
-                        {endYear}
+                    <time datetime={endDate} data-title={endDate}>
+                      {endYear}
                     </time>
                   </div>
                 </header>
@@ -46,12 +67,76 @@ import { work } from "@cv"
                 </footer>
               </article>
             </li>
-          )
-        }
+          );
+        },
       )
     }
   </ul>
+
+  <dialog id="metro-modal">
+    <div class="modal-wrapper" style="position: relative;">
+      <button
+        id="close-metro-btn"
+        type="button"
+        style="position: absolute; top: 25px; right: 5px; background: #e11d48; color: white; border: 2px solid white; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 99999; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"
+        onclick="document.getElementById('metro-modal').close(); document.body.style.overflow='';"
+      >
+        &times;
+      </button>
+      <div class="modal-content">
+        <header>
+          <img src="/MWN.png" alt="Metro World News" />
+        </header>
+        <ul class="sites-grid">
+          {
+            METRO_SITES.map((site) => (
+              <li>
+                <a
+                  href={site.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={site.url}
+                >
+                  <span class="site-link-text">
+                    {site.url
+                      .replace("https://www.", "")
+                      .replace("https://", "")
+                      .replace("/", "")}
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </dialog>
 </Section>
+
+<script is:inline>
+  function setupMetroModal() {
+    const dialog = document.getElementById("metro-modal");
+    const trigger = document.querySelector(".metro-trigger");
+
+    if (!dialog || !trigger) return;
+
+    trigger.onclick = (e) => {
+      e.preventDefault();
+      dialog.showModal();
+      document.body.style.overflow = "hidden";
+    };
+
+    dialog.onclick = (e) => {
+      if (e.target === dialog) {
+        dialog.close();
+        document.body.style.overflow = "";
+      }
+    };
+  }
+
+  setupMetroModal();
+  document.addEventListener("astro:page-load", setupMetroModal);
+</script>
 
 <style>
   ul {
@@ -65,12 +150,22 @@ import { work } from "@cv"
     color: #111;
   }
 
-  article a {
+  article a,
+  .metro-trigger {
     color: #111;
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    transition: color 0.2s ease;
   }
 
-  article a:hover {
+  article a:hover,
+  .metro-trigger:hover {
     text-decoration: underline;
+    color: #444;
   }
 
   article h4 {
@@ -102,10 +197,15 @@ import { work } from "@cv"
     content: attr(data-title);
     background-color: #333;
     color: #fff;
-    font-size: .75rem;
-    font-family: Menlo, Monaco, Lucida Console, "Courier New", monospace;;
+    font-size: 0.75rem;
+    font-family:
+      Menlo,
+      Monaco,
+      Lucida Console,
+      "Courier New",
+      monospace;
     position: absolute;
-    padding: .2rem .5rem;
+    padding: 0.2rem 0.5rem;
     bottom: -1.4rem;
     left: 50%;
     white-space: nowrap;
@@ -124,6 +224,137 @@ import { work } from "@cv"
   @media (width <= 700px) {
     time {
       text-align: right;
+    }
+  }
+
+  /* Modal Styles */
+  dialog {
+    display: none;
+    border: none;
+    background: transparent;
+    max-width: 95vw;
+    width: 600px;
+    max-height: 95vh;
+    overflow: visible;
+    padding: 0;
+  }
+
+  dialog[open] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  dialog::backdrop {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(12px);
+  }
+
+  .modal-wrapper {
+    position: relative;
+    padding: 40px 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-height: 80vh;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .modal-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+    padding: 1.5rem;
+    margin-bottom: 0;
+    background: #fff;
+  }
+
+  .modal-content img {
+    height: 100px; /* Much larger */
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto; /* Center it */
+  }
+
+  #close-modal {
+    background: #f5f5f5;
+    border: none;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #666;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  #close-modal:hover {
+    background: #e0e0e0;
+    color: #000;
+  }
+
+  .sites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 1.5rem;
+    list-style: none;
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  .sites-grid li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    height: 80px;
+  }
+
+  .sites-grid li a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-color: #ddd;
+  }
+
+  .site-link-text {
+    font-size: 0.9rem;
+    color: #444;
+    font-weight: 500;
+    text-align: center;
+    word-break: break-all;
+  }
+
+  .sites-grid li a:hover .site-link-text {
+    color: #000;
+  }
+
+  @media (max-width: 500px) {
+    .sites-grid {
+      grid-template-columns: 1fr 1fr;
     }
   }
 </style>

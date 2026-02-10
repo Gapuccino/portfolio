@@ -1,12 +1,12 @@
 {
   "basics": {
     "name": "Sergio Gabriel Rueda Piñón",
-    "label": "Desarrollador Web",
+    "label": "Desarrollador Frontend",
     "image": "/img.jpg",
     "email": "gabrielpin2121@gmail.com",
     "phone": "+52 55 4307 4944",
     "url": "",
-    "summary": "Egresado de Ciencias de la Informática con sólida base técnica en desarrollo web, bases de datos y programación orientada a objetos. Experiencia en metodologías ágiles como Scrum, herramientas de gestión de proyectos y desarrollo de interfaces responsivas. Comprometido con el aprendizaje continuo y la innovación tecnológica.",
+    "summary": "Desarrollador Web y Licenciado en Ciencias de la Informática, especializado en la construcción de interfaces modernas y optimizadas. Experiencia en el desarrollo de componentes escalables, mantenimiento de sitios de alto tráfico y mejora de rendimiento (Core Web Vitals). Competente en la integración de Frontend con lógica de Backend y manejo de CMS empresariales. Enfocado en la capacidad de análisis, calidad de código y buenas prácticas.",
     "location": {
       "address": "Las Peñas, C.P. 09750",
       "postalCode": "09750",
@@ -29,30 +29,42 @@
   },
   "work": [
     {
+      "name": "Metro World News (Publimetro)",
+      "position": "Desarrollador Web / Frontend.",
+      "url": "",
+      "startDate": "2025-09-23",
+      "endDate": null,
+      "summary": "Desarrollo de componentes y optimización de rendimiento web para 13 sitios de alto tráfico.",
+      "highlights": [
+        "Desarrollo de Custom Blocks en React 18 dentro de Arc XP",
+        "Optimización WPO para 13 sitios, mejorando LCP, TBT y CLS",
+        "Depuración técnica y documentación para entornos productivos"
+      ]
+    },
+    {
       "name": "INEA CDMX",
-      "position": "Auxiliar de Desarrollo Web (Servicio Social)",
+      "position": "Desarrollador Frontend (Servicio Social)",
       "url": "",
       "startDate": "2025-02-17",
-      "endDate": "2025-07-31",
-      "summary": "Desarrollo e implementación de módulos web accesibles y optimización de carga de contenido educativo.",
+      "endDate": "2025-08-31",
+      "summary": "Desarrollo e implementación de interfaces responsivas y optimización de carga de contenido educativo.",
       "highlights": [
-        "Implementación de módulos web con React, HTML5 y CSS3",
-        "Optimización de carga en un 40% utilizando Strapi CMS",
-        "Desarrollo de interfaces responsivas para más de 500 usuarios",
-        "Gestión de requerimientos y seguimiento de tareas bajo Scrum"
+        "Desarrollo de interfaces responsivas con React, HTML5 y CSS3",
+        "Integración con Strapi reduciendo 40% el tiempo de carga",
+        "Participación en actividades ágiles y control de entregables"
       ]
     },
     {
       "name": "Human Group / AFISCO",
-      "position": "Auxiliar en Contabilidad",
+      "position": "Auxiliar en Automatización de Datos",
       "url": "",
       "startDate": "2024-05-01",
       "endDate": "2024-12-31",
-      "summary": "Automatización y gestión de procesos contables y administrativos.",
+      "summary": "Automatización y gestión de procesos de datos y registros administrativos.",
       "highlights": [
-        "Automatización de procesos contables con SQL Server",
-        "Gestión de más de 200 registros laborales y facturación fiscal",
-        "Coordinación de pagos IMSS/INFONAVIT para 15 empresas"
+        "Automatización con SQL Server reduciendo errores en 25%",
+        "Gestión técnica de registros de +200 usuarios",
+        "Reportes internos y validación de datos"
       ]
     }
   ],
@@ -84,36 +96,70 @@
   "publications": [],
   "skills": [
     {
-      "name": "Desarrollo Web",
-      "level": "Intermedio",
+      "name": "Frontend",
+      "level": "Intermedio-Avanzado",
       "keywords": [
+        "React 18",
+        "JavaScript (ES6+)",
+        "jQuery",
         "HTML5",
         "CSS3",
-        "JavaScript",
-        "React",
-        "Diseño responsivo",
-        "REST API"
+        "Bootstrap",
+        "Astro"
+      ]
+    },
+    {
+      "name": "Backend",
+      "level": "Intermedio",
+      "keywords": [
+        "Python",
+        "REST APIs"
       ]
     },
     {
       "name": "Bases de Datos",
       "level": "Intermedio",
       "keywords": [
-        "SQL Server",
-        "PostgreSQL",
         "MySQL",
-        "Access"
+        "SQL Server"
       ]
     },
     {
-      "name": "Herramientas de Gestión",
+      "name": "CMS",
       "level": "Intermedio",
       "keywords": [
-        "Trello",
-        "Jira",
-        "Microsoft Project",
-        "Confluence",
-        "Monday"
+        "Arc XP",
+        "Strapi"
+
+      ]
+    },
+    {
+      "name": "Performance",
+      "level": "Intermedio",
+      "keywords": [
+        "Core Web Vitals (LCP, TBT, CLS)",
+        "Lighthouse",
+        "PageSpeed Insights"
+      ]
+    },
+    {
+      "name": "Herramientas",
+      "level": "Intermedio",
+      "keywords": [
+        "Git",
+        "GitHub",
+        "VS Code",
+        "Linux",
+        "Docker",
+        "AWS"
+      ]
+    },
+    {
+      "name": "Metodologías",
+      "level": "Intermedio",
+      "keywords": [
+        "Scrum",
+        "Kanban"
       ]
     }
   ],
@@ -134,13 +180,69 @@
   "references": [],
   "projects": [
     {
+      "name": "Metro Push Notifications",
+      "url": "",
+      "description": "Aplicación web para la gestión y envío de notificaciones push mediante Firebase Cloud Messaging (FCM).",
+      "highlights": [
+        "Integración de Firebase Cloud Messaging para notificaciones en tiempo real",
+        "Implementación de Service Workers para manejo de mensajes en segundo plano",
+        "Sistema de control de cuotas diarias por usuario usando LocalStorage",
+        "Interfaz dinámica con previsualización reactiva y animaciones con Framer Motion"
+      ],
+      "technologies": ["Astro", "React", "Tailwind CSS", "Firebase", "Framer Motion"],
+      "images": [
+        "/Noti.jpeg",
+        "/noti/WhatsApp Image 2026-02-10 at 8.11.31 AM.jpeg",
+        "/noti/WhatsApp Image 2026-02-10 at 8.11.49 AM.jpeg",
+        "/noti/WhatsApp Image 2026-02-10 at 8.12.05 AM.jpeg"
+      ]
+    },
+    {
+      "name": "Sistema de Fichajes de Fútbol",
+      "url": "https://www.metroecuador.com.ec/deportes/fichajes/",
+      "additionalLinks": [
+        { "label": "Ver Exterior", "url": "https://www.metroecuador.com.ec/deportes/exterior/" }
+      ],
+      "description": "Aplicación web integral para la gestión del mercado de fichajes y seguimiento de jugadores ecuatorianos en el exterior.",
+      "highlights": [
+        "Arquitectura híbrida con renderizado en el servidor (SSR)",
+        "Sistema de autenticación segura y protección de rutas",
+        "Endpoints API para integración con ArcXP",
+        "Gestión de datos normalizados en PostgreSQL"
+      ],
+      "technologies": ["Astro", "TypeScript", "Tailwind CSS", "PostgreSQL", "Drizzle ORM", "Lucia Auth"],
+      "images": [
+        "/fichajes/image.png",
+        "/fichajes/image copy.png",
+        "/fichajes/image copy 2.png",
+        "/fichajes/image copy 3.png"
+      ]
+    },
+    {
+      "name": "Publimetro Shortener",
+      "url": "",
+      "description": "Acortador de URLs para Publimetro con dashboard administrativo y sistema de autenticación.",
+      "highlights": [
+        "Arquitectura desacoplada: Backend en FastAPI y Frontend en Astro",
+        "Dashboard interactivo para creación y gestión de links",
+        "Acceso protegido por contraseña administrativa",
+        "Almacenamiento ligero y eficiente con SQLite"
+      ],
+      "technologies": ["FastAPI", "Python", "Astro", "SQLite"],
+      "images": [
+        "/shortener/login.png",
+        "/shortener/dash.png"
+      ]
+    },
+    {
       "name": "Sistema web de compraventa de inmuebles – UPIICSA",
       "url": "https://bienes-raices-five-olive.vercel.app/",
       "description": "Sistema web académico para compraventa de inmuebles con gestión de backlog y sprints bajo metodología Scrum.",
       "highlights": [
         "Planificación, desarrollo, pruebas funcionales y entrega final"
       ],
-      "technologies": ["Scrum", "JavaScript", "HTML5", "CSS3"]
+      "technologies": ["Scrum", "JavaScript", "HTML5", "CSS3"],
+      "images": ["/bienes.png"]
     },
     {
       "name": "Plataforma educativa web – INEA CDMX",
@@ -152,7 +254,8 @@
         "Optimización de carga con Strapi CMS"
       ],
       "url": "https://inea-web-frontend.vercel.app/",
-      "technologies": ["React", "HTML5", "CSS3", "Strapi"]
+      "technologies": ["React", "HTML5", "CSS3", "Strapi"],
+      "images": ["/inea.png"]
     },
     {
       "name": "Portafolio Minimalista",
@@ -164,7 +267,8 @@
         "Diseño limpio y accesible"
       ],
       "url": "",
-      "technologies": ["Astro", "TypeScript", "CSS"]
+      "technologies": ["Astro", "TypeScript", "CSS"],
+      "images": ["/portafolio.png"]
     },
     {
       "name": "Festival de Música",
@@ -175,18 +279,33 @@
         "Integración de agenda de eventos y perfiles de artistas",
         "Funcionalidad de compra de boletos en línea"
       ],
-      "technologies": ["Astro", "JavaScript", "CSS3"]
+      "technologies": ["Astro", "JavaScript", "CSS3"],
+      "images": ["/festival.png"]
     }
   ],
   "techStack": [
     { "name": "React", "category": "Frontend" },
+    { "name": "JavaScript", "category": "Frontend" },
+    { "name": "jQuery", "category": "Frontend" },
     { "name": "HTML5", "category": "Frontend" },
     { "name": "CSS3", "category": "Frontend" },
-    { "name": "JavaScript", "category": "Frontend" },
+    { "name": "Bootstrap", "category": "Frontend" },
     { "name": "Astro", "category": "Frontend" },
     { "name": "Python", "category": "Backend" },
-    { "name": "Strapi", "category": "Backend / CMS" },
+
+    { "name": "MySQL", "category": "Bases de Datos" },
     { "name": "SQL Server", "category": "Bases de Datos" },
-    { "name": "Git", "category": "Control de Versiones" }
+    { "name": "Arc XP", "category": "CMS" },
+    { "name": "Strapi", "category": "CMS" },
+
+    { "name": "Git", "category": "Herramientas" },
+    { "name": "GitHub", "category": "Herramientas" },
+    { "name": "Docker", "category": "Herramientas" },
+    { "name": "AWS", "category": "Herramientas" },
+    { "name": "Linux", "category": "Herramientas" },
+    { "name": "PostgreSQL", "category": "Bases de Datos" },
+    { "name": "Tailwind CSS", "category": "Frontend" },
+    { "name": "FastAPI", "category": "Backend" },
+    { "name": "SQLite", "category": "Bases de Datos" }
   ]
 }

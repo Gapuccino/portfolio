@@ -1,7 +1,7 @@
 ---
 import GitHub from "@/icons/GitHub.astro";
 import Section from "../Section.astro";
-import cv from "@cv"; // si @cv apunta al json directamente
+import cv from "@cv";
 
 interface Project {
   name: string;
@@ -10,66 +10,223 @@ interface Project {
   highlights?: string[];
   isActive?: boolean;
   github?: string;
+  iframe?: string;
+  images?: string[];
+  additionalLinks?: { label: string; url: string }[];
 }
 
 const { projects = [] } = cv as { projects?: Project[] };
 const list = (projects || []) as Project[];
+
+const PROJECT_IMAGES: Record<string, string> = {
+  "Publimetro Shortener": "/shortener/dash.png",
+  "Sistema web de compraventa de inmuebles – UPIICSA": "/bienes.png",
+  "Plataforma educativa web – INEA CDMX": "/inea.png",
+  "Festival de Música": "/festival.png",
+  "Portafolio Minimalista": "/portafolio.png",
+  "Sistema de Fichajes de Fútbol": "/fichajes.png",
+  "Metro Push Notifications": "/Noti.jpeg",
+};
 ---
 
 <Section title="Proyectos">
   <ul>
     {
-      list.length === 0 ? (
-        <li>
-          <small style="opacity:.6">Sin proyectos aún.</small>
-        </li>
-      ) : (
-        list.map(
-          ({ url, description, highlights = [], name, isActive, github }) => (
-            <li>
-              <article>
-                <header>
-                  <h3>
-                    {url ? (
-                      <a
-                        href={url}
-                        target="_blank"
-                        title={`Ver el proyecto ${name}`}
+      list.map(
+        ({
+          url,
+          description,
+          highlights = [],
+          name,
+          isActive,
+          github,
+          iframe,
+          images,
+          additionalLinks,
+        }) => (
+          <li>
+            <article>
+              <div class="project-image-container">
+                <img
+                  src={PROJECT_IMAGES[name] || "/iconos/default-project.webp"}
+                  alt={name}
+                  class="project-image"
+                />
+                <div class="project-overlay">
+                  {iframe && (
+                    <button
+                      class="view-demo-btn"
+                      data-iframe={iframe}
+                      data-title={name}
+                    >
+                      Ver Demo
+                    </button>
+                  )}
+                  {images &&
+                    (name === "Publimetro Shortener" ||
+                      name === "Sistema de Fichajes de Fútbol" ||
+                      name === "Metro Push Notifications") && (
+                      <button
+                        class="view-images-btn"
+                        data-images={JSON.stringify(images)}
+                        data-title={name}
                       >
-                        {name}
-                      </a>
-                    ) : (
-                      name
+                        Ver Capturas
+                      </button>
                     )}
-                    {isActive && <span>•</span>}
-                    {github && (
+                  {url && (
+                    <a
+                      href={url}
+                      target="_blank"
+                      class="view-project-link"
+                      title={
+                        name === "Sistema de Fichajes de Fútbol"
+                          ? "Ver Fichajes"
+                          : `Ver el proyecto ${name}`
+                      }
+                    >
+                      {name === "Sistema de Fichajes de Fútbol"
+                        ? "Ver Fichajes"
+                        : "Visitar Sitio"}
+                    </a>
+                  )}
+                  {additionalLinks &&
+                    additionalLinks.map((link) => (
                       <a
-                        class="github-code-link"
-                        href={github}
+                        href={link.url}
                         target="_blank"
-                        title={`Ver código fuente del proyecto ${name}`}
+                        class="view-project-link additional"
+                        title={link.label}
                       >
-                        <GitHub />
+                        {link.label}
                       </a>
-                    )}
-                  </h3>
-                  {description && <p>{description}</p>}
-                </header>
-                {highlights.length > 0 && (
-                  <footer>
-                    {highlights.map((h) => (
-                      <span>{h}</span>
                     ))}
-                  </footer>
-                )}
-              </article>
-            </li>
-          )
-        )
+                </div>
+              </div>
+              <header>
+                <h3>
+                  {name}
+                  {isActive && <span class="active-dot">•</span>}
+                  {github && (
+                    <a
+                      class="github-code-link"
+                      href={github}
+                      target="_blank"
+                      title={`Ver código fuente del proyecto ${name}`}
+                    >
+                      <GitHub />
+                    </a>
+                  )}
+                </h3>
+                {description && <p>{description}</p>}
+              </header>
+
+              <footer>
+                <div class="tags">
+                  {highlights.map((h) => (
+                    <span>{h}</span>
+                  ))}
+                </div>
+              </footer>
+            </article>
+          </li>
+        ),
       )
     }
   </ul>
 </Section>
+
+<dialog id="project-modal">
+  <div class="modal-wrapper">
+    <div class="modal-inner-content" style="position: relative;">
+      <button
+        id="close-modal-btn"
+        type="button"
+        style="position: absolute; top: -15px; right: -15px; background: #e11d48; color: white; border: 2px solid white; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 99999; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"
+        onclick="const m = document.getElementById('project-modal'); m.close(); document.getElementById('modal-iframe').style.display='none'; document.getElementById('modal-gallery').style.display='none'; document.getElementById('modal-iframe').src=''; document.body.style.overflow='';"
+      >
+        &times;
+      </button>
+
+      <iframe
+        id="modal-iframe"
+        src=""
+        width="100%"
+        height="600px"
+        style="border: none; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none;"
+        title="Project Preview"></iframe>
+
+      <div
+        id="modal-gallery"
+        style="display: none; max-height: 80vh; overflow-y: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);"
+      >
+        <!-- Images will be injected here -->
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script is:inline>
+  function initProjectModal() {
+    const modal = document.getElementById("project-modal");
+    const iframe = document.getElementById("modal-iframe");
+    const gallery = document.getElementById("modal-gallery");
+    const demoButtons = document.querySelectorAll(".view-demo-btn");
+    const imageButtons = document.querySelectorAll(".view-images-btn");
+
+    if (!modal || !iframe || !gallery) return;
+
+    const openModal = () => {
+      modal.showModal();
+      document.body.style.overflow = "hidden";
+    };
+
+    demoButtons.forEach((btn) => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const url = btn.getAttribute("data-iframe");
+        if (url) {
+          gallery.style.display = "none";
+          iframe.style.display = "block";
+          iframe.src = url;
+          openModal();
+        }
+      };
+    });
+
+    imageButtons.forEach((btn) => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const imagesStr = btn.getAttribute("data-images");
+        if (imagesStr) {
+          const images = JSON.parse(imagesStr);
+          iframe.style.display = "none";
+          gallery.style.display = "block";
+          gallery.innerHTML = images
+            .map(
+              (img) =>
+                `<img src="${img}" style="width: 100%; display: block; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />`,
+            )
+            .join("");
+          openModal();
+        }
+      };
+    });
+
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.close();
+        iframe.src = "";
+        iframe.style.display = "none";
+        gallery.style.display = "none";
+        document.body.style.overflow = "";
+      }
+    };
+  }
+
+  initProjectModal();
+  document.addEventListener("astro:page-load", initProjectModal);
+</script>
 
 <style>
   ul {
@@ -87,6 +244,12 @@ const list = (projects || []) as Project[];
     flex-direction: column;
     padding: 16px;
     height: 100%;
+    transition: all 0.3s ease;
+  }
+
+  article:hover {
+    border-color: #ccc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
   article header {
@@ -95,10 +258,73 @@ const list = (projects || []) as Project[];
 
   article h3 {
     margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .active-dot {
+    color: rgb(0, 188, 47);
+  }
+
+  .project-image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f0f0f0;
+    margin-bottom: 12px;
+  }
+
+  .project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  article:hover .project-image {
+    transform: scale(1.05);
+  }
+
+  .project-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(2px);
+  }
+
+  .project-image-container:hover .project-overlay {
+    opacity: 1;
+  }
+
+  .view-project-link {
+    background: white;
+    color: #111;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+
+  .view-project-link:hover {
+    transform: scale(1.05);
   }
 
   article a {
     color: #111;
+    text-decoration: none;
   }
 
   article a:hover {
@@ -109,21 +335,25 @@ const list = (projects || []) as Project[];
     font-size: 0.75rem;
     line-height: 1.2rem;
     margin-bottom: 4px;
+    color: #666;
   }
 
   article h3 span {
     color: rgb(0, 188, 47);
-    animation-name: flicker;
-    animation-duration: 3s;
-    animation-timing-function: ease-in;
-    animation-iteration-count: infinite;
   }
 
   footer {
     display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 0.6rem;
+    margin-top: auto;
+  }
+
+  .tags {
+    display: flex;
     flex-wrap: wrap;
     gap: 4px;
-    font-size: 0.6rem;
   }
 
   footer span {
@@ -135,20 +365,100 @@ const list = (projects || []) as Project[];
     padding: 0.2rem 0.6rem;
   }
 
-  .github-code-link {
-    margin-left: 5px;
+  .view-demo-btn,
+  .view-images-btn {
+    background: #111;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    width: fit-content;
+    font-weight: 600;
   }
 
-  @keyframes flicker {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.25;
-    }
-    100% {
-      opacity: 1;
-    }
+  .view-demo-btn:hover,
+  .view-images-btn:hover {
+    transform: scale(1.05);
+    background: #333;
+  }
+
+  .modal-inner-content {
+    width: 100%;
+    max-width: 900px;
+    background: white;
+    border-radius: 12px;
+  }
+
+  .github-code-link {
+    display: flex;
+    align-items: center;
+    color: #555;
+    transition: color 0.2s;
+  }
+
+  .github-code-link:hover {
+    color: #000;
+  }
+
+  /* Modal Styles */
+  dialog {
+    padding: 0;
+    border: none;
+    background: transparent;
+    max-width: 95vw;
+    width: 1000px;
+    max-height: 95vh;
+    overflow: visible;
+  }
+
+  dialog::backdrop {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(12px);
+  }
+
+  .modal-wrapper {
+    position: relative;
+    padding: 40px 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .iframe-inner-container {
+    width: 100%;
+    max-width: 900px;
+    background: white;
+    border-radius: 12px;
+    position: relative; /* Para posicionar el botón de cierre relativo a esto */
+  }
+
+  #close-modal-btn {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: #e11d48;
+    color: white;
+    border: 2px solid white;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 1;
+    z-index: 10000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+  }
+
+  #close-modal-btn:hover {
+    transform: scale(1.1);
+    background: #be123c;
   }
 
   @media (width <= 700px) {
@@ -161,11 +471,23 @@ const list = (projects || []) as Project[];
       box-shadow: 0 1px 1px #f2f2f2;
       padding: 0 0 16px 0;
     }
+
+    .modal-wrapper {
+      padding: 50px 10px 10px;
+    }
+
+    #modal-iframe {
+      height: 70vh !important;
+    }
   }
 
   @media print {
-    article h3 span {
+    article h3 {
       animation-name: none;
+    }
+    .view-demo-btn,
+    dialog {
+      display: none;
     }
   }
 </style>
