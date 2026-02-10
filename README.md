@@ -50,19 +50,16 @@ Basado en el diseño de <a href="https://github.com/BartoszJarocki/cv">Bartosz J
 
 <img src="portada.png"></img>
 
-## 🛠️ Stack
+##  Stack
 
 - [**Astro**](https://astro.build/) - El framework web de la nueva época.
 - [**Typescript**](https://www.typescriptlang.org/) - JavaScript con sintaxis de tipado.
 - [**Ninja Keys**](https://github.com/ssleptsov/ninja-keys) - Menu desplegable con atajos de teclado hecho en puro Javascript.
 
 
-## 🚀 Empezar
+##  Empezar
 
-### 1. Usa este [repo](https://github.com/midudev/minimalist-portfolio-json) como _template_ de un proyecto de Astro
-
-
-- Yo uso [pnpm](https://pnpm.io/installation) como gestor de dependencias y empaquetador.
+- Yo uso [npm](https://pnpm.io/installation) como gestor de dependencias y empaquetador.
 
 ```bash
 # Activa pnpm en MacOS, WSL & Linux:
