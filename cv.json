@@ -286,15 +286,14 @@
   "techStack": [
     { "name": "React", "category": "Frontend" },
     { "name": "JavaScript", "category": "Frontend" },
-    { "name": "jQuery", "category": "Frontend" },
+
     { "name": "HTML5", "category": "Frontend" },
     { "name": "CSS3", "category": "Frontend" },
     { "name": "Bootstrap", "category": "Frontend" },
     { "name": "Astro", "category": "Frontend" },
     { "name": "Python", "category": "Backend" },
 
-    { "name": "MySQL", "category": "Bases de Datos" },
-    { "name": "SQL Server", "category": "Bases de Datos" },
+
     { "name": "Arc XP", "category": "CMS" },
     { "name": "Strapi", "category": "CMS" },
 
