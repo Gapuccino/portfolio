@@ -42,10 +42,12 @@ const METRO_SITES = [
                         >
                           {name}
                         </button>
-                      ) : (
+                      ) : url ? (
                         <a href={url} title={`Ver ${name}`} target="_blank">
                           {name}
                         </a>
+                      ) : (
+                        <span>{name}</span>
                       )}
                     </h3>
                     <h4>{position}</h4>
