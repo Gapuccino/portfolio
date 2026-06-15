@@ -2,115 +2,145 @@
 import Section from "../Section.astro";
 import cv from "@cv";
 
-interface Tech {
-  name: string;
-  level?: string;
-  category?: string;
-}
-
-const stack = ((cv as any).techStack || []) as Tech[];
-
-const ICONS = {
-  React: "/iconos/REACT.webp",
+const SKILLS_ICONS: Record<string, string> = {
   HTML5: "/iconos/HTML.webp",
   CSS3: "/iconos/CSS.webp",
-  JavaScript: "/iconos/JS.webp",
-
+  "JavaScript (ES6+)": "/iconos/JS.webp",
+  "React 18": "/iconos/REACT.webp",
+  jQuery: "/iconos/JQUERY.webp",
   Bootstrap: "/iconos/Bootstrap.webp",
   Astro: "/iconos/ASTRO.webp",
   Python: "/iconos/PYTHON.webp",
-
+  "REST APIs": "/iconos/Fatapi.webp",
+  MySQL: "/iconos/MYSQL.webp",
+  "SQL Server": "/iconos/SQLSERVER.webp",
+  PostgreSQL: "/iconos/Postgresql.webp",
   "Arc XP": "/iconos/ARCXP.webp",
   Strapi: "/iconos/STRAPI.webp",
   Git: "/iconos/GIT.webp",
   GitHub: "/iconos/GITHUB.webp",
+  "VS Code": "/iconos/visual-studio-code-icon.webp",
+  Linux: "/iconos/UBUNTU-LINUX.webp",
   Docker: "/iconos/DOCKER.webp",
   AWS: "/iconos/AWS.webp",
-  Linux: "/iconos/UBUNTU-LINUX.webp",
-  FastAPI: "/iconos/Fatapi.webp",
-  PostgreSQL: "/iconos/Postgresql.webp",
-  SQLite: "/iconos/Sqlite.webp",
-  "Tailwind CSS": "/iconos/Tailwind.webp",
-} as const;
+  Antigravity: "/iconos/antigravity.webp",
+  "Core Web Vitals (LCP, TBT, CLS)": "/iconos/CWV.webp",
+  Lighthouse: "/iconos/Lighthouse.webp",
+  Scrum: "/iconos/Scrum.webp",
+  Kanban: "/iconos/Kanban.webp",
+};
+
+interface SkillGroup {
+  name: string;
+  level?: string;
+  keywords?: string[];
+}
+
+const groups = ((cv as any).skills || []) as SkillGroup[];
 ---
 
 <Section title="Habilidades">
-  <ul class="grid">
+  <dl class="skills">
     {
-      stack.map((s) => {
-        const iconName = s.name === "Next.js" ? "Next" : s.name;
-        const iconData = ICONS[s.name as keyof typeof ICONS];
-        const isSvg = iconData?.startsWith("<svg");
-
-        return (
-          <li class="item">
-            {isSvg ? (
-              <span class="icon" set:html={iconData} />
-            ) : (
-              <img
-                class="icon-img"
-                src={iconData}
-                alt={s.name}
-                width="28"
-                height="28"
-              />
-            )}
-            <div class="meta">
-              <strong>{s.name}</strong>
-              <small>
-                {s.category} • {s.level}
-              </small>
-            </div>
-          </li>
-        );
-      })
+      groups.map((g) => (
+        <div class="row">
+          <dt>
+            <span class="cat">{g.name}</span>
+            {g.level && <span class="level mono">{g.level}</span>}
+          </dt>
+          <dd>
+            <ul class="tags">
+              {(g.keywords || []).map((k) => {
+                const iconSrc = SKILLS_ICONS[k];
+                return (
+                  <li class="tag mono">
+                    {iconSrc && <img src={iconSrc} alt={`${k} icon`} class="skill-icon" />}
+                    <span>{k}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </dd>
+        </div>
+      ))
     }
-  </ul>
+  </dl>
 </Section>
 
 <style>
-  .grid {
-    list-style: none;
+  .skills {
     margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 0.9rem;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  }
-  .item {
     display: flex;
-    gap: 0.6rem;
-    align-items: center;
-    padding: 0.55rem 0.7rem;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    background: #fff;
+    flex-direction: column;
   }
-  .icon {
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(9rem, 12rem) 1fr;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .row:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  dt {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .cat {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .level {
+    font-size: 0.72rem;
+    color: var(--ink-3);
+  }
+
+  dd {
+    margin: 0;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .tag {
     display: inline-flex;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: #f4f6f8;
     align-items: center;
-    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    padding: 0.35rem 0.7rem;
+    border-radius: 7px;
+    transition:
+      border-color 0.18s var(--ease-out),
+      color 0.18s var(--ease-out),
+      transform 0.18s var(--ease-out);
   }
-  .meta strong {
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+  .skill-icon {
+    width: 1.2em;
+    height: 1.2em;
+    object-fit: contain;
   }
-  .meta small {
-    display: block;
-    font-size: 0.6rem;
-    color: #666;
-    letter-spacing: 0.05em;
-    margin-top: 2px;
-    text-transform: uppercase;
+  .tag:hover {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    transform: translateY(-2px);
   }
-  @media (width <= 600px) {
-    .grid {
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+
+  @media (width <= 640px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
     }
   }
 </style>

@@ -12,481 +12,723 @@ interface Project {
   github?: string;
   iframe?: string;
   images?: string[];
+  technologies?: string[];
   additionalLinks?: { label: string; url: string }[];
 }
 
-const { projects = [] } = cv as { projects?: Project[] };
-const list = (projects || []) as Project[];
+const list = ((cv as any).projects || []) as Project[];
+const total = list.length;
 
 const PROJECT_IMAGES: Record<string, string> = {
-  "Publimetro Shortener": "/shortener/dash.png",
-  "Sistema web de compraventa de inmuebles – UPIICSA": "/bienes.png",
-  "Plataforma educativa web – INEA CDMX": "/inea.png",
-  "Festival de Música": "/festival.png",
-  "Portafolio Minimalista": "/portafolio.png",
-  "Sistema de Fichajes de Fútbol": "/fichajes.png",
-  "Metro Push Notifications": "/Noti.jpeg",
+  "Publimetro Shortener": "/shortener/dash.webp",
+  "Sistema web de compraventa de inmuebles – UPIICSA": "/bienes.webp",
+  "Plataforma educativa web – INEA CDMX": "/inea.webp",
+  "Festival de Música": "/festival.webp",
+  "Portafolio Minimalista": "/portafolio.webp",
+  "Sistema de Fichajes de Fútbol": "/fichajes.webp",
+  "Metro Push Notifications": "/Noti.webp",
 };
 ---
 
 <Section title="Proyectos">
-  <ul>
-    {
-      list.map(
-        ({
-          url,
-          description,
-          highlights = [],
-          name,
-          isActive,
-          github,
-          iframe,
-          images,
-          additionalLinks,
-        }) => (
-          <li>
-            <article>
-              <div class="project-image-container">
-                <img
-                  src={PROJECT_IMAGES[name] || "/iconos/default-project.webp"}
-                  alt={name}
-                  class="project-image"
-                />
-                <div class="project-overlay">
-                  {iframe && (
-                    <button
-                      class="view-demo-btn"
-                      data-iframe={iframe}
-                      data-title={name}
-                    >
-                      Ver Demo
-                    </button>
+  <div class="reel-wrap" role="region" aria-label="Proyectos" aria-roledescription="carrusel">
+
+    <!-- Slide track -->
+    <div class="reel" id="projects-reel" aria-live="polite" aria-atomic="false">
+      {
+        list.map(({ url, description, name, isActive, github, iframe, images, technologies = [], additionalLinks }, i) => {
+          const cover = PROJECT_IMAGES[name];
+          const hasGallery = !!images && images.length > 0;
+          return (
+            <div
+              class:list={["reel__slide", i === 0 && "is-active", i === 0 && "is-entering"]}
+              data-index={i}
+              aria-hidden={i !== 0 ? "true" : "false"}
+              aria-roledescription="diapositiva"
+              aria-label={`${i + 1} de ${total}: ${name}`}
+            >
+              <article class="card">
+                <div class="card__thumb">
+                  {cover
+                    ? <img src={cover} alt={`Vista previa de ${name}`} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+                    : <span class="thumb__fallback mono">{name}</span>
+                  }
+                </div>
+                <div class="card__body">
+                  <header class="card__header">
+                    <h3 class="card__title">
+                      <span>{name}</span>
+                      {isActive && <span class="live-dot" title="En activo" aria-hidden="true" />}
+                    </h3>
+                    {github && (
+                      <a class="ic" href={github} target="_blank" rel="noopener" title={`Código de ${name}`}>
+                        <GitHub />
+                      </a>
+                    )}
+                  </header>
+                  {description && <p class="desc">{description}</p>}
+                  {technologies.length > 0 && (
+                    <ul class="tech">
+                      {technologies.map((t) => <li class="mono">{t}</li>)}
+                    </ul>
                   )}
-                  {images &&
-                    (name === "Publimetro Shortener" ||
-                      name === "Sistema de Fichajes de Fútbol" ||
-                      name === "Metro Push Notifications") && (
-                      <button
-                        class="view-images-btn"
-                        data-images={JSON.stringify(images)}
-                        data-title={name}
-                      >
-                        Ver Capturas
+                  <div class="card__links">
+                    {url && (
+                      <a class="lnk" href={url} target="_blank" rel="noopener">
+                        Visitar sitio <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
+                    {iframe && (
+                      <button class="lnk view-demo-btn" data-iframe={iframe} data-title={name}>
+                        Ver demo
                       </button>
                     )}
-                  {url && (
-                    <a
-                      href={url}
-                      target="_blank"
-                      class="view-project-link"
-                      title={
-                        name === "Sistema de Fichajes de Fútbol"
-                          ? "Ver Fichajes"
-                          : `Ver el proyecto ${name}`
-                      }
-                    >
-                      {name === "Sistema de Fichajes de Fútbol"
-                        ? "Ver Fichajes"
-                        : "Visitar Sitio"}
-                    </a>
-                  )}
-                  {additionalLinks &&
-                    additionalLinks.map((link) => (
-                      <a
-                        href={link.url}
-                        target="_blank"
-                        class="view-project-link additional"
-                        title={link.label}
-                      >
-                        {link.label}
+                    {hasGallery && (
+                      <button class="lnk view-images-btn" data-images={JSON.stringify(images)} data-title={name}>
+                        Ver capturas
+                      </button>
+                    )}
+                    {additionalLinks?.map((link) => (
+                      <a class="lnk" href={link.url} target="_blank" rel="noopener">
+                        {link.label} <span aria-hidden="true">↗</span>
                       </a>
                     ))}
+                  </div>
                 </div>
-              </div>
-              <header>
-                <h3>
-                  {name}
-                  {isActive && <span class="active-dot">•</span>}
-                  {github && (
-                    <a
-                      class="github-code-link"
-                      href={github}
-                      target="_blank"
-                      title={`Ver código fuente del proyecto ${name}`}
-                    >
-                      <GitHub />
-                    </a>
-                  )}
-                </h3>
-                {description && <p>{description}</p>}
-              </header>
+              </article>
+            </div>
+          );
+        })
+      }
+    </div>
 
-              <footer>
-                <div class="tags">
-                  {highlights.map((h) => (
-                    <span>{h}</span>
-                  ))}
-                </div>
-              </footer>
-            </article>
-          </li>
-        ),
-      )
-    }
-  </ul>
-</Section>
-
-<dialog id="project-modal">
-  <div class="modal-wrapper">
-    <div class="modal-inner-content" style="position: relative;">
-      <button
-        id="close-modal-btn"
-        type="button"
-        style="position: absolute; top: -15px; right: -15px; background: #e11d48; color: white; border: 2px solid white; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 99999; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"
-        onclick="const m = document.getElementById('project-modal'); m.close(); document.getElementById('modal-iframe').style.display='none'; document.getElementById('modal-gallery').style.display='none'; document.getElementById('modal-iframe').src=''; document.body.style.overflow='';"
-      >
-        &times;
+    <!-- Nav footer: prev | dots | counter | next -->
+    <div class="reel__nav">
+      <button class="reel__arrow" id="reel-prev" aria-label="Proyecto anterior">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
 
-      <iframe
-        id="modal-iframe"
-        src=""
-        width="100%"
-        height="600px"
-        style="border: none; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none;"
-        title="Project Preview"></iframe>
-
-      <div
-        id="modal-gallery"
-        style="display: none; max-height: 80vh; overflow-y: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);"
-      >
-        <!-- Images will be injected here -->
+      <div class="reel__dots" role="tablist" aria-label="Seleccionar proyecto">
+        {
+          list.map((p, i) => (
+            <button
+              class:list={["reel__dot", i === 0 && "is-active"]}
+              data-goto={i}
+              role="tab"
+              aria-selected={i === 0 ? "true" : "false"}
+              aria-label={p.name}
+            />
+          ))
+        }
       </div>
+
+      <div class="reel__counter" aria-live="polite" aria-atomic="true">
+        <span id="reel-current">01</span><span class="reel__sep" aria-hidden="true">/</span><span>{String(total).padStart(2, "0")}</span>
+      </div>
+
+      <button class="reel__arrow" id="reel-next" aria-label="Proyecto siguiente">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
+
+    <!-- Timeline bar (Remotion-inspired playhead) -->
+    <div class="reel__timeline" aria-hidden="true">
+      <div class="reel__timeline-fill" id="reel-fill" style={`transform: scaleX(${1 / total})`}></div>
+    </div>
+
+  </div>
+</Section>
+
+<!-- Modal -->
+<dialog id="project-modal" class="no-print">
+  <div class="modal">
+    <button id="close-modal-btn" type="button" aria-label="Cerrar">&times;</button>
+    <iframe id="modal-iframe" src="" title="Vista del proyecto"></iframe>
+    <div id="modal-gallery"></div>
   </div>
 </dialog>
 
 <script is:inline>
+  function initCarousel() {
+    const reel = document.getElementById("projects-reel");
+    if (!reel) return;
+
+    const slides = Array.from(reel.querySelectorAll(".reel__slide"));
+    const prevBtn = document.getElementById("reel-prev");
+    const nextBtn = document.getElementById("reel-next");
+    const currentEl = document.getElementById("reel-current");
+    const fill = document.getElementById("reel-fill");
+    const dots = Array.from(document.querySelectorAll(".reel__dot"));
+    const total = slides.length;
+    const reelWrap = reel.closest(".reel-wrap");
+    let current = 0;
+    let busy = false;
+    const DURATION = 560;
+    const AUTOPLAY_DELAY = 5000;
+    let autoTimer = null;
+
+    function startAuto() {
+      if (autoTimer) clearInterval(autoTimer);
+      autoTimer = setInterval(() => goTo((current + 1) % total, 1), AUTOPLAY_DELAY);
+    }
+
+    function stopAuto() {
+      clearInterval(autoTimer);
+      autoTimer = null;
+    }
+
+    function goTo(idx, dir) {
+      const target = ((idx % total) + total) % total;
+      if (busy || target === current) return;
+      busy = true;
+
+      const outSlide = slides[current];
+      const inSlide = slides[target];
+
+      outSlide.classList.remove("is-active", "is-entering");
+      outSlide.classList.add(dir > 0 ? "is-exit-left" : "is-exit-right");
+      outSlide.setAttribute("aria-hidden", "true");
+
+      inSlide.style.setProperty("--slide-from", String(dir));
+      void inSlide.offsetHeight;
+      inSlide.classList.add("is-active", "is-entering");
+      inSlide.setAttribute("aria-hidden", "false");
+
+      dots[current]?.classList.remove("is-active");
+      dots[current]?.setAttribute("aria-selected", "false");
+      dots[target]?.classList.add("is-active");
+      dots[target]?.setAttribute("aria-selected", "true");
+
+      if (currentEl) currentEl.textContent = String(target + 1).padStart(2, "0");
+      if (fill) fill.style.transform = `scaleX(${(target + 1) / total})`;
+
+      current = target;
+
+      setTimeout(() => {
+        outSlide.classList.remove("is-exit-left", "is-exit-right");
+        inSlide.classList.remove("is-entering");
+        busy = false;
+      }, DURATION);
+    }
+
+    setTimeout(() => slides[0]?.classList.remove("is-entering"), 900);
+
+    prevBtn?.addEventListener("click", () => { stopAuto(); goTo(current - 1, -1); startAuto(); });
+    nextBtn?.addEventListener("click", () => { stopAuto(); goTo(current + 1, 1); startAuto(); });
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const idx = parseInt(dot.dataset.goto ?? "0", 10);
+        stopAuto();
+        goTo(idx, idx > current ? 1 : -1);
+        startAuto();
+      });
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!reel.closest("[role='region']")?.contains(document.activeElement) &&
+          document.activeElement !== document.body) return;
+      if (e.key === "ArrowLeft") { stopAuto(); goTo(current - 1, -1); startAuto(); }
+      if (e.key === "ArrowRight") { stopAuto(); goTo(current + 1, 1); startAuto(); }
+    });
+
+    let tx0 = 0;
+    reel.addEventListener("touchstart", (e) => { tx0 = e.touches[0].clientX; }, { passive: true });
+    reel.addEventListener("touchend", (e) => {
+      const dx = e.changedTouches[0].clientX - tx0;
+      if (Math.abs(dx) > 48) {
+        stopAuto();
+        if (dx < 0) goTo(current + 1, 1);
+        else goTo(current - 1, -1);
+        startAuto();
+      }
+    }, { passive: true });
+
+    if (reelWrap) {
+      reelWrap.addEventListener("mouseenter", stopAuto);
+      reelWrap.addEventListener("mouseleave", startAuto);
+      reelWrap.addEventListener("focusin", stopAuto);
+      reelWrap.addEventListener("focusout", startAuto);
+    }
+
+    startAuto();
+  }
+
   function initProjectModal() {
     const modal = document.getElementById("project-modal");
     const iframe = document.getElementById("modal-iframe");
     const gallery = document.getElementById("modal-gallery");
-    const demoButtons = document.querySelectorAll(".view-demo-btn");
-    const imageButtons = document.querySelectorAll(".view-images-btn");
-
     if (!modal || !iframe || !gallery) return;
 
-    const openModal = () => {
-      modal.showModal();
-      document.body.style.overflow = "hidden";
+    const open = () => { modal.showModal(); document.body.style.overflow = "hidden"; };
+    const shut = () => {
+      modal.close();
+      iframe.src = "";
+      iframe.style.display = "none";
+      gallery.style.display = "none";
+      document.body.style.overflow = "";
     };
 
-    demoButtons.forEach((btn) => {
+    document.querySelectorAll(".view-demo-btn").forEach((btn) => {
       btn.onclick = (e) => {
         e.preventDefault();
-        const url = btn.getAttribute("data-iframe");
-        if (url) {
-          gallery.style.display = "none";
-          iframe.style.display = "block";
-          iframe.src = url;
-          openModal();
-        }
-      };
-    });
-
-    imageButtons.forEach((btn) => {
-      btn.onclick = (e) => {
-        e.preventDefault();
-        const imagesStr = btn.getAttribute("data-images");
-        if (imagesStr) {
-          const images = JSON.parse(imagesStr);
-          iframe.style.display = "none";
-          gallery.style.display = "block";
-          gallery.innerHTML = images
-            .map(
-              (img) =>
-                `<img src="${img}" style="width: 100%; display: block; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />`,
-            )
-            .join("");
-          openModal();
-        }
-      };
-    });
-
-    modal.onclick = (e) => {
-      if (e.target === modal) {
-        modal.close();
-        iframe.src = "";
-        iframe.style.display = "none";
+        const u = btn.getAttribute("data-iframe");
+        if (!u) return;
         gallery.style.display = "none";
-        document.body.style.overflow = "";
-      }
-    };
+        iframe.style.display = "block";
+        iframe.src = u;
+        open();
+      };
+    });
+
+    document.querySelectorAll(".view-images-btn").forEach((btn) => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const raw = btn.getAttribute("data-images");
+        if (!raw) return;
+        const imgs = JSON.parse(raw);
+        iframe.style.display = "none";
+        gallery.style.display = "flex";
+        gallery.innerHTML = imgs.map((img) => `<img src="${img}" alt="" loading="lazy" />`).join("");
+        open();
+      };
+    });
+
+    document.getElementById("close-modal-btn")?.addEventListener("click", shut);
+    modal.addEventListener("click", (e) => { if (e.target === modal) shut(); });
   }
 
+  initCarousel();
   initProjectModal();
-  document.addEventListener("astro:page-load", initProjectModal);
+  document.addEventListener("astro:page-load", () => { initCarousel(); initProjectModal(); });
 </script>
 
 <style>
-  ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-inline: -16px;
-  }
-
-  article {
-    border-radius: 8px;
-    border: 1px solid #f2f2f2;
-    gap: 16px;
+  /* ─── Wrapper ─── */
+  .reel-wrap {
     display: flex;
     flex-direction: column;
-    padding: 16px;
-    height: 100%;
-    transition: all 0.3s ease;
+    gap: 1.1rem;
   }
 
-  article:hover {
-    border-color: #ccc;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  }
-
-  article header {
-    flex: 1;
-  }
-
-  article h3 {
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1rem;
-  }
-
-  .active-dot {
-    color: rgb(0, 188, 47);
-  }
-
-  .project-image-container {
+  /* ─── Track ─── */
+  .reel {
     position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 8px;
     overflow: hidden;
-    background: #f0f0f0;
-    margin-bottom: 12px;
+    height: 300px;
   }
 
-  .project-image {
+  /* ─── Slides ─── */
+  .reel__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(calc(var(--slide-from, 1) * 56px)) scale(0.975);
+    filter: blur(6px);
+    transition:
+      opacity 0.5s var(--ease-out),
+      transform 0.55s var(--ease-out),
+      filter 0.45s var(--ease-out);
+    will-change: transform, opacity, filter;
+  }
+
+  .reel__slide.is-active {
+    position: absolute;
+    inset: 0;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+
+  .reel__slide.is-exit-left {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-56px) scale(0.975);
+    filter: blur(6px);
+    transition:
+      opacity 0.38s cubic-bezier(0.4, 0, 1, 1),
+      transform 0.38s cubic-bezier(0.4, 0, 1, 1),
+      filter 0.32s cubic-bezier(0.4, 0, 1, 1);
+  }
+
+  .reel__slide.is-exit-right {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(56px) scale(0.975);
+    filter: blur(6px);
+    transition:
+      opacity 0.38s cubic-bezier(0.4, 0, 1, 1),
+      transform 0.38s cubic-bezier(0.4, 0, 1, 1),
+      filter 0.32s cubic-bezier(0.4, 0, 1, 1);
+  }
+
+  /* ─── Card: 2-col on desktop ─── */
+  .card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  @media (max-width: 600px) {
+    .reel { height: 480px; }
+    .card {
+      grid-template-columns: 1fr;
+      grid-template-rows: 200px 1fr;
+    }
+  }
+
+  /* ─── Thumb ─── */
+  .card__thumb {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--accent-tint), var(--bg-2));
+  }
+
+  .card__thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    display: block;
   }
 
-  article:hover .project-image {
-    transform: scale(1.05);
-  }
-
-  .project-overlay {
+  .thumb__fallback {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
     display: flex;
-    flex-direction: column;
-    gap: 10px;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    backdrop-filter: blur(2px);
-  }
-
-  .project-image-container:hover .project-overlay {
-    opacity: 1;
-  }
-
-  .view-project-link {
-    background: white;
-    color: #111;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.8rem;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    text-decoration: none;
-    transition: transform 0.2s ease;
+    color: var(--accent-ink);
   }
 
-  .view-project-link:hover {
-    transform: scale(1.05);
-  }
-
-  article a {
-    color: #111;
-    text-decoration: none;
-  }
-
-  article a:hover {
-    text-decoration: underline;
-  }
-
-  article p {
-    font-size: 0.75rem;
-    line-height: 1.2rem;
-    margin-bottom: 4px;
-    color: #666;
-  }
-
-  article h3 span {
-    color: rgb(0, 188, 47);
-  }
-
-  footer {
+  /* ─── Body ─── */
+  .card__body {
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    font-size: 0.6rem;
-    margin-top: auto;
+    gap: 0.75rem;
   }
 
-  .tags {
+  .card__header {
     display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 
-  footer span {
-    border-radius: 6px;
-    background: #eee;
-    color: #444;
-    font-size: 0.6rem;
-    font-weight: 500;
-    padding: 0.2rem 0.6rem;
-  }
-
-  .view-demo-btn,
-  .view-images-btn {
-    background: #111;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    width: fit-content;
-    font-weight: 600;
-  }
-
-  .view-demo-btn:hover,
-  .view-images-btn:hover {
-    transform: scale(1.05);
-    background: #333;
-  }
-
-  .modal-inner-content {
-    width: 100%;
-    max-width: 900px;
-    background: white;
-    border-radius: 12px;
-  }
-
-  .github-code-link {
+  .card__title {
+    flex: 1;
     display: flex;
     align-items: center;
-    color: #555;
-    transition: color 0.2s;
+    gap: 0.45rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.25;
   }
 
-  .github-code-link:hover {
-    color: #000;
+  .card__title > span:first-child { flex: 1; }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px var(--accent-tint);
+    animation: pulse-dot 2.4s ease-in-out infinite;
   }
 
-  /* Modal Styles */
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 3px var(--accent-tint); }
+    50%       { box-shadow: 0 0 0 5px var(--accent-tint); }
+  }
+
+  .ic {
+    display: inline-flex;
+    color: var(--ink-3);
+    transition: color 0.18s var(--ease-out);
+    flex-shrink: 0;
+  }
+  .ic:hover { color: var(--ink); }
+  .ic :global(svg) { width: 18px; height: 18px; }
+
+  .desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+
+  .tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .tech li {
+    font-size: 0.7rem;
+    color: var(--ink-3);
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+  }
+
+  .card__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .lnk {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: gap 0.18s var(--ease-out);
+  }
+  .lnk:hover {
+    gap: 0.55rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ─── Stagger entrance animations ─── */
+  .is-entering .card__thumb img {
+    animation: revealThumb 0.7s var(--ease-out) both;
+  }
+  .is-entering .card__header {
+    animation: fadeUp 0.5s 0.08s var(--ease-out) both;
+  }
+  .is-entering .desc {
+    animation: fadeUp 0.5s 0.16s var(--ease-out) both;
+  }
+  .is-entering .tech {
+    animation: fadeUp 0.5s 0.24s var(--ease-out) both;
+  }
+  .is-entering .card__links {
+    animation: fadeUp 0.5s 0.32s var(--ease-out) both;
+  }
+
+  @keyframes revealThumb {
+    from { opacity: 0; transform: scale(1.06); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── Nav bar ─── */
+  .reel__nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .reel__arrow {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition:
+      background 0.2s var(--ease-out),
+      border-color 0.2s var(--ease-out),
+      color 0.2s var(--ease-out),
+      transform 0.2s var(--ease-out);
+  }
+  .reel__arrow:hover:not(:disabled) {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    transform: scale(1.1);
+  }
+  .reel__arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* ─── Dots ─── */
+  .reel__dots {
+    display: flex;
+    gap: 0.45rem;
+    align-items: center;
+    flex: 1;
+  }
+
+  .reel__dot {
+    height: 6px;
+    width: 6px;
+    border-radius: 3px;
+    border: none;
+    background: var(--line-2);
+    cursor: pointer;
+    padding: 0;
+    transition:
+      background 0.28s var(--ease-out),
+      width 0.32s var(--ease-out),
+      transform 0.22s var(--ease-out);
+  }
+  .reel__dot.is-active {
+    background: var(--accent);
+    width: 22px;
+  }
+  .reel__dot:hover:not(.is-active) {
+    background: var(--ink-3);
+    transform: scaleY(1.5);
+  }
+
+  /* ─── Counter ─── */
+  .reel__counter {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .reel__sep { margin: 0 0.15em; opacity: 0.5; }
+
+  /* ─── Timeline (Remotion-style playhead) ─── */
+  .reel__timeline {
+    height: 2px;
+    background: var(--line);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .reel__timeline-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 1px;
+    transform-origin: left;
+    transition: transform 0.52s var(--ease-out);
+  }
+
+  /* ─── Reduced motion ─── */
+  @media (prefers-reduced-motion: reduce) {
+    .reel__slide,
+    .reel__slide.is-exit-left,
+    .reel__slide.is-exit-right {
+      transition: opacity 0.15s linear !important;
+      transform: none !important;
+      filter: none !important;
+    }
+    .is-entering .card__thumb img,
+    .is-entering .card__header,
+    .is-entering .desc,
+    .is-entering .tech,
+    .is-entering .card__links {
+      animation: none !important;
+    }
+    .reel__timeline-fill {
+      transition: transform 0.15s linear !important;
+    }
+    .live-dot {
+      animation: none !important;
+    }
+  }
+
+  /* ─── Modal ─── */
   dialog {
     padding: 0;
     border: none;
     background: transparent;
-    max-width: 95vw;
-    width: 1000px;
-    max-height: 95vh;
-    overflow: visible;
-  }
-
-  dialog::backdrop {
-    background: rgba(255, 255, 255, 0.82);
-    backdrop-filter: blur(12px);
-  }
-
-  .modal-wrapper {
-    position: relative;
-    padding: 40px 20px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .iframe-inner-container {
+    max-width: min(94vw, 960px);
     width: 100%;
-    max-width: 900px;
-    background: white;
-    border-radius: 12px;
-    position: relative; /* Para posicionar el botón de cierre relativo a esto */
   }
-
+  dialog::backdrop {
+    background: oklch(0.99 0.005 50 / 0.72);
+    backdrop-filter: blur(10px);
+  }
+  .modal {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 30px 70px oklch(0.2 0.02 45 / 0.22);
+  }
   #close-modal-btn {
     position: absolute;
-    top: -15px;
-    right: -15px;
-    background: #e11d48;
-    color: white;
-    border: 2px solid white;
-    width: 34px;
-    height: 34px;
+    top: -14px;
+    right: -14px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.5rem;
+    background: var(--accent);
+    color: #fff;
+    border: 2px solid var(--surface);
+    font-size: 1.3rem;
     line-height: 1;
-    z-index: 10000;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 6px 16px oklch(0.2 0.02 45 / 0.25);
+    transition: transform 0.18s var(--ease-out);
+  }
+  #close-modal-btn:hover { transform: scale(1.08); }
+  #modal-iframe {
+    display: none;
+    width: 100%;
+    height: 70vh;
+    border: none;
+    border-radius: 10px;
+  }
+  #modal-gallery {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  #modal-gallery :global(img) {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--line);
   }
 
-  #close-modal-btn:hover {
-    transform: scale(1.1);
-    background: #be123c;
-  }
-
-  @media (width <= 700px) {
-    ul {
-      margin-inline: 0px;
-    }
-
-    article {
-      border: none;
-      box-shadow: 0 1px 1px #f2f2f2;
-      padding: 0 0 16px 0;
-    }
-
-    .modal-wrapper {
-      padding: 50px 10px 10px;
-    }
-
-    #modal-iframe {
-      height: 70vh !important;
-    }
-  }
-
+  /* ─── Print ─── */
   @media print {
-    article h3 {
-      animation-name: none;
-    }
-    .view-demo-btn,
+    .reel__nav,
+    .reel__timeline,
     dialog {
+      display: none;
+    }
+    .reel__slide {
+      position: static !important;
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+    .reel__slide:not(.is-active) {
       display: none;
     }
   }

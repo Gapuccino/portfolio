@@ -4,70 +4,65 @@ import Section from "../Section.astro";
 import { work } from "@cv";
 
 const METRO_SITES = [
-  { url: "https://www.publimetro.com.mx/", logo: "/iconos/PUBLIMETRO_MX.webp" },
-  { url: "https://www.publimetro.co/", logo: "/iconos/PUBLIMETRO_CO.webp" },
-  { url: "https://www.metroecuador.com.ec/", logo: "/iconos/METRO_EC.webp" },
-  { url: "https://www.publimetro.cl/", logo: "/iconos/PUBLIMETRO_CL.webp" },
-  { url: "https://www.publinews.gt/", logo: "/iconos/PUBLINEWS.webp" },
-  { url: "https://www.fayerwayer.com/", logo: "/iconos/FAYERWAYER.webp" },
-  { url: "https://www.nuevamujer.com/", logo: "/iconos/NUEVAMUJER.webp" },
-  { url: "https://www.ferplei.com/", logo: "/iconos/FERPLEI.webp" },
-  { url: "https://www.elcalce.com/", logo: "/iconos/ELCALCE.webp" },
-  { url: "https://www.metroworldnews.com/", logo: "/iconos/MWN_ICON.webp" },
-  { url: "https://www.metro.pr/", logo: "/iconos/METRO_PR.webp" },
-  { url: "https://www.sagrosso.com/", logo: "/iconos/SAGROSSO.webp" },
+  { url: "https://www.publimetro.com.mx/" },
+  { url: "https://www.publimetro.co/" },
+  { url: "https://www.metroecuador.com.ec/" },
+  { url: "https://www.publimetro.cl/" },
+  { url: "https://www.publinews.gt/" },
+  { url: "https://www.fayerwayer.com/" },
+  { url: "https://www.nuevamujer.com/" },
+  { url: "https://www.ferplei.com/" },
+  { url: "https://www.elcalce.com/" },
+  { url: "https://www.metroworldnews.com/" },
+  { url: "https://www.metro.pr/" },
+  { url: "https://www.sagrosso.com/" },
 ];
 ---
 
-<Section title="Experiencia laboral">
-  <ul>
+<Section title="Experiencia">
+  <ul class="timeline">
     {
       work.map(
         ({ name, startDate, endDate, position, summary, highlights, url }) => {
           const startYear = new Date(startDate).getFullYear();
-          const endYear =
-            endDate != null ? new Date(endDate).getFullYear() : "Actual";
+          const isCurrent = endDate == null;
+          const endYear = isCurrent
+            ? "Actual"
+            : new Date(endDate).getFullYear();
 
           return (
-            <li>
-              <article>
-                <header>
-                  <div>
-                    <h3>
-                      {name === "Metro World News (Publimetro)" ? (
-                        <button
-                          class="metro-trigger"
-                          type="button"
-                          title={`Ver sitios de ${name}`}
-                        >
-                          {name}
-                        </button>
-                      ) : url ? (
-                        <a href={url} title={`Ver ${name}`} target="_blank">
-                          {name}
-                        </a>
-                      ) : (
-                        <span>{name}</span>
-                      )}
-                    </h3>
-                    <h4>{position}</h4>
-                  </div>
+            <li class:list={["item", { "is-current": isCurrent }]}>
+              <div class="when mono">
+                <span>{startYear}</span>
+                <span class="when__sep">—</span>
+                <span class={isCurrent ? "when__now" : ""}>{endYear}</span>
+              </div>
 
-                  <div>
-                    <time datetime={startDate} data-title={startDate}>
-                      {startYear}
-                    </time>
-                    {" - "}
-                    <time datetime={endDate} data-title={endDate}>
-                      {endYear}
-                    </time>
-                  </div>
-                </header>
-
-                <footer>
-                  <p>{summary}</p>
-                </footer>
-              </article>
+              <div class="body">
+                <h3 class="org">
+                  {name === "Metro World News (Publimetro)" ? (
+                    <button class="link metro-trigger" type="button">
+                      {name}
+                      <span class="org__hint mono">12 sitios ↗</span>
+                    </button>
+                  ) : url ? (
+                    <a class="link" href={url} target="_blank" rel="noopener">
+                      {name}
+                    </a>
+                  ) : (
+                    <span>{name}</span>
+                  )}
+                </h3>
+                <p class="role">{position}</p>
+                {summary && <p class="summary">{summary}</p>}
+                {highlights && highlights.length > 0 && (
+                  <ul class="highlights">
+                    {highlights.map((h) => (
+                      <li>{h}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </li>
           );
         },
@@ -75,42 +70,27 @@ const METRO_SITES = [
     }
   </ul>
 
-  <dialog id="metro-modal">
-    <div class="modal-wrapper" style="position: relative;">
-      <button
-        id="close-metro-btn"
-        type="button"
-        style="position: absolute; top: 25px; right: 5px; background: #e11d48; color: white; border: 2px solid white; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 99999; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"
-        onclick="document.getElementById('metro-modal').close(); document.body.style.overflow='';"
-      >
-        &times;
-      </button>
-      <div class="modal-content">
-        <header>
-          <img src="/MWN.png" alt="Metro World News" />
-        </header>
-        <ul class="sites-grid">
-          {
-            METRO_SITES.map((site) => (
-              <li>
-                <a
-                  href={site.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={site.url}
-                >
-                  <span class="site-link-text">
-                    {site.url
-                      .replace("https://www.", "")
-                      .replace("https://", "")
-                      .replace("/", "")}
-                  </span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
+  <dialog id="metro-modal" class="no-print">
+    <div class="modal">
+      <header class="modal__head">
+        <h3>Metro World News</h3>
+        <button id="close-metro-btn" type="button" aria-label="Cerrar">
+          &times;
+        </button>
+      </header>
+      <ul class="sites">
+        {
+          METRO_SITES.map((site) => (
+            <li>
+              <a href={site.url} target="_blank" rel="noopener noreferrer">
+                <span class="mono">
+                  {site.url.replace(/^https?:\/\/(www\.)?/, "").replace("/", "")}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </dialog>
 </Section>
@@ -119,21 +99,24 @@ const METRO_SITES = [
   function setupMetroModal() {
     const dialog = document.getElementById("metro-modal");
     const trigger = document.querySelector(".metro-trigger");
-
+    const close = document.getElementById("close-metro-btn");
     if (!dialog || !trigger) return;
 
-    trigger.onclick = (e) => {
+    const open = (e) => {
       e.preventDefault();
       dialog.showModal();
       document.body.style.overflow = "hidden";
     };
-
-    dialog.onclick = (e) => {
-      if (e.target === dialog) {
-        dialog.close();
-        document.body.style.overflow = "";
-      }
+    const shut = () => {
+      dialog.close();
+      document.body.style.overflow = "";
     };
+
+    trigger.addEventListener("click", open);
+    close?.addEventListener("click", shut);
+    dialog.addEventListener("click", (e) => {
+      if (e.target === dialog) shut();
+    });
   }
 
   setupMetroModal();
@@ -141,222 +124,198 @@ const METRO_SITES = [
 </script>
 
 <style>
-  ul {
+  .timeline {
     display: flex;
     flex-direction: column;
-    gap: 32px;
   }
 
-  article h3 {
-    font-weight: 500;
-    color: #111;
+  .item {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 1.5rem;
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .item:first-child {
+    border-top: none;
+    padding-top: 0;
   }
 
-  article a,
-  .metro-trigger {
-    color: #111;
-    text-decoration: none;
+  .when {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+    padding-top: 0.2rem;
+  }
+  .when__sep {
+    color: var(--line-2);
+  }
+  .when__now {
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+
+  .org {
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .is-current .org::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .link {
     background: none;
     border: none;
     padding: 0;
     font: inherit;
+    color: inherit;
     cursor: pointer;
-    transition: color 0.2s ease;
-  }
-
-  article a:hover,
-  .metro-trigger:hover {
-    text-decoration: underline;
-    color: #444;
-  }
-
-  article h4 {
-    color: #222;
-    font-weight: 400;
-  }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 4px;
-  }
-
-  time {
-    color: #555;
-    font-size: 0.85rem;
-    min-width: 102px;
-    cursor: default;
-  }
-
-  [data-title]:hover:after {
-    opacity: 1;
-    transition: all 0.1s ease-in-out 0.5s;
-    visibility: visible;
-  }
-
-  [data-title]:after {
-    content: attr(data-title);
-    background-color: #333;
-    color: #fff;
-    font-size: 0.75rem;
-    font-family:
-      Menlo,
-      Monaco,
-      Lucida Console,
-      "Courier New",
-      monospace;
-    position: absolute;
-    padding: 0.2rem 0.5rem;
-    bottom: -1.4rem;
-    left: 50%;
-    white-space: nowrap;
-    box-shadow: 1px 1px 1px #222222;
-    opacity: 0;
-    border: 1px solid #111111;
-    z-index: 99999;
-    visibility: hidden;
-    border-radius: 6px;
-  }
-
-  [data-title] {
-    position: relative;
-  }
-
-  @media (width <= 700px) {
-    time {
-      text-align: right;
-    }
-  }
-
-  /* Modal Styles */
-  dialog {
-    display: none;
-    border: none;
-    background: transparent;
-    max-width: 95vw;
-    width: 600px;
-    max-height: 95vh;
-    overflow: visible;
-    padding: 0;
-  }
-
-  dialog[open] {
-    display: flex;
-    justify-content: center;
+    display: inline-flex;
     align-items: center;
+    gap: 0.6rem;
+    transition: color 0.18s var(--ease-out);
+  }
+  .link:hover {
+    color: var(--accent-ink);
   }
 
-  dialog::backdrop {
-    background: rgba(255, 255, 255, 0.82);
-    backdrop-filter: blur(12px);
+  .org__hint {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--accent-ink);
+    background: var(--accent-tint);
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
   }
 
-  .modal-wrapper {
-    position: relative;
-    padding: 40px 20px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+  .role {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 0.2rem;
   }
 
-  .modal-content {
+  .summary {
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    max-width: var(--measure);
+  }
+
+  .highlights {
+    margin-top: 0.85rem;
     display: flex;
     flex-direction: column;
-    height: auto;
-    max-height: 80vh;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    width: 100%;
+    gap: 0.4rem;
+    max-width: var(--measure);
+  }
+  .highlights li {
+    position: relative;
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .highlights li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
+    background: var(--accent);
+    transform: rotate(45deg);
   }
 
-  .modal-content header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #f0f0f0;
-    flex-shrink: 0;
-    padding: 1.5rem;
-    margin-bottom: 0;
-    background: #fff;
+  @media (width <= 640px) {
+    .item {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+    .when {
+      flex-direction: row;
+      gap: 0.4rem;
+      padding-top: 0;
+    }
   }
 
-  .modal-content img {
-    height: 100px; /* Much larger */
-    width: auto;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto; /* Center it */
-  }
-
-  #close-modal {
-    background: #f5f5f5;
+  /* Modal */
+  dialog {
+    padding: 0;
     border: none;
-    font-size: 1.2rem;
-    line-height: 1;
-    cursor: pointer;
-    color: #666;
+    background: transparent;
+    max-width: min(92vw, 560px);
+    color: var(--ink);
+  }
+  dialog::backdrop {
+    background: oklch(0.99 0.005 50 / 0.7);
+    backdrop-filter: blur(8px);
+  }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px oklch(0.2 0.02 45 / 0.18);
+  }
+  .modal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .modal__head h3 {
+    font-size: 1.05rem;
+  }
+  #close-metro-btn {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
     width: 32px;
     height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--ink-2);
+    transition: all 0.18s var(--ease-out);
   }
-
-  #close-modal:hover {
-    background: #e0e0e0;
-    color: #000;
+  #close-metro-btn:hover {
+    background: var(--accent-tint);
+    color: var(--accent-ink);
   }
-
-  .sites-grid {
+  .sites {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
-    margin: 0;
-    padding: 1.5rem;
-    list-style: none;
-    overflow-y: auto;
-    flex-grow: 1;
-  }
-
-  .sites-grid li a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
     padding: 1rem;
-    background: #fff;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    transition: all 0.2s ease;
-    height: 80px;
+    max-height: 60vh;
+    overflow-y: auto;
   }
-
-  .sites-grid li a:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    border-color: #ddd;
+  .sites a {
+    display: block;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    font-size: 0.8rem;
+    color: var(--ink-2);
+    transition: all 0.18s var(--ease-out);
   }
-
-  .site-link-text {
-    font-size: 0.9rem;
-    color: #444;
-    font-weight: 500;
-    text-align: center;
-    word-break: break-all;
-  }
-
-  .sites-grid li a:hover .site-link-text {
-    color: #000;
-  }
-
-  @media (max-width: 500px) {
-    .sites-grid {
-      grid-template-columns: 1fr 1fr;
-    }
+  .sites a:hover {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    background: var(--accent-tint);
   }
 </style>

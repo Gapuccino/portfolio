@@ -1,183 +1,335 @@
 ---
 import { basics } from "@cv";
-import Section from "@/components/Section.astro";
 import Mail from "@/icons/Mail.astro";
 import Phone from "@/icons/Phone.astro";
-import X from "@/icons/X.astro";
-import LinkedIn from "@/icons/LinkedIn.astro";
 import GitHub from "@/icons/GitHub.astro";
 import WorldMap from "@/icons/WorldMap.astro";
-import type { SocialIcon } from "@/types";
 
 const { name, label, image, location, profiles, phone, email } = basics;
 const { city, region } = location;
 
-const SOCIAL_ICONS: SocialIcon = {
-  GitHub,
-  LinkedIn,
-  X,
-};
+// Propuesta de valor: concreta, no buzzwords. Editar aquí.
+const headline = "Construyo interfaces web rápidas, accesibles y medibles.";
 
-const linkedInfo = profiles.find(({ network }) => network === "LinkedIn");
-const linkedUrl = linkedInfo?.url;
+const github = profiles.find(({ network }) => network === "GitHub")?.url;
+const waNumber = phone?.replace(/\D/g, "");
 
-const printInfo = [email, phone, linkedUrl].filter(Boolean).join(" • ");
+const printInfo = [email, phone, github].filter(Boolean).join("  ·  ");
 ---
 
-<Section>
-  <div class="container">
-    <div class="info">
-      <h1>{name}</h1>
-      <h2>{label}</h2>
-      <span>
-        <WorldMap />
-        {city}, {region}
-      </span>
-      <footer class="print">
-        {printInfo}
-      </footer>
-      <footer class="no-print">
-        {
-          email && (
-            <a
-              href={`mailto:${email}`}
-              title={`Enviar un correo electrónico a ${name} al correo ${email}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Mail />
-            </a>
-          )
-        }
-        {
-          phone && (
-            <a
-              href={`https://wa.me/${phone.replace(/\D/g, "")}`}
-              title={`Enviar un mensaje de WhatsApp a ${name}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Phone />
-            </a>
-          )
-        }
-        {
-          profiles.map(({ network, url, username }) => {
-            const Icon = SOCIAL_ICONS[network];
+<header class="hero">
+  <div class="hero__text">
+    <p class="badge">
+      <span class="badge__dot" aria-hidden="true"></span>
+      Disponible para nuevos proyectos
+    </p>
 
-            return (
-              <a
-                href={url}
-                title={`Visitar el perfil de ${name} en ${network}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon />
-              </a>
-            );
-          })
-        }
-      </footer>
-    </div>
-    <figure>
-      <img src={image} alt={name} />
-    </figure>
+    <h1>{name}</h1>
+    <p class="headline">{headline}</p>
+
+    <p class="meta mono">
+      <span>{label}</span>
+      <span class="meta__sep" aria-hidden="true">/</span>
+      <span class="meta__loc"><WorldMap />{city}, {region}</span>
+    </p>
+
+    <nav class="actions no-print" aria-label="Contacto">
+      {
+        email && (
+          <a class="btn btn--primary" href={`mailto:${email}`}>
+            <Mail />
+            Escríbeme
+          </a>
+        )
+      }
+      {
+        waNumber && (
+          <a
+            class="btn"
+            href={`https://wa.me/${waNumber}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Phone />
+            WhatsApp
+          </a>
+        )
+      }
+      {
+        github && (
+          <a
+            class="btn"
+            href={github}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GitHub />
+            GitHub
+          </a>
+        )
+      }
+      <button class="btn btn--ghost" type="button" id="print-cv">
+        Descargar CV
+      </button>
+    </nav>
+
+    <p class="print">{printInfo}</p>
   </div>
-</Section>
+
+  <figure class="hero__photo">
+    <img src={image} alt={`Retrato de ${name}`} width="320" height="320" />
+  </figure>
+</header>
+
+<script>
+  document
+    .getElementById("print-cv")
+    ?.addEventListener("click", () => window.print());
+</script>
 
 <style>
-  .container {
-    display: flex;
-    flex-direction: row;
+  .hero {
+    max-width: var(--content);
+    margin: 0 auto clamp(3.5rem, 8vw, 6.5rem);
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    gap: clamp(2rem, 6vw, 5rem);
   }
 
-  .info {
+  .hero__text {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero__text > * {
+    animation: rise 0.7s var(--ease-out) both;
+  }
+  .hero__text > :nth-child(1) {
+    animation-delay: 0.02s;
+  }
+  .hero__text > :nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .hero__text > :nth-child(3) {
+    animation-delay: 0.14s;
+  }
+  .hero__text > :nth-child(4) {
+    animation-delay: 0.2s;
+  }
+  .hero__text > :nth-child(5) {
+    animation-delay: 0.26s;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.9rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
     gap: 0.5rem;
-    padding-right: 32px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+    background: var(--accent-tint);
+    border: 1px solid oklch(0.85 0.06 45);
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+  }
+
+  .badge__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent);
+    animation: pulse 2.4s var(--ease-out) infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 oklch(0.6 0.205 32 / 0.5);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 7px oklch(0.6 0.205 32 / 0);
+    }
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: clamp(2.6rem, 7vw, 4.75rem);
+    font-weight: 900;
+    line-height: 0.98;
+    margin-bottom: 1.1rem;
   }
 
-  h2 {
-    color: #444;
+  .headline {
+    font-size: clamp(1.15rem, 2.6vw, 1.6rem);
     font-weight: 500;
-    font-size: 1.1rem;
+    line-height: 1.3;
+    color: var(--ink);
+    max-width: 24ch;
+    margin-bottom: 1.6rem;
     text-wrap: balance;
   }
 
-  img {
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    width: 128px;
-    border-radius: 16px;
+  .headline::after {
+    content: "";
+    display: block;
+    width: 3.5rem;
+    height: 4px;
+    margin-top: 1.1rem;
+    background: var(--accent);
+    border-radius: 2px;
   }
 
-  span {
-    color: #666;
+  .meta {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.5rem 0.85rem;
     font-size: 0.85rem;
-    letter-spacing: -0.05rem;
+    color: var(--ink-3);
+    margin-bottom: 2rem;
   }
 
-  footer {
-    color: #555;
-    font-size: 0.65rem;
-    display: flex;
-    gap: 4px;
-    margin-top: 8px;
+  .meta__sep {
+    color: var(--line-2);
   }
 
-  footer a {
-    color: #777;
+  .meta__loc {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    border: 1px solid #eee;
-    padding: 4px;
-    height: 32px;
-    width: 32px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
+    gap: 0.35rem;
   }
 
-  footer a:hover {
-    background: #eee;
-    border: 1px solid #ddd;
+  .meta :global(svg) {
+    width: 15px;
+    height: 15px;
   }
 
-  @media (width <= 700px) {
-    .container {
-      flex-direction: column-reverse;
-    }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
 
-    .info {
-      justify-content: center;
-      align-items: center;
-      padding-right: 0;
-      text-align: center;
-    }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.6rem 1.1rem;
+    border-radius: 8px;
+    border: 1px solid var(--line-2);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      transform 0.18s var(--ease-out),
+      border-color 0.18s var(--ease-out),
+      background 0.18s var(--ease-out);
+  }
 
-    figure {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  .btn :global(svg) {
+    width: 17px;
+    height: 17px;
+  }
 
-    h2 {
-      text-wrap: balance;
-    }
+  .btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--ink);
+  }
 
-    figure {
-      margin: 0 auto;
+  .btn--primary {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+    color: #fff;
+  }
+
+  .btn--primary:hover {
+    background: oklch(0.45 0.17 30);
+    border-color: oklch(0.45 0.17 30);
+  }
+
+  .btn--ghost {
+    background: transparent;
+    border-color: transparent;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--line-2);
+  }
+
+  .btn--ghost:hover {
+    transform: none;
+    text-decoration-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .hero__photo {
+    position: relative;
+    width: clamp(170px, 22vw, 240px);
+    flex-shrink: 0;
+    animation: rise 0.8s var(--ease-out) 0.18s both;
+  }
+
+  .hero__photo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translate(14px, 14px);
+    background: var(--accent);
+    border-radius: 18px;
+    z-index: 0;
+  }
+
+  .hero__photo img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 18px;
+    border: 1px solid var(--line-2);
+    background: var(--bg-2);
+  }
+
+  @media (width <= 760px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .hero__photo {
+      order: -1;
+      width: clamp(140px, 40vw, 180px);
+    }
+    .headline {
+      max-width: 30ch;
+    }
+  }
+
+  /* Never let entrance motion hide content when printing the CV */
+  @media print {
+    .hero__text > *,
+    .hero__photo {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .hero__photo::before {
+      display: none;
     }
   }
 </style>

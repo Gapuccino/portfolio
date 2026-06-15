@@ -1,33 +1,59 @@
 ---
-// se ejecuta en el servidor o en build time <----
 const { title } = Astro.props
 ---
 
 <section>
-  {title && <h2>{title}</h2>}
+  {
+    title && (
+      <div class="section-head">
+        <h2>{title}</h2>
+        <span class="rule" aria-hidden="true"></span>
+      </div>
+    )
+  }
   <slot />
 </section>
 
-<script>
-  // se ejecuta en el cliente <----
-</script>
-
 <style>
   section {
-    max-width: 700px;
-    margin: 0 auto 48px;
+    max-width: var(--content);
+    margin: 0 auto clamp(3.5rem, 7vw, 6rem);
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
   }
 
   h2 {
-    margin-bottom: 8px;
-    font-weight: 700;
-    line-height: 1.5;
-    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 3.4vw, 2.25rem);
+    flex-shrink: 0;
   }
 
-  @media (width <= 700px) {
-    section {
-      margin-bottom: 38px;
+  .rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line-2);
+    transform-origin: left;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rule {
+      animation: draw-rule linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 18%;
+    }
+    @keyframes draw-rule {
+      from {
+        transform: scaleX(0);
+        opacity: 0;
+      }
+      to {
+        transform: scaleX(1);
+        opacity: 1;
+      }
     }
   }
 </style>
