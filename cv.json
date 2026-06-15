@@ -1,16 +1,14 @@
 {
   "basics": {
     "name": "Sergio Gabriel Rueda Piñón",
-    "label": "Desarrollador Frontend",
+    "label": "Desarrollador Fullstack",
     "image": "/img.jpg",
     "email": "gabrielpin2121@gmail.com",
     "phone": "+52 55 4307 4944",
     "url": "",
     "summary": "Desarrollador Web y Licenciado en Ciencias de la Informática, especializado en la construcción de interfaces modernas y optimizadas. Experiencia en el desarrollo de componentes escalables, mantenimiento de sitios de alto tráfico y mejora de rendimiento (Core Web Vitals). Competente en la integración de Frontend con lógica de Backend y manejo de CMS empresariales. Enfocado en la capacidad de análisis, calidad de código y buenas prácticas.",
     "location": {
-      "address": "Las Peñas, C.P. 09750",
-      "postalCode": "09750",
-      "city": "Iztapalapa, Ciudad de México",
+      "city": "Ciudad de México",
       "countryCode": "MX",
       "region": "México"
     },
@@ -28,6 +26,20 @@
     ]
   },
   "work": [
+    {
+      "name": "Echopoint",
+      "position": "Desarrollador Fullstack",
+      "url": "https://echopoint-intsolutions.com/",
+      "startDate": "2026-04-15",
+      "endDate": null,
+      "summary": "Desarrollo integral de una plataforma SaaS multi-tenant white-label para el sector financiero: broker, CRM a medida y landing de conversión.",
+      "highlights": [
+        "Desarrollo end-to-end de un SaaS multi-tenant white-label para brokers con Next.js 14 (App Router) y Supabase",
+        "Aislamiento de datos por tenant con Row Level Security (RLS) en PostgreSQL y pruebas de aislamiento entre clientes",
+        "Arquitectura Feature-Driven (FDA) para escalar los módulos del CRM manteniendo separación de responsabilidades",
+        "Depuración técnica y documentación para entornos productivos"
+      ]
+    },
     {
       "name": "Metro World News (Publimetro)",
       "position": "Desarrollador Web / Frontend.",
@@ -52,19 +64,6 @@
         "Desarrollo de interfaces responsivas con React, HTML5 y CSS3",
         "Integración con Strapi reduciendo 40% el tiempo de carga",
         "Participación en actividades ágiles y control de entregables"
-      ]
-    },
-    {
-      "name": "Human Group / AFISCO",
-      "position": "Auxiliar en Automatización de Datos",
-      "url": "",
-      "startDate": "2024-05-01",
-      "endDate": "2024-12-31",
-      "summary": "Automatización y gestión de procesos de datos y registros administrativos.",
-      "highlights": [
-        "Automatización con SQL Server reduciendo errores en 25%",
-        "Gestión técnica de registros de +200 usuarios",
-        "Reportes internos y validación de datos"
       ]
     }
   ],
@@ -130,7 +129,6 @@
       "keywords": [
         "Arc XP",
         "Strapi"
-
       ]
     },
     {
@@ -164,8 +162,14 @@
     }
   ],
   "languages": [
-    { "language": "Español", "fluency": "Nativo" },
-    { "language": "Inglés", "fluency": "Intermedio (B1)" }
+    {
+      "language": "Español",
+      "fluency": "Nativo"
+    },
+    {
+      "language": "Inglés",
+      "fluency": "Intermedio (B1)"
+    }
   ],
   "interests": [
     {
@@ -189,7 +193,13 @@
         "Sistema de control de cuotas diarias por usuario usando LocalStorage",
         "Interfaz dinámica con previsualización reactiva y animaciones con Framer Motion"
       ],
-      "technologies": ["Astro", "React", "Tailwind CSS", "Firebase", "Framer Motion"],
+      "technologies": [
+        "Astro",
+        "React",
+        "Tailwind CSS",
+        "Firebase",
+        "Framer Motion"
+      ],
       "images": [
         "/Noti.jpeg",
         "/noti/WhatsApp Image 2026-02-10 at 8.11.31 AM.jpeg",
@@ -201,7 +211,10 @@
       "name": "Sistema de Fichajes de Fútbol",
       "url": "https://www.metroecuador.com.ec/deportes/fichajes/",
       "additionalLinks": [
-        { "label": "Ver Exterior", "url": "https://www.metroecuador.com.ec/deportes/exterior/" }
+        {
+          "label": "Ver Exterior",
+          "url": "https://www.metroecuador.com.ec/deportes/exterior/"
+        }
       ],
       "description": "Aplicación web integral para la gestión del mercado de fichajes y seguimiento de jugadores ecuatorianos en el exterior.",
       "highlights": [
@@ -210,7 +223,14 @@
         "Endpoints API para integración con ArcXP",
         "Gestión de datos normalizados en PostgreSQL"
       ],
-      "technologies": ["Astro", "TypeScript", "Tailwind CSS", "PostgreSQL", "Drizzle ORM", "Lucia Auth"],
+      "technologies": [
+        "Astro",
+        "TypeScript",
+        "Tailwind CSS",
+        "PostgreSQL",
+        "Drizzle ORM",
+        "Lucia Auth"
+      ],
       "images": [
         "/fichajes/image.png",
         "/fichajes/image copy.png",
@@ -228,7 +248,12 @@
         "Acceso protegido por contraseña administrativa",
         "Almacenamiento ligero y eficiente con SQLite"
       ],
-      "technologies": ["FastAPI", "Python", "Astro", "SQLite"],
+      "technologies": [
+        "FastAPI",
+        "Python",
+        "Astro",
+        "SQLite"
+      ],
       "images": [
         "/shortener/login.png",
         "/shortener/dash.png"
@@ -241,8 +266,15 @@
       "highlights": [
         "Planificación, desarrollo, pruebas funcionales y entrega final"
       ],
-      "technologies": ["Scrum", "JavaScript", "HTML5", "CSS3"],
-      "images": ["/bienes.png"]
+      "technologies": [
+        "Scrum",
+        "JavaScript",
+        "HTML5",
+        "CSS3"
+      ],
+      "images": [
+        "/bienes.png"
+      ]
     },
     {
       "name": "Plataforma educativa web – INEA CDMX",
@@ -254,8 +286,15 @@
         "Optimización de carga con Strapi CMS"
       ],
       "url": "https://inea-web-frontend.vercel.app/",
-      "technologies": ["React", "HTML5", "CSS3", "Strapi"],
-      "images": ["/inea.png"]
+      "technologies": [
+        "React",
+        "HTML5",
+        "CSS3",
+        "Strapi"
+      ],
+      "images": [
+        "/inea.png"
+      ]
     },
     {
       "name": "Portafolio Minimalista",
@@ -267,8 +306,14 @@
         "Diseño limpio y accesible"
       ],
       "url": "",
-      "technologies": ["Astro", "TypeScript", "CSS"],
-      "images": ["/portafolio.png"]
+      "technologies": [
+        "Astro",
+        "TypeScript",
+        "CSS"
+      ],
+      "images": [
+        "/portafolio.png"
+      ]
     },
     {
       "name": "Festival de Música",
@@ -279,32 +324,88 @@
         "Integración de agenda de eventos y perfiles de artistas",
         "Funcionalidad de compra de boletos en línea"
       ],
-      "technologies": ["Astro", "JavaScript", "CSS3"],
-      "images": ["/festival.png"]
+      "technologies": [
+        "Astro",
+        "JavaScript",
+        "CSS3"
+      ],
+      "images": [
+        "/festival.png"
+      ]
     }
   ],
   "techStack": [
-    { "name": "React", "category": "Frontend" },
-    { "name": "JavaScript", "category": "Frontend" },
-
-    { "name": "HTML5", "category": "Frontend" },
-    { "name": "CSS3", "category": "Frontend" },
-    { "name": "Bootstrap", "category": "Frontend" },
-    { "name": "Astro", "category": "Frontend" },
-    { "name": "Python", "category": "Backend" },
-
-
-    { "name": "Arc XP", "category": "CMS" },
-    { "name": "Strapi", "category": "CMS" },
-
-    { "name": "Git", "category": "Herramientas" },
-    { "name": "GitHub", "category": "Herramientas" },
-    { "name": "Docker", "category": "Herramientas" },
-    { "name": "AWS", "category": "Herramientas" },
-    { "name": "Linux", "category": "Herramientas" },
-    { "name": "PostgreSQL", "category": "Bases de Datos" },
-    { "name": "Tailwind CSS", "category": "Frontend" },
-    { "name": "FastAPI", "category": "Backend" },
-    { "name": "SQLite", "category": "Bases de Datos" }
+    {
+      "name": "React",
+      "category": "Frontend"
+    },
+    {
+      "name": "JavaScript",
+      "category": "Frontend"
+    },
+    {
+      "name": "HTML5",
+      "category": "Frontend"
+    },
+    {
+      "name": "CSS3",
+      "category": "Frontend"
+    },
+    {
+      "name": "Bootstrap",
+      "category": "Frontend"
+    },
+    {
+      "name": "Astro",
+      "category": "Frontend"
+    },
+    {
+      "name": "Python",
+      "category": "Backend"
+    },
+    {
+      "name": "Arc XP",
+      "category": "CMS"
+    },
+    {
+      "name": "Strapi",
+      "category": "CMS"
+    },
+    {
+      "name": "Git",
+      "category": "Herramientas"
+    },
+    {
+      "name": "GitHub",
+      "category": "Herramientas"
+    },
+    {
+      "name": "Docker",
+      "category": "Herramientas"
+    },
+    {
+      "name": "AWS",
+      "category": "Herramientas"
+    },
+    {
+      "name": "Linux",
+      "category": "Herramientas"
+    },
+    {
+      "name": "PostgreSQL",
+      "category": "Bases de Datos"
+    },
+    {
+      "name": "Tailwind CSS",
+      "category": "Frontend"
+    },
+    {
+      "name": "FastAPI",
+      "category": "Backend"
+    },
+    {
+      "name": "SQLite",
+      "category": "Bases de Datos"
+    }
   ]
 }
