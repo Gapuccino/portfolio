@@ -11,31 +11,54 @@ import KeyboardManager from "@/components/KeyboardManager.astro";
 
 import { basics } from "@cv";
 const { name, label } = basics;
+const year = new Date().getFullYear();
 ---
 
-<Layout title={`Portafolio de ${name} - ${label}`}>
+<Layout title={`${name} — ${label}`}>
   <main>
     <Hero />
     <About />
+    <Projects />
     <Experience />
     <Skills />
-    <Projects />
     <Education />
   </main>
+
+  <footer class="site-footer no-print">
+    <div class="site-footer__inner">
+      <span class="mono">© {year} {name}</span>
+      <span class="mono dim">Diseñado y construido con Astro</span>
+    </div>
+  </footer>
 
   <KeyboardManager />
 </Layout>
 
 <style>
   main {
-    padding: 4rem;
+    padding: clamp(2.5rem, 6vw, 5.5rem) var(--pad) 2rem;
     margin: auto;
     width: 100%;
   }
 
-  @media (width <= 700px) {
-    main {
-      padding: 2rem;
-    }
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding: 1.75rem var(--pad) 4.5rem;
+  }
+
+  .site-footer__inner {
+    max-width: var(--content);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+
+  .dim {
+    color: var(--ink-3);
   }
 </style>

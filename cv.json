@@ -2,7 +2,7 @@
   "basics": {
     "name": "Sergio Gabriel Rueda Piñón",
     "label": "Desarrollador Fullstack",
-    "image": "/img.jpg",
+    "image": "/Foto.webp",
     "email": "gabrielpin2121@gmail.com",
     "phone": "+52 55 4307 4944",
     "url": "",
@@ -17,11 +17,6 @@
         "network": "GitHub",
         "username": "Gapuccino",
         "url": "https://github.com/Gapuccino"
-      },
-      {
-        "network": "LinkedIn",
-        "username": "gabrielruedapiñón",
-        "url": "https://www.linkedin.com/in/gabrielruedapi%C3%B1%C3%B3n"
       }
     ]
   },
@@ -45,7 +40,7 @@
       "position": "Desarrollador Web / Frontend.",
       "url": "",
       "startDate": "2025-09-23",
-      "endDate": null,
+      "endDate": "2026-03-30",
       "summary": "Desarrollo de componentes y optimización de rendimiento web para 13 sitios de alto tráfico.",
       "highlights": [
         "Desarrollo de Custom Blocks en React 18 dentro de Arc XP",
@@ -120,7 +115,8 @@
       "level": "Intermedio",
       "keywords": [
         "MySQL",
-        "SQL Server"
+        "SQL Server",
+        "PostgreSQL"
       ]
     },
     {
@@ -136,8 +132,7 @@
       "level": "Intermedio",
       "keywords": [
         "Core Web Vitals (LCP, TBT, CLS)",
-        "Lighthouse",
-        "PageSpeed Insights"
+        "Lighthouse"
       ]
     },
     {
@@ -149,7 +144,8 @@
         "VS Code",
         "Linux",
         "Docker",
-        "AWS"
+        "AWS",
+        "Antigravity"
       ]
     },
     {
@@ -201,10 +197,10 @@
         "Framer Motion"
       ],
       "images": [
-        "/Noti.jpeg",
-        "/noti/WhatsApp Image 2026-02-10 at 8.11.31 AM.jpeg",
-        "/noti/WhatsApp Image 2026-02-10 at 8.11.49 AM.jpeg",
-        "/noti/WhatsApp Image 2026-02-10 at 8.12.05 AM.jpeg"
+        "/Noti.webp",
+        "/noti/WhatsApp Image 2026-02-10 at 8.11.31 AM.webp",
+        "/noti/WhatsApp Image 2026-02-10 at 8.11.49 AM.webp",
+        "/noti/WhatsApp Image 2026-02-10 at 8.12.05 AM.webp"
       ]
     },
     {
@@ -232,10 +228,10 @@
         "Lucia Auth"
       ],
       "images": [
-        "/fichajes/image.png",
-        "/fichajes/image copy.png",
-        "/fichajes/image copy 2.png",
-        "/fichajes/image copy 3.png"
+        "/fichajes/image.webp",
+        "/fichajes/image copy.webp",
+        "/fichajes/image copy 2.webp",
+        "/fichajes/image copy 3.webp"
       ]
     },
     {
@@ -255,8 +251,8 @@
         "SQLite"
       ],
       "images": [
-        "/shortener/login.png",
-        "/shortener/dash.png"
+        "/shortener/login.webp",
+        "/shortener/dash.webp"
       ]
     },
     {
@@ -273,7 +269,7 @@
         "CSS3"
       ],
       "images": [
-        "/bienes.png"
+        "/bienes.webp"
       ]
     },
     {
@@ -293,7 +289,7 @@
         "Strapi"
       ],
       "images": [
-        "/inea.png"
+        "/inea.webp"
       ]
     },
     {
@@ -312,7 +308,7 @@
         "CSS"
       ],
       "images": [
-        "/portafolio.png"
+        "/portafolio.webp"
       ]
     },
     {
@@ -330,7 +326,7 @@
         "CSS3"
       ],
       "images": [
-        "/festival.png"
+        "/festival.webp"
       ]
     }
   ],

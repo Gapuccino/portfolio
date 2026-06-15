@@ -6,7 +6,15 @@ const { summary } = basics
 ---
 
 <Section title="Sobre mí">
-  <p>
-    {summary}
-  </p>
+  <p class="lead">{summary}</p>
 </Section>
+
+<style>
+  .lead {
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+    line-height: 1.6;
+    color: var(--ink);
+    max-width: var(--measure);
+    font-weight: 400;
+  }
+</style>
