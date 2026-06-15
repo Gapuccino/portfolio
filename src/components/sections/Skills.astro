@@ -1,146 +1,328 @@
 ---
-import Section from "../Section.astro";
 import cv from "@cv";
 
 const SKILLS_ICONS: Record<string, string> = {
-  HTML5: "/iconos/HTML.webp",
-  CSS3: "/iconos/CSS.webp",
-  "JavaScript (ES6+)": "/iconos/JS.webp",
-  "React 18": "/iconos/REACT.webp",
-  jQuery: "/iconos/JQUERY.webp",
-  Bootstrap: "/iconos/Bootstrap.webp",
-  Astro: "/iconos/ASTRO.webp",
-  Python: "/iconos/PYTHON.webp",
-  "REST APIs": "/iconos/Fatapi.webp",
-  MySQL: "/iconos/MYSQL.webp",
-  "SQL Server": "/iconos/SQLSERVER.webp",
-  PostgreSQL: "/iconos/Postgresql.webp",
-  "Arc XP": "/iconos/ARCXP.webp",
-  Strapi: "/iconos/STRAPI.webp",
-  Git: "/iconos/GIT.webp",
-  GitHub: "/iconos/GITHUB.webp",
-  "VS Code": "/iconos/visual-studio-code-icon.webp",
-  Linux: "/iconos/UBUNTU-LINUX.webp",
-  Docker: "/iconos/DOCKER.webp",
-  AWS: "/iconos/AWS.webp",
-  Antigravity: "/iconos/antigravity.webp",
-  "Core Web Vitals (LCP, TBT, CLS)": "/iconos/CWV.webp",
-  Lighthouse: "/iconos/Lighthouse.webp",
-  Scrum: "/iconos/Scrum.webp",
-  Kanban: "/iconos/Kanban.webp",
+  'HTML5':                           '/iconos/HTML.webp',
+  'CSS3':                            '/iconos/CSS.webp',
+  'JavaScript (ES6+)':               '/iconos/JS.webp',
+  'jQuery':                          '/iconos/JQUERY.webp',
+  'React 18':                        '/iconos/REACT.webp',
+  'Bootstrap':                       '/iconos/Bootstrap.webp',
+  'Astro':                           '/iconos/ASTRO.webp',
+  'Tailwind CSS':                    '/iconos/Tailwind.webp',
+  'Python':                          '/iconos/PYTHON.webp',
+  'FastAPI':                         '/iconos/Fatapi.webp',
+  'MySQL':                           '/iconos/MYSQL.webp',
+  'SQL Server':                      '/iconos/SQLSERVER.webp',
+  'PostgreSQL':                      '/iconos/Postgresql.webp',
+  'SQLite':                          '/iconos/Sqlite.webp',
+  'Arc XP':                          '/iconos/ARCXP.webp',
+  'Strapi':                          '/iconos/STRAPI.webp',
+  'Core Web Vitals (LCP, TBT, CLS)': '/iconos/CWV.webp',
+  'Lighthouse':                      '/iconos/Lighthouse.webp',
+  'Git':                             '/iconos/GIT.webp',
+  'GitHub':                          '/iconos/GITHUB.webp',
+  'VS Code':                         '/iconos/visual-studio-code-icon.webp',
+  'Linux':                           '/iconos/UBUNTU-LINUX.webp',
+  'Docker':                          '/iconos/DOCKER.webp',
+  'AWS':                             '/iconos/AWS.webp',
+  'Antigravity':                     '/iconos/antigravity.webp',
+  'Scrum':                           '/iconos/Scrum.webp',
+  'Kanban':                          '/iconos/Kanban.webp',
 };
 
-interface SkillGroup {
-  name: string;
-  level?: string;
-  keywords?: string[];
-}
+const GROUP_COLORS: Record<string, string> = {
+  'Frontend':       '#36BFF0',
+  'Backend':        '#2FB86B',
+  'Bases de Datos': '#FFD23F',
+  'CMS':            '#FF6F61',
+  'Performance':    '#FF6F61',
+  'Herramientas':   '#BEE9FF',
+  'Metodologías':   '#BEE9FF',
+};
 
+interface SkillGroup { name: string; level?: string; keywords?: string[]; }
 const groups = ((cv as any).skills || []) as SkillGroup[];
 ---
 
-<Section title="Habilidades">
-  <dl class="skills">
-    {
-      groups.map((g) => (
-        <div class="row">
-          <dt>
-            <span class="cat">{g.name}</span>
-            {g.level && <span class="level mono">{g.level}</span>}
-          </dt>
-          <dd>
-            <ul class="tags">
-              {(g.keywords || []).map((k) => {
-                const iconSrc = SKILLS_ICONS[k];
+<section id="skills" class="skills-section" aria-label="Habilidades">
+  <div class="skills-inner">
+    <div class="section-header" data-reveal>
+      <span class="section-badge" style="background:var(--yellow); color:var(--navy); border-color:#fff; box-shadow:4px 4px 0 rgba(255,255,255,.35);">MI CAJA DE HERRAMIENTAS</span>
+    </div>
+
+    <p class="skills-subtitle" data-reveal>
+      Las tecnologías con las que construyo todos los días. Selecciona una categoría y dales una pokeada. 👆
+    </p>
+
+    <!-- Tabs Navigation (Character Selection Style) -->
+    <div class="tabs-nav" data-reveal>
+      {groups.map((g, idx) => {
+        const color = GROUP_COLORS[g.name] ?? '#BEE9FF';
+        return (
+          <button
+            class={`tab-btn ${idx === 0 ? 'active' : ''}`}
+            data-tab-target={`tab-${idx}`}
+            style={`--tab-color:${color};`}
+            role="tab"
+            aria-selected={idx === 0 ? "true" : "false"}
+            aria-controls={`tab-${idx}`}
+          >
+            <span class="tab-dot" style={`background:${color};`}></span>
+            {g.name}
+          </button>
+        );
+      })}
+    </div>
+
+    <!-- Tabs Panels Content -->
+    <div class="tabs-content">
+      {groups.map((g, gIdx) => {
+        return (
+          <div
+            id={`tab-${gIdx}`}
+            class={`tab-panel ${gIdx === 0 ? 'active' : ''}`}
+            data-tab-panel
+            role="tabpanel"
+            aria-labelledby={`tab-${gIdx}`}
+          >
+            <ul class="bubble-row">
+              {(g.keywords ?? []).map((k, idx) => {
+                const icon = SKILLS_ICONS[k];
                 return (
-                  <li class="tag mono">
-                    {iconSrc && <img src={iconSrc} alt={`${k} icon`} class="skill-icon" />}
-                    <span>{k}</span>
+                  <li
+                    class="bubble-item"
+                    style={`animation-delay:${idx * 0.05}s;`}
+                  >
+                    <div class="bubble-icon">
+                      {icon
+                        ? <img src={icon} alt={k} width="36" height="36" loading="lazy" />
+                        : <span class="bubble-initial" aria-label={k}>{k.charAt(0)}</span>
+                      }
+                    </div>
+                    <span class="bubble-name">{k}</span>
                   </li>
                 );
               })}
             </ul>
-          </dd>
-        </div>
-      ))
-    }
-  </dl>
-</Section>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
 
 <style>
-  .skills {
+  .skills-section {
+    position: relative;
+    z-index: 1;
+    background: var(--navy);
+    border-top: 5px solid var(--navy);
+    border-bottom: 5px solid var(--navy);
     margin: 0;
-    display: flex;
-    flex-direction: column;
+    padding: clamp(48px, 7vw, 72px) 24px clamp(56px, 8vw, 80px);
   }
 
-  .row {
-    display: grid;
-    grid-template-columns: minmax(9rem, 12rem) 1fr;
-    gap: 1.5rem;
-    padding: 1.25rem 0;
-    border-top: 1px solid var(--line);
-    align-items: baseline;
-  }
-  .row:first-child {
-    border-top: none;
-    padding-top: 0;
+  .skills-inner {
+    max-width: 1080px;
+    margin: 0 auto;
   }
 
-  dt {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  .cat {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--ink);
-  }
-  .level {
-    font-size: 0.72rem;
-    color: var(--ink-3);
+  .skills-section .section-header {
+    margin-bottom: 10px;
   }
 
-  dd {
-    margin: 0;
+  .skills-subtitle {
+    font-family: var(--ff-body);
+    font-size: 16px;
+    font-weight: 600;
+    color: #bcd3e8;
+    max-width: 540px;
+    margin: 0 0 32px;
   }
-  .tags {
+
+  /* Tabs Nav */
+  .tabs-nav {
     display: flex;
+    gap: 10px;
     flex-wrap: wrap;
-    gap: 0.45rem;
-  }
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--ink-2);
-    background: var(--surface);
-    border: 1px solid var(--line-2);
-    padding: 0.35rem 0.7rem;
-    border-radius: 7px;
-    transition:
-      border-color 0.18s var(--ease-out),
-      color 0.18s var(--ease-out),
-      transform 0.18s var(--ease-out);
-  }
-  .skill-icon {
-    width: 1.2em;
-    height: 1.2em;
-    object-fit: contain;
-  }
-  .tag:hover {
-    border-color: var(--accent);
-    color: var(--accent-ink);
-    transform: translateY(-2px);
+    margin-bottom: 36px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
 
-  @media (width <= 640px) {
-    .row {
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
+  .tabs-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .tabs-nav {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-left: -24px;
+      margin-right: -24px;
+      padding-left: 24px;
+      padding-right: 24px;
     }
   }
+
+  .tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--ff-title);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--navy);
+    background: #fff;
+    border: 3px solid var(--navy);
+    border-radius: 14px;
+    padding: 8px 18px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 3px 3px 0 var(--navy);
+    transition: transform .15s var(--ease-pop), box-shadow .15s, background-color .15s, color .15s;
+  }
+
+  .tab-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.25);
+    flex-shrink: 0;
+  }
+
+  .tab-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0 var(--navy);
+    background: var(--tab-color);
+  }
+
+  .tab-btn:active {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0 var(--navy);
+  }
+
+  .tab-btn.active {
+    background: var(--tab-color);
+    transform: scale(1.05) rotate(-1deg);
+    box-shadow: 5px 5px 0 var(--navy);
+  }
+
+  /* Tab Panel */
+  .tab-panel {
+    display: none;
+    opacity: 0;
+  }
+
+  .tab-panel.active {
+    display: block;
+    opacity: 1;
+    animation: popPanelIn .38s var(--ease-pop) forwards;
+  }
+
+  @keyframes popPanelIn {
+    0% {
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Bubble row */
+  .bubble-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .bubble-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 82px;
+  }
+
+  .bubble-icon {
+    display: grid;
+    place-items: center;
+    width: 62px;
+    height: 62px;
+    background: #fff;
+    border: var(--border);
+    border-radius: 50%;
+    box-shadow: 0 5px 0 rgba(0, 0, 0, .3);
+    animation: bobSmall 4s ease-in-out infinite;
+    transition: transform .18s var(--ease-pop), box-shadow .18s;
+    cursor: default;
+  }
+
+  .bubble-icon:hover {
+    transform: translateY(-8px) scale(1.14) rotate(-5deg);
+    box-shadow: 0 14px 0 rgba(0, 0, 0, .2);
+  }
+
+  .bubble-icon img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+  }
+
+  .bubble-initial {
+    font-family: var(--ff-comic);
+    font-size: 22px;
+    color: var(--blue-deep);
+    letter-spacing: 1px;
+  }
+
+  .bubble-name {
+    font-family: var(--ff-body);
+    font-weight: 700;
+    font-size: 11px;
+    color: #dce9f5;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 76px;
+  }
 </style>
+
+<script>
+  const initTabs = () => {
+    const tabBtns = Array.from(document.querySelectorAll('.tab-btn')) as HTMLButtonElement[];
+    const panels = Array.from(document.querySelectorAll('[data-tab-panel]')) as HTMLElement[];
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab-target');
+        
+        // Update tab buttons state
+        tabBtns.forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+
+        // Update active panels
+        panels.forEach((p) => {
+          if (p.id === targetId) {
+            p.classList.add('active');
+          } else {
+            p.classList.remove('active');
+          }
+        });
+      });
+    });
+  };
+
+  // Run on load
+  initTabs();
+</script>

@@ -1,0 +1,152 @@
+---
+/* Mascota "esponja" — fixed bottom-right */
+---
+
+<div class="mascot-root no-print" title="¡Pícame!" role="img" aria-label="Mascota esponja" tabindex="0">
+  <div class="mascot-body">
+    <!-- Poros -->
+    <div class="pore" style="top:11px; left:11px; width:9px; height:9px;"  aria-hidden="true"></div>
+    <div class="pore" style="top:30px; left:24px; width:8px; height:8px;"  aria-hidden="true"></div>
+    <div class="pore" style="top:18px; right:13px; width:11px; height:11px;" aria-hidden="true"></div>
+    <div class="pore" style="bottom:14px; left:16px; width:8px; height:8px;" aria-hidden="true"></div>
+
+    <!-- Ojos -->
+    <div class="eyes" aria-hidden="true">
+      <div class="eye">
+        <div class="pupil" data-pupil></div>
+      </div>
+      <div class="eye">
+        <div class="pupil" data-pupil></div>
+      </div>
+    </div>
+
+    <!-- Sonrisa -->
+    <div class="mouth" aria-hidden="true"></div>
+
+    <!-- Piernas -->
+    <div class="leg leg--left"  aria-hidden="true"></div>
+    <div class="leg leg--right" aria-hidden="true"></div>
+  </div>
+</div>
+
+<style>
+  .mascot-root {
+    position: fixed;
+    right: 26px;
+    bottom: 26px;
+    z-index: 60;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .mascot-body {
+    position: relative;
+    width: 74px;
+    height: 86px;
+    background: var(--yellow);
+    border: var(--border);
+    border-radius: 16px;
+    box-shadow: 4px 5px 0 rgba(21, 35, 63, .3);
+    animation: bobSmall 2.8s ease-in-out infinite;
+  }
+
+  .pore {
+    position: absolute;
+    border-radius: 50%;
+    background: #e9b933;
+  }
+
+  .eyes {
+    position: absolute;
+    top: 16px;
+    left: 13px;
+    display: flex;
+    gap: 5px;
+  }
+
+  .eye {
+    width: 20px;
+    height: 22px;
+    background: #fff;
+    border: 2.5px solid var(--navy);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    animation: blink 4.2s ease-in-out infinite;
+    overflow: visible;
+  }
+
+  .pupil {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--navy);
+    transition: transform .05s linear;
+  }
+
+  .mouth {
+    position: absolute;
+    top: 46px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 12px;
+    border: 2.5px solid var(--navy);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+  }
+
+  .leg {
+    position: absolute;
+    bottom: -9px;
+    width: 12px;
+    height: 14px;
+    background: var(--yellow);
+    border: var(--border);
+    border-radius: 0 0 6px 6px;
+  }
+  .leg--left  { left: 14px; }
+  .leg--right { right: 14px; }
+
+  @media (max-width: 480px) {
+    .mascot-root { right: 14px; bottom: 14px; }
+  }
+</style>
+
+<script>
+  const root    = document.querySelector('.mascot-root') as HTMLElement | null;
+  const body    = root?.querySelector('.mascot-body') as HTMLElement | null;
+  const pupils  = root ? Array.from(root.querySelectorAll('[data-pupil]')) as HTMLElement[] : [];
+
+  /* Pupils follow the cursor */
+  const onMove = (e: MouseEvent) => {
+    pupils.forEach((pupil) => {
+      const eye = pupil.parentElement!;
+      const r   = eye.getBoundingClientRect();
+      const cx  = r.left + r.width  / 2;
+      const cy  = r.top  + r.height / 2;
+      const ang = Math.atan2(e.clientY - cy, e.clientX - cx);
+      const d   = 4;
+      pupil.style.transform = `translate(${Math.cos(ang) * d}px, ${Math.sin(ang) * d}px)`;
+    });
+  };
+  window.addEventListener('mousemove', onMove);
+
+  /* Click: squash & stretch jump */
+  const jump = () => {
+    if (!body) return;
+    body.animate(
+      [
+        { transform: 'translateY(0)    scale(1,    1)'    },
+        { transform: 'translateY(-4px) scale(1.12, .86)'  },
+        { transform: 'translateY(-46px) scale(.9,  1.14)' },
+        { transform: 'translateY(0)    scale(1.1,  .9)'   },
+        { transform: 'translateY(0)    scale(1,    1)'    },
+      ],
+      { duration: 620, easing: 'cubic-bezier(.34,1.56,.64,1)' }
+    );
+  };
+
+  root?.addEventListener('click', jump);
+  root?.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') jump(); });
+</script>

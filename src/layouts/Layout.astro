@@ -1,17 +1,26 @@
 ---
-import { basics } from "@cv"
+import '../styles/global.css';
+import { basics } from "@cv";
 
 interface Props {
-  title: string
+  title: string;
 }
 
-const { title } = Astro.props
+const { title } = Astro.props;
+const { name, summary, image, url } = basics;
 
-const { image, summary, url } = basics
+const site = Astro.site ?? new URL('https://gabriel-rueda.vercel.app');
+const ogImage = new URL(image, site).toString();
+const canonical = url || site.toString();
 
-const site = Astro.site ?? new URL("https://gabriel-rueda.vercel.app")
-const ogImage = new URL(image, site).toString()
-const canonical = url || site.toString()
+/* Precompute bubble props server-side so the layer is static HTML */
+const bubbles = Array.from({ length: 14 }, (_, i) => ({
+  left:  `${(i * 37 + 5) % 100}%`,
+  size:  `${14 + ((i * 13) % 44)}px`,
+  dur:   `${9  + ((i * 7)  % 11)}s`,
+  delay: `-${((i * 1.7) % 12).toFixed(1)}s`,
+  op:    `${(0.22 + ((i % 5) * 0.11)).toFixed(2)}`,
+}));
 ---
 
 <!doctype html>
@@ -21,200 +30,73 @@ const canonical = url || site.toString()
     <title>{title}</title>
     <meta name="description" content={summary} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#fbf8f5" />
+    <meta name="theme-color" content="#FFD23F" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
     <link rel="preload" as="image" href={image} />
 
+    <!-- Fonts: Fredoka · Bangers · Nunito -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap"
     />
 
-    <meta property="og:url" content={canonical} />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={summary} />
-    <meta property="og:image" content={ogImage} />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta property="twitter:domain" content={site.host} />
-    <meta property="twitter:url" content={canonical} />
-    <meta name="twitter:title" content={title} />
+    <!-- Open Graph -->
+    <meta property="og:url"          content={canonical} />
+    <meta property="og:type"         content="website" />
+    <meta property="og:title"        content={title} />
+    <meta property="og:description"  content={summary} />
+    <meta property="og:image"        content={ogImage} />
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta property="twitter:url"     content={canonical} />
+    <meta name="twitter:title"       content={title} />
     <meta name="twitter:description" content={summary} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image"       content={ogImage} />
   </head>
   <body>
-    <div class="grain" aria-hidden="true"></div>
+    <!-- Fixed bubble layer behind everything -->
+    <div class="bubbles-layer" aria-hidden="true">
+      {bubbles.map((b) => (
+        <div
+          class="bubble"
+          style={`left:${b.left};width:${b.size};height:${b.size};animation-duration:${b.dur};animation-delay:${b.delay};opacity:${b.op};`}
+        />
+      ))}
+    </div>
+
     <slot />
   </body>
 </html>
 
-<style is:global>
-  :root {
-    /* Color — light, committed vermilion accent (OKLCH) */
-    --bg: oklch(0.985 0.004 50);
-    --bg-2: oklch(0.965 0.007 50);
-    --surface: oklch(1 0 0);
-    --ink: oklch(0.21 0.018 45);
-    --ink-2: oklch(0.4 0.018 45);
-    --ink-3: oklch(0.52 0.014 45);
-    --line: oklch(0.9 0.008 50);
-    --line-2: oklch(0.83 0.01 50);
-    --accent: oklch(0.6 0.205 32);
-    --accent-strong: oklch(0.52 0.2 31);
-    --accent-tint: oklch(0.95 0.035 45);
-    --accent-ink: oklch(0.46 0.17 30);
-
-    --font-sans: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto,
-      sans-serif;
-    --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo,
-      monospace;
-
-    --measure: 66ch;
-    --content: 940px;
-    --pad: clamp(1.25rem, 5vw, 4rem);
-
-    --z-sticky: 100;
-    --z-backdrop: 200;
-    --z-modal: 300;
-
-    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
-
-  html {
-    font-family: var(--font-sans);
-    background: var(--bg);
-    color: var(--ink);
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.001ms !important;
-      animation-delay: 0ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-    }
-  }
-
-  body,
-  figure {
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  /* Faint engineered background: a single warm accent glow, no noise */
-  .grain {
+<style>
+  .bubbles-layer {
     position: fixed;
     inset: 0;
-    z-index: -1;
     pointer-events: none;
-    background:
-      radial-gradient(
-        60rem 40rem at 100% -10%,
-        oklch(0.93 0.05 45 / 0.55),
-        transparent 60%
-      ),
-      radial-gradient(
-        50rem 40rem at -10% 10%,
-        oklch(0.94 0.02 250 / 0.4),
-        transparent 55%
-      );
+    z-index: 0;
+    overflow: hidden;
   }
 
-  a {
-    color: inherit;
-    text-decoration: none;
+  .bubble {
+    position: absolute;
+    bottom: -80px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 32% 28%,
+      rgba(255, 255, 255, .95),
+      rgba(180, 230, 255, .35) 60%,
+      rgba(120, 200, 245, .15)
+    );
+    border: 2px solid rgba(255, 255, 255, .7);
+    box-shadow: inset -2px -3px 6px rgba(70, 160, 220, .25);
+    animation: bubbleRise linear infinite;
   }
 
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    margin: 0;
-    font-family: var(--font-sans);
-    font-weight: 800;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-    color: var(--ink);
-  }
-
-  p {
-    color: var(--ink-2);
-    font-size: 1rem;
-    line-height: 1.65;
-    margin: 0;
-    text-wrap: pretty;
-  }
-
-  ::selection {
-    background: var(--accent);
-    color: #fff;
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
-
-  .mono {
-    font-family: var(--font-mono);
-    font-weight: 500;
-    letter-spacing: 0;
-  }
-
-  .print {
-    display: none !important;
-  }
-
-  @media print {
-    .grain {
-      display: none !important;
-    }
-    .no-print {
-      display: none !important;
-    }
-    .print {
-      display: block !important;
-    }
-    astro-dev-toolbar {
-      display: none !important;
-    }
-    article {
-      break-inside: avoid;
-    }
+  @keyframes bubbleRise {
+    0%   { transform: translateY(0) translateX(0); }
+    50%  { transform: translateY(-55vh) translateX(20px); }
+    100% { transform: translateY(-112vh) translateX(-10px); }
   }
 </style>

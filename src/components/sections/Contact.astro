@@ -1,0 +1,178 @@
+---
+import { basics } from "@cv";
+
+const { name, email, phone, location, profiles } = basics;
+const { city } = location;
+const github = profiles.find((p) => p.network === "GitHub")?.url;
+const year = new Date().getFullYear();
+---
+
+<section id="contacto" class="contact" aria-label="Contacto">
+  <div class="contact-card" data-reveal>
+    <!-- Decorative circles -->
+    <div class="deco deco--tr" aria-hidden="true"></div>
+    <div class="deco deco--bl" aria-hidden="true"></div>
+
+    <div class="contact-content">
+      <h2 class="contact-title">¿Construimos algo juntos?</h2>
+      <p class="contact-sub">
+        Estoy abierto a nuevos proyectos y oportunidades. ¡Mándame un mensaje!
+      </p>
+
+      <div class="contact-actions">
+        {email && (
+          <a href={`mailto:${email}`} class="btn-cartoon btn-coral" aria-label="Enviar correo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M22 7l-10 7L2 7"/>
+            </svg>
+            Escríbeme un correo
+          </a>
+        )}
+        {github && (
+          <a href={github} target="_blank" rel="noopener noreferrer"
+             class="btn-cartoon btn-navy" aria-label="Ver perfil de GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+              fill="currentColor" aria-hidden="true">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+            Mi GitHub
+          </a>
+        )}
+      </div>
+
+      <div class="contact-meta">
+        {phone && (
+          <span class="meta-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.07 2.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+            {phone}
+          </span>
+        )}
+        {city && (
+          <span class="meta-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            {city}, MX
+          </span>
+        )}
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <p class="site-footer">
+    Hecho con burbujas, squash &amp; stretch y mucho café &middot; {name} &middot; {year}
+  </p>
+</section>
+
+<style>
+  .contact {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(32px, 5vw, 50px) 24px clamp(60px, 10vw, 90px);
+  }
+
+  .contact-card {
+    position: relative;
+    background: var(--yellow);
+    border: var(--border-lg);
+    border-radius: 30px;
+    box-shadow: var(--shadow-lg);
+    padding: clamp(36px, 6vw, 54px) clamp(24px, 5vw, 44px);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  /* Decorative circles */
+  .deco {
+    position: absolute;
+    border-radius: 50%;
+    border: var(--border-lg);
+    opacity: .9;
+    pointer-events: none;
+  }
+  .deco--tr {
+    top: -30px; right: -30px;
+    width: 140px; height: 140px;
+    background: var(--coral);
+  }
+  .deco--bl {
+    bottom: -40px; left: -26px;
+    width: 110px; height: 110px;
+    background: var(--blue);
+  }
+
+  .contact-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .contact-title {
+    font-family: var(--ff-title);
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 700;
+    color: var(--navy);
+    text-shadow: 3px 3px 0 #fff;
+    margin-bottom: 10px;
+    line-height: 1.08;
+  }
+
+  .contact-sub {
+    font-family: var(--ff-body);
+    font-size: clamp(15px, 2vw, 19px);
+    font-weight: 700;
+    color: #3a4663;
+    max-width: 480px;
+    margin: 0 auto 30px;
+  }
+
+  .contact-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 26px;
+  }
+
+  .btn-coral { background: var(--coral);  color: #fff; }
+  .btn-navy  { background: var(--navy);   color: #fff; }
+
+  .contact-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--ff-title);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--navy);
+  }
+
+  /* Footer */
+  .site-footer {
+    text-align: center;
+    font-family: var(--ff-title);
+    font-weight: 600;
+    font-size: 13px;
+    color: #5a6477;
+    margin-top: 28px;
+  }
+</style>

@@ -1,74 +1,89 @@
 ---
-import Section from "../Section.astro"
+import { education } from "@cv";
 
-import { education } from "@cv"
+const items = education.map((e) => ({
+  ...e,
+  startYear: e.startDate.split('-')[0],
+  endYear:   e.endDate ? e.endDate.split('-')[0] : 'Actual',
+}));
 ---
 
-<Section title="Educación">
-  <ul class="edu">
-    {
-      education.map(({ institution, startDate, endDate, area, studyType }) => {
-        const startYear = new Date(startDate).getFullYear()
-        const endYear =
-          endDate != null ? new Date(endDate).getFullYear() : "Actual"
+<section id="educacion" class="education" aria-label="Educación">
+  <div class="section-header" data-reveal>
+    <span class="section-badge" style="background:var(--coral); color:#fff;">EDUCACIÓN</span>
+    <div class="section-line"></div>
+  </div>
 
-        return (
-          <li class="item">
-            <div class="when mono">
-              {startYear}<span class="when__sep">—</span>{endYear}
-            </div>
-            <div class="body">
-              <h3>{institution}</h3>
-              <p class="area">
-                {studyType ? `${studyType} · ${area}` : area}
-              </p>
-            </div>
-          </li>
-        )
-      })
-    }
-  </ul>
-</Section>
+  <div class="edu-grid">
+    {items.map((e) => (
+      <article class="edu-card hover-lift" data-reveal>
+        <div class="year-badge">{e.startYear} — {e.endYear}</div>
+        <h3 class="edu-area">{e.area}</h3>
+        <p class="edu-type">{e.studyType}</p>
+        <p class="edu-institution">{e.institution}</p>
+      </article>
+    ))}
+  </div>
+</section>
 
 <style>
-  .edu {
-    display: flex;
-    flex-direction: column;
-  }
-  .item {
-    display: grid;
-    grid-template-columns: 7.5rem 1fr;
-    gap: 1.5rem;
-    padding: 1.5rem 0;
-    border-top: 1px solid var(--line);
-  }
-  .item:first-child {
-    border-top: none;
-    padding-top: 0;
-  }
-  .when {
-    font-size: 0.85rem;
-    color: var(--ink-3);
-    padding-top: 0.15rem;
-  }
-  .when__sep {
-    margin: 0 0.4rem;
-    color: var(--line-2);
-  }
-  h3 {
-    font-size: 1.15rem;
-    font-weight: 700;
-  }
-  .area {
-    font-size: 0.95rem;
-    margin-top: 0.25rem;
-    color: var(--ink-2);
+  .education {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(48px, 7vw, 68px) 24px clamp(40px, 6vw, 56px);
   }
 
-  @media (width <= 640px) {
-    .item {
-      grid-template-columns: 1fr;
-      gap: 0.4rem;
-    }
+  .edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 24px;
+  }
+
+  .edu-card {
+    background: #fff;
+    border: var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    padding: 22px 24px 24px;
+    position: relative;
+  }
+
+  .year-badge {
+    display: inline-block;
+    font-family: var(--ff-title);
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    background: var(--blue);
+    border: 2px solid var(--navy);
+    border-radius: var(--radius-pill);
+    box-shadow: 2px 2px 0 var(--navy);
+    padding: 4px 13px;
+    margin-bottom: 14px;
+  }
+
+  .edu-area {
+    font-family: var(--ff-title);
+    font-size: clamp(17px, 2.2vw, 20px);
+    font-weight: 700;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .edu-type {
+    font-family: var(--ff-title);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--blue-deep);
+    margin-bottom: 4px;
+  }
+
+  .edu-institution {
+    font-family: var(--ff-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: #5a6477;
   }
 </style>

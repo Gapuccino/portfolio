@@ -1,0 +1,141 @@
+---
+import { basics } from "@cv";
+const { name } = basics;
+---
+
+<nav class="site-nav no-print" aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a href="#inicio" class="nav-logo" aria-label={`${name} — inicio`}>
+      <span class="logo-badge" aria-hidden="true">G</span>
+      <span class="logo-name">Gabriel Rueda</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#sobremi"     class="nav-link">Sobre mí</a>
+      <a href="#experiencia" class="nav-link">Experiencia</a>
+      <a href="#proyectos"   class="nav-link">Proyectos</a>
+      <a href="#skills"      class="nav-link">Skills</a>
+      <a href="#contacto"    class="nav-cta">¡Hablemos!</a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: var(--yellow);
+    border-bottom: 4px solid var(--navy);
+    box-shadow: 0 5px 0 rgba(21, 35, 63, .18);
+  }
+
+  .nav-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 10px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .logo-badge {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    background: var(--coral);
+    border: var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    transform: rotate(-6deg);
+    font-family: var(--ff-comic);
+    font-size: 24px;
+    color: #fff;
+    letter-spacing: 1px;
+    transition: transform .18s var(--ease-pop);
+  }
+
+  .nav-logo:hover .logo-badge {
+    transform: rotate(-11deg) scale(1.1);
+  }
+
+  .logo-name {
+    font-family: var(--ff-title);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--navy);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-top: 8px;
+    padding-bottom: 12px; /* prevents clipping on hover animations */
+    margin-top: -8px;
+    margin-bottom: -10px;
+  }
+
+  .nav-links::-webkit-scrollbar { display: none; }
+
+  .nav-link {
+    font-family: var(--ff-title);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--navy);
+    padding: 7px 12px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    white-space: nowrap;
+    transition: background .15s, border-color .15s, box-shadow .15s;
+  }
+
+  .nav-link:hover {
+    background: #fff;
+    border-color: var(--navy);
+    box-shadow: 2px 2px 0 var(--navy);
+  }
+
+  .nav-cta {
+    font-family: var(--ff-title);
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 12px;
+    background: var(--green);
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+    white-space: nowrap;
+    transition: transform .16s var(--ease-pop), box-shadow .16s;
+  }
+
+  .nav-cta:hover {
+    transform: translate(-1px, -2px);
+    box-shadow: 5px 6px 0 var(--navy);
+  }
+
+  .nav-cta:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--navy);
+  }
+
+  @media (max-width: 480px) {
+    .logo-name { display: none; }
+    .nav-inner  { padding: 10px 14px; }
+  }
+</style>

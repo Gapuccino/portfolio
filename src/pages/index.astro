@@ -1,64 +1,73 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import Nav from "@/components/Nav.astro";
+import Mascota from "@/components/Mascota.astro";
 
-import About from "@/components/sections/About.astro";
-import Education from "@/components/sections/Education.astro";
+import Hero       from "@/components/sections/Hero.astro";
+import About      from "@/components/sections/About.astro";
 import Experience from "@/components/sections/Experience.astro";
-import Hero from "@/components/sections/Hero.astro";
-import Projects from "@/components/sections/Projects.astro";
-import Skills from "@/components/sections/Skills.astro";
-import KeyboardManager from "@/components/KeyboardManager.astro";
+import Projects   from "@/components/sections/Projects.astro";
+import Skills     from "@/components/sections/Skills.astro";
+import Education  from "@/components/sections/Education.astro";
+import Contact    from "@/components/sections/Contact.astro";
 
 import { basics } from "@cv";
 const { name, label } = basics;
-const year = new Date().getFullYear();
 ---
 
 <Layout title={`${name} — ${label}`}>
+  <Nav />
+
   <main>
     <Hero />
     <About />
-    <Projects />
     <Experience />
+    <Projects />
     <Skills />
     <Education />
+    <Contact />
   </main>
 
-  <footer class="site-footer no-print">
-    <div class="site-footer__inner">
-      <span class="mono">© {year} {name}</span>
-      <span class="mono dim">Diseñado y construido con Astro</span>
-    </div>
-  </footer>
-
-  <KeyboardManager />
+  <Mascota />
 </Layout>
+
+<!-- Scroll reveal: set hidden via JS so no-JS still shows content -->
+<script>
+  const reveal = () => {
+    const els = Array.from(document.querySelectorAll('[data-reveal]')) as HTMLElement[];
+
+    /* Hide them only if JS is available */
+    els.forEach((el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(28px) scale(.92)';
+      el.style.willChange = 'transform, opacity';
+    });
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            const el = e.target as HTMLElement;
+            el.style.animation = 'popReveal .6s cubic-bezier(.34,1.56,.64,1) forwards';
+            io.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.14 }
+    );
+
+    els.forEach((el) => io.observe(el));
+  };
+
+  /* Run once on initial load */
+  reveal();
+</script>
 
 <style>
   main {
-    padding: clamp(2.5rem, 6vw, 5.5rem) var(--pad) 2rem;
-    margin: auto;
-    width: 100%;
-  }
-
-  .site-footer {
-    border-top: 1px solid var(--line);
-    padding: 1.75rem var(--pad) 4.5rem;
-  }
-
-  .site-footer__inner {
-    max-width: var(--content);
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-    color: var(--ink-3);
-  }
-
-  .dim {
-    color: var(--ink-3);
+    /* Push below fixed nav (~68px) */
+    padding-top: 68px;
+    position: relative;
+    z-index: 1;
   }
 </style>

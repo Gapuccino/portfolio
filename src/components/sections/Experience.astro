@@ -1,321 +1,326 @@
 ---
-import Section from "../Section.astro";
-
 import { work } from "@cv";
 
-const METRO_SITES = [
-  { url: "https://www.publimetro.com.mx/" },
-  { url: "https://www.publimetro.co/" },
-  { url: "https://www.metroecuador.com.ec/" },
-  { url: "https://www.publimetro.cl/" },
-  { url: "https://www.publinews.gt/" },
-  { url: "https://www.fayerwayer.com/" },
-  { url: "https://www.nuevamujer.com/" },
-  { url: "https://www.ferplei.com/" },
-  { url: "https://www.elcalce.com/" },
-  { url: "https://www.metroworldnews.com/" },
-  { url: "https://www.metro.pr/" },
-  { url: "https://www.sagrosso.com/" },
-];
+const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const fmt = (d: string | null) => {
+  if (!d) return 'Actual';
+  const [y, m] = d.split('-');
+  return `${MONTHS[parseInt(m) - 1]} ${y}`;
+};
+
+const BADGE_COLORS = ['#2FB86B', '#36BFF0', '#FF6F61', '#FFD23F', '#1E7FC2'];
+
+const jobs = work.map((j, i) => ({
+  ...j,
+  period: `${fmt(j.startDate)} — ${fmt(j.endDate)}`,
+  badgeColor: BADGE_COLORS[i % BADGE_COLORS.length],
+  badgeTextColor: BADGE_COLORS[i % BADGE_COLORS.length] === '#FFD23F' ? '#15233F' : '#fff',
+}));
 ---
 
-<Section title="Experiencia">
-  <ul class="timeline">
-    {
-      work.map(
-        ({ name, startDate, endDate, position, summary, highlights, url }) => {
-          const startYear = new Date(startDate).getFullYear();
-          const isCurrent = endDate == null;
-          const endYear = isCurrent
-            ? "Actual"
-            : new Date(endDate).getFullYear();
+<section id="experiencia" class="experience-scroll-section" style={`height: ${jobs.length * 100}vh;`} aria-label="Experiencia">
+  <!-- Checkpoints for scroll-snapping page-by-page inside the sticky wrapper -->
+  {jobs.map((_, i) => (
+    <div class="snap-checkpoint" data-checkpoint={i} style={`top: ${i * 100}vh;`}></div>
+  ))}
 
-          return (
-            <li class:list={["item", { "is-current": isCurrent }]}>
-              <div class="when mono">
-                <span>{startYear}</span>
-                <span class="when__sep">—</span>
-                <span class={isCurrent ? "when__now" : ""}>{endYear}</span>
-              </div>
-
-              <div class="body">
-                <h3 class="org">
-                  {name === "Metro World News (Publimetro)" ? (
-                    <button class="link metro-trigger" type="button">
-                      {name}
-                      <span class="org__hint mono">12 sitios ↗</span>
-                    </button>
-                  ) : url ? (
-                    <a class="link" href={url} target="_blank" rel="noopener">
-                      {name}
-                    </a>
-                  ) : (
-                    <span>{name}</span>
-                  )}
-                </h3>
-                <p class="role">{position}</p>
-                {summary && <p class="summary">{summary}</p>}
-                {highlights && highlights.length > 0 && (
-                  <ul class="highlights">
-                    {highlights.map((h) => (
-                      <li>{h}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </li>
-          );
-        },
-      )
-    }
-  </ul>
-
-  <dialog id="metro-modal" class="no-print">
-    <div class="modal">
-      <header class="modal__head">
-        <h3>Metro World News</h3>
-        <button id="close-metro-btn" type="button" aria-label="Cerrar">
-          &times;
-        </button>
-      </header>
-      <ul class="sites">
-        {
-          METRO_SITES.map((site) => (
-            <li>
-              <a href={site.url} target="_blank" rel="noopener noreferrer">
-                <span class="mono">
-                  {site.url.replace(/^https?:\/\/(www\.)?/, "").replace("/", "")}
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+  <!-- Sticky content container -->
+  <div class="sticky-container">
+    <div class="experience-header-sticky">
+      <div class="section-header">
+        <span class="section-badge" style="background:var(--blue); color:#fff;">EXPERIENCIA</span>
+        <div class="section-line"></div>
+      </div>
     </div>
-  </dialog>
-</Section>
 
-<script is:inline>
-  function setupMetroModal() {
-    const dialog = document.getElementById("metro-modal");
-    const trigger = document.querySelector(".metro-trigger");
-    const close = document.getElementById("close-metro-btn");
-    if (!dialog || !trigger) return;
+    <div class="experience-slider-track">
+      <div class="experience-slider-cards" data-experience-cards>
+        {jobs.map((job) => (
+          <article class="job-card hover-lift">
+            <!-- Period badge (absolute, floats above top edge) -->
+            <div
+              class="period-badge"
+              style={`background:${job.badgeColor}; color:${job.badgeTextColor};`}
+            >
+              {job.period}
+            </div>
 
-    const open = (e) => {
-      e.preventDefault();
-      dialog.showModal();
-      document.body.style.overflow = "hidden";
-    };
-    const shut = () => {
-      dialog.close();
-      document.body.style.overflow = "";
-    };
+            <h3 class="job-org">
+              {job.url
+                ? <a href={job.url} target="_blank" rel="noopener noreferrer" class="job-link">{job.name}</a>
+                : <span>{job.name}</span>
+              }
+            </h3>
+            <p class="job-role">{job.position}</p>
 
-    trigger.addEventListener("click", open);
-    close?.addEventListener("click", shut);
-    dialog.addEventListener("click", (e) => {
-      if (e.target === dialog) shut();
-    });
-  }
+            {job.summary && <p class="job-summary">{job.summary}</p>}
 
-  setupMetroModal();
-  document.addEventListener("astro:page-load", setupMetroModal);
-</script>
+            {job.highlights && job.highlights.length > 0 && (
+              <ul class="highlights">
+                {job.highlights.map((h) => (
+                  <li class="highlight-item">
+                    <span class="bullet" aria-hidden="true"></span>
+                    <span>{h}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <!-- Progress indicator dots -->
+    <div class="experience-progress">
+      {jobs.map((_, i) => (
+        <button
+          class={`progress-dot ${i === 0 ? 'active' : ''}`}
+          data-progress={i}
+          aria-label={`Ver puesto ${i + 1}`}
+        ></button>
+      ))}
+    </div>
+  </div>
+</section>
 
 <style>
-  .timeline {
+  .experience-scroll-section {
+    position: relative;
+    /* Height is dynamic via inline style */
+    display: block !important; /* overrides global flex section style */
+  }
+
+  .snap-checkpoint {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    scroll-snap-align: start;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .sticky-container {
+    position: sticky;
+    top: 68px;
+    height: calc(100vh - 68px);
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 40px 24px;
+    z-index: 10;
   }
 
-  .item {
-    display: grid;
-    grid-template-columns: 7.5rem 1fr;
-    gap: 1.5rem;
-    padding: 1.75rem 0;
-    border-top: 1px solid var(--line);
-  }
-  .item:first-child {
-    border-top: none;
-    padding-top: 0;
+  .experience-header-sticky {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto 24px auto;
   }
 
-  .when {
+  .experience-slider-track {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 24px 16px 36px 16px; /* increased to leave room for the hover animation */
+  }
+
+  .experience-slider-cards {
     display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    font-size: 0.85rem;
-    color: var(--ink-3);
-    padding-top: 0.2rem;
-  }
-  .when__sep {
-    color: var(--line-2);
-  }
-  .when__now {
-    color: var(--accent-ink);
-    font-weight: 600;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    width: 100%;
+    gap: 40px; /* spacing between slides when scrolling */
   }
 
-  .org {
-    font-size: 1.2rem;
-    font-weight: 700;
+  .experience-slider-cards .job-card {
+    flex: 0 0 100%;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 14px;
+    background: #fff;
+    border: var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    padding: 26px 28px 24px;
+    position: relative;
+  }
+
+  /* Progress indicators */
+  .experience-progress {
     display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
   }
 
-  .is-current .org::before {
-    content: "";
-    width: 8px;
-    height: 8px;
+  .progress-dot {
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: var(--accent);
-    flex-shrink: 0;
-  }
-
-  .link {
-    background: none;
-    border: none;
-    padding: 0;
-    font: inherit;
-    color: inherit;
+    background: #fff;
+    border: 2px solid var(--navy);
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    transition: color 0.18s var(--ease-out);
-  }
-  .link:hover {
-    color: var(--accent-ink);
+    padding: 0;
+    transition: transform .15s var(--ease-pop), background-color .15s, box-shadow .15s;
   }
 
-  .org__hint {
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: var(--accent-ink);
-    background: var(--accent-tint);
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
+  .progress-dot:hover {
+    transform: scale(1.18);
+    background: var(--yellow-lt);
   }
 
-  .role {
-    font-size: 0.95rem;
+  .progress-dot.active {
+    background: var(--blue);
+    transform: scale(1.3);
+    box-shadow: 2px 2px 0 var(--navy);
+  }
+
+  /* Card inner elements (original styles) */
+  .period-badge {
+    position: absolute;
+    top: -14px;
+    left: 22px;
+    font-family: var(--ff-title);
+    font-weight: 700;
+    font-size: 14px;
+    border: var(--border);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-sm);
+    padding: 4px 14px;
+    white-space: nowrap;
+  }
+
+  .job-org {
+    font-family: var(--ff-title);
+    font-size: clamp(19px, 2.5vw, 24px);
+    font-weight: 700;
+    margin: 8px 0 2px;
+  }
+
+  .job-link {
+    color: inherit;
+    transition: color .15s;
+  }
+  .job-link:hover { color: var(--blue-deep); }
+
+  .job-role {
+    font-family: var(--ff-title);
     font-weight: 600;
-    color: var(--ink);
-    margin-top: 0.2rem;
+    font-size: 16px;
+    color: var(--blue-deep);
+    margin-bottom: 12px;
   }
 
-  .summary {
-    font-size: 0.95rem;
-    margin-top: 0.5rem;
-    max-width: var(--measure);
+  .job-summary {
+    font-family: var(--ff-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.55;
+    color: #3a4663;
+    margin-bottom: 14px;
   }
 
   .highlights {
-    margin-top: 0.85rem;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    max-width: var(--measure);
-  }
-  .highlights li {
-    position: relative;
-    padding-left: 1.25rem;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: var(--ink-2);
-  }
-  .highlights li::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0.55em;
-    width: 6px;
-    height: 6px;
-    border-radius: 1px;
-    background: var(--accent);
-    transform: rotate(45deg);
-  }
-
-  @media (width <= 640px) {
-    .item {
-      grid-template-columns: 1fr;
-      gap: 0.6rem;
-    }
-    .when {
-      flex-direction: row;
-      gap: 0.4rem;
-      padding-top: 0;
-    }
-  }
-
-  /* Modal */
-  dialog {
+    gap: 8px;
+    margin: 0;
     padding: 0;
-    border: none;
-    background: transparent;
-    max-width: min(92vw, 560px);
-    color: var(--ink);
+    list-style: none;
   }
-  dialog::backdrop {
-    background: oklch(0.99 0.005 50 / 0.7);
-    backdrop-filter: blur(8px);
-  }
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--line-2);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 24px 60px oklch(0.2 0.02 45 / 0.18);
-  }
-  .modal__head {
+
+  .highlight-item {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.1rem 1.25rem;
-    border-bottom: 1px solid var(--line);
+    align-items: flex-start;
+    gap: 10px;
+    font-family: var(--ff-body);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: #28354f;
   }
-  .modal__head h3 {
-    font-size: 1.05rem;
+
+  .bullet {
+    flex-shrink: 0;
+    margin-top: 4px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--yellow);
+    border: 2px solid var(--navy);
   }
-  #close-metro-btn {
-    background: var(--bg-2);
-    border: 1px solid var(--line);
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    font-size: 1.3rem;
-    line-height: 1;
-    cursor: pointer;
-    color: var(--ink-2);
-    transition: all 0.18s var(--ease-out);
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .sticky-container {
+      padding: 24px 16px;
+    }
+    .experience-header-sticky {
+      margin-bottom: 20px;
+    }
+    .job-card {
+      padding: 22px 20px 20px;
+    }
   }
-  #close-metro-btn:hover {
-    background: var(--accent-tint);
-    color: var(--accent-ink);
-  }
-  .sites {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    padding: 1rem;
-    max-height: 60vh;
-    overflow-y: auto;
-  }
-  .sites a {
-    display: block;
-    padding: 0.7rem 0.8rem;
-    border: 1px solid var(--line);
-    border-radius: 9px;
-    font-size: 0.8rem;
-    color: var(--ink-2);
-    transition: all 0.18s var(--ease-out);
-  }
-  .sites a:hover {
-    border-color: var(--accent);
-    color: var(--accent-ink);
-    background: var(--accent-tint);
+
+  @media (max-width: 480px) {
+    .sticky-container {
+      padding: 16px 12px;
+    }
+    .job-summary {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .highlight-item {
+      font-size: 13px;
+    }
   }
 </style>
+
+<script>
+  const initExperienceScroll = () => {
+    const checkpoints = Array.from(document.querySelectorAll('.snap-checkpoint')) as HTMLElement[];
+    const cardsContainer = document.querySelector('[data-experience-cards]') as HTMLElement | null;
+    const dots = Array.from(document.querySelectorAll('.experience-progress .progress-dot')) as HTMLButtonElement[];
+    const section = document.querySelector('.experience-scroll-section') as HTMLElement | null;
+
+    if (!section || checkpoints.length === 0 || !cardsContainer) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = parseInt(entry.target.getAttribute('data-checkpoint') || '0', 10);
+          
+          // Translate the cards container: accounts for 100% width + 40px gap
+          cardsContainer.style.transform = `translateX(calc(-${idx * 100}% - ${idx * 40}px))`;
+          
+          // Update active dot indicators
+          dots.forEach((dot, dIdx) => {
+            if (dIdx === idx) {
+              dot.classList.add('active');
+            } else {
+              dot.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, {
+      threshold: 0.5,
+      rootMargin: '-68px 0px 0px 0px' // accounts for the fixed navbar height
+    });
+
+    checkpoints.forEach((cp) => observer.observe(cp));
+
+    // Dots click navigation
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        checkpoints[idx].scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  };
+
+  // Run on startup
+  initExperienceScroll();
+</script>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Bangers&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; }
+  ::selection { background: #FFD23F; color: #15233F; }
+  @keyframes bubbleRise {
+    0% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-55vh) translateX(20px); }
+    100% { transform: translateY(-112vh) translateX(-10px); }
+  }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+  @keyframes bobSmall { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @keyframes wiggle { 0%,100% { transform: rotate(-2.2deg); } 50% { transform: rotate(2.2deg); } }
+  @keyframes wiggleSoft { 0%,100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
+  @keyframes spinSlow { to { transform: rotate(360deg); } }
+  @keyframes popReveal { 0% { opacity: 0; transform: translateY(28px) scale(.92); } 60% { opacity: 1; transform: translateY(-4px) scale(1.02); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes floatTag { 0%,100% { transform: translateY(0) rotate(var(--r,0deg)); } 50% { transform: translateY(-14px) rotate(var(--r,0deg)); } }
+  @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+  @keyframes scrollDot { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(16px); opacity: 0; } 100% { opacity: 0; } }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+</style>
+</helmet>
+
+<div style="position:relative; font-family:'Nunito',sans-serif; color:#15233F; background:linear-gradient(180deg,#BEE9FF 0%, #DCF4FF 22%, #EFFAFF 46%, #FFF7E6 100%); overflow:hidden;">
+
+  <!-- BUBBLES BACKGROUND -->
+  <div style="position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;">
+    <sc-for list="{{ bubbles }}" as="b" hint-placeholder-count="12">
+      <div style="position:absolute; bottom:-80px; border-radius:50%; background:radial-gradient(circle at 32% 28%, rgba(255,255,255,.95), rgba(180,230,255,.35) 60%, rgba(120,200,245,.15)); border:2px solid rgba(255,255,255,.7); box-shadow:inset -2px -3px 6px rgba(70,160,220,.25); left:{{ b.left }}; width:{{ b.size }}; height:{{ b.size }}; opacity:{{ b.op }}; animation:bubbleRise {{ b.dur }} linear infinite; animation-delay:{{ b.delay }};"></div>
+    </sc-for>
+  </div>
+
+  <!-- NAV -->
+  <nav style="position:fixed; top:0; left:0; right:0; z-index:50; background:#FFD23F; border-bottom:4px solid #15233F; box-shadow:0 5px 0 rgba(21,35,63,.18);">
+    <div style="max-width:1120px; margin:0 auto; padding:12px 22px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <a href="#inicio" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+        <span style="display:grid; place-items:center; width:42px; height:42px; background:#FF6F61; border:3px solid #15233F; border-radius:14px; box-shadow:3px 3px 0 #15233F; transform:rotate(-6deg); font-family:'Bangers',cursive; font-size:26px; color:#fff; letter-spacing:1px;">G</span>
+        <span style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:20px; color:#15233F;">Gabriel Rueda</span>
+      </a>
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+        <a href="#sobremi" style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; color:#15233F; text-decoration:none; padding:7px 13px; border-radius:11px; border:2px solid transparent; transition:all .15s;" style-hover="background:#fff; border:2px solid #15233F; box-shadow:2px 2px 0 #15233F;">Sobre mí</a>
+        <a href="#experiencia" style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; color:#15233F; text-decoration:none; padding:7px 13px; border-radius:11px; border:2px solid transparent; transition:all .15s;" style-hover="background:#fff; border:2px solid #15233F; box-shadow:2px 2px 0 #15233F;">Experiencia</a>
+        <a href="#proyectos" style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; color:#15233F; text-decoration:none; padding:7px 13px; border-radius:11px; border:2px solid transparent; transition:all .15s;" style-hover="background:#fff; border:2px solid #15233F; box-shadow:2px 2px 0 #15233F;">Proyectos</a>
+        <a href="#skills" style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; color:#15233F; text-decoration:none; padding:7px 13px; border-radius:11px; border:2px solid transparent; transition:all .15s;" style-hover="background:#fff; border:2px solid #15233F; box-shadow:2px 2px 0 #15233F;">Skills</a>
+        <a href="#contacto" style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:15px; color:#fff; text-decoration:none; padding:8px 16px; border-radius:12px; background:#2FB86B; border:3px solid #15233F; box-shadow:3px 3px 0 #15233F; transition:all .15s;" style-hover="transform:translate(-1px,-2px); box-shadow:5px 6px 0 #15233F;">¡Hablemos!</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="inicio" data-screen-label="Hero" style="position:relative; z-index:1; max-width:1120px; margin:0 auto; padding:140px 24px 70px; display:grid; grid-template-columns:1.05fr .95fr; gap:40px; align-items:center;">
+    <div>
+      <span style="display:inline-block; font-family:'Bangers',cursive; font-size:22px; letter-spacing:1.5px; color:#fff; background:#FF6F61; border:3px solid #15233F; border-radius:14px; box-shadow:4px 4px 0 #15233F; padding:6px 16px; transform:rotate(-3deg); animation:wiggleSoft 3.5s ease-in-out infinite;">{{ greeting }}</span>
+      <h1 style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:clamp(48px,7vw,86px); line-height:.95; margin:18px 0 6px; color:#15233F; text-shadow:5px 5px 0 #36BFF0; letter-spacing:-1px;">Gabriel<br>Rueda Piñón</h1>
+      <div style="display:inline-block; font-family:'Fredoka',sans-serif; font-weight:600; font-size:clamp(20px,2.5vw,28px); color:#fff; background:#36BFF0; border:3px solid #15233F; border-radius:13px; box-shadow:4px 4px 0 #15233F; padding:5px 18px; margin-top:8px; transform:rotate(1.5deg); white-space:nowrap;">Desarrollador Fullstack</div>
+      <p style="font-size:18px; line-height:1.6; max-width:480px; margin:26px 0 30px; font-weight:600; color:#28354f;">Construyo interfaces modernas, rápidas y bien hechas. Me clavo en el rendimiento (Core Web Vitals), el código limpio y conectar un buen frontend con backend sólido. 🧽✨</p>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <a href="#proyectos" style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:18px; color:#15233F; text-decoration:none; background:#FFD23F; border:3px solid #15233F; border-radius:15px; box-shadow:5px 5px 0 #15233F; padding:13px 26px; transition:transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s;" style-hover="transform:translate(-2px,-4px) rotate(-1deg) scale(1.03); box-shadow:8px 11px 0 #15233F;" style-active="transform:translate(2px,2px) scale(.97); box-shadow:2px 2px 0 #15233F;">Ver proyectos 🚀</a>
+        <a href="#contacto" style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:18px; color:#fff; text-decoration:none; background:#FF6F61; border:3px solid #15233F; border-radius:15px; box-shadow:5px 5px 0 #15233F; padding:13px 26px; transition:transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s;" style-hover="transform:translate(-2px,-4px) rotate(1deg) scale(1.03); box-shadow:8px 11px 0 #15233F;" style-active="transform:translate(2px,2px) scale(.97); box-shadow:2px 2px 0 #15233F;">Contáctame 💬</a>
+      </div>
+      <div style="display:flex; gap:14px; margin-top:26px; align-items:center;">
+        <a href="https://github.com/Gapuccino" target="_blank" rel="noopener" style="display:grid; place-items:center; width:48px; height:48px; background:#fff; border:3px solid #15233F; border-radius:50%; box-shadow:3px 3px 0 #15233F; transition:transform .16s;" style-hover="transform:translateY(-4px) rotate(-8deg);"><img src="public/iconos/GITHUB.webp" alt="GitHub" style="width:26px; height:26px; object-fit:contain;"></a>
+        <a href="/cdn-cgi/l/email-protection#abcccac9d9c2cec7dbc2c5999a999aebccc6cac2c785c8c4c6" style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:16px; color:#15233F; text-decoration:none; padding:6px 0; border-bottom:3px solid #FFD23F;"><span class="__cf_email__" data-cfemail="6e090f0c1c070b021e07005c5f5c5f2e09030f0702400d0103">[email&#160;protected]</span></a>
+      </div>
+    </div>
+
+    <!-- PHOTO PORTHOLE -->
+    <div style="position:relative; display:grid; place-items:center; min-height:480px;">
+      <sc-for list="{{ heroTags }}" as="t" hint-placeholder-count="5">
+        <div style="position:absolute; z-index:4; font-family:'Fredoka',sans-serif; font-weight:700; font-size:15px; color:#fff; border:3px solid #15233F; border-radius:50px; box-shadow:3px 3px 0 #15233F; padding:7px 15px; white-space:nowrap; top:{{ t.top }}; left:{{ t.left }}; background:{{ t.color }}; --r:{{ t.rot }}; transform:rotate({{ t.rot }}); animation:floatTag {{ t.dur }} ease-in-out infinite; animation-delay:{{ t.delay }};">{{ t.label }}</div>
+      </sc-for>
+      <div style="position:relative; width:min(420px,80vw); aspect-ratio:1; animation:bob 5s ease-in-out infinite;">
+        <div style="position:absolute; inset:0; border-radius:50%; background:#36BFF0; border:11px solid #15233F; box-shadow:9px 12px 0 rgba(21,35,63,.22), inset 0 0 0 6px #2a9fd6; overflow:hidden;">
+          <img src="assets/foto.webp" alt="Foto de Gabriel" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 18%;">
+          <div style="position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle at 28% 22%, rgba(255,255,255,.55), rgba(255,255,255,0) 42%); pointer-events:none;"></div>
+        </div>
+        <div style="position:absolute; top:6%; left:6%; width:18px; height:18px; background:#cfd8e6; border:3px solid #15233F; border-radius:50%;"></div>
+        <div style="position:absolute; top:6%; right:6%; width:18px; height:18px; background:#cfd8e6; border:3px solid #15233F; border-radius:50%;"></div>
+        <div style="position:absolute; bottom:6%; left:6%; width:18px; height:18px; background:#cfd8e6; border:3px solid #15233F; border-radius:50%;"></div>
+        <div style="position:absolute; bottom:6%; right:6%; width:18px; height:18px; background:#cfd8e6; border:3px solid #15233F; border-radius:50%;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCROLL HINT -->
+  <div style="position:relative; z-index:1; display:flex; justify-content:center; padding-bottom:20px;">
+    <div style="display:grid; place-items:start center; width:28px; height:46px; border:3px solid #15233F; border-radius:16px; padding-top:6px; background:rgba(255,255,255,.55);">
+      <div style="width:7px; height:7px; border-radius:50%; background:#15233F; animation:scrollDot 1.5s ease-in-out infinite;"></div>
+    </div>
+  </div>
+
+  <!-- SOBRE MI -->
+  <section id="sobremi" data-screen-label="Sobre mí" style="position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:70px 24px;">
+    <div data-reveal style="display:flex; align-items:center; gap:14px; margin-bottom:30px;">
+      <span style="font-family:'Bangers',cursive; font-size:30px; letter-spacing:2px; color:#fff; background:#2FB86B; border:3px solid #15233F; border-radius:14px; box-shadow:4px 4px 0 #15233F; padding:6px 18px; transform:rotate(-2deg);">SOBRE MÍ</span>
+      <div style="flex:1; height:6px; border-radius:6px; background:repeating-linear-gradient(90deg,#15233F 0 14px,transparent 14px 26px);"></div>
+    </div>
+    <div data-reveal style="position:relative; background:#fff; border:3px solid #15233F; border-radius:26px; box-shadow:8px 8px 0 #15233F; padding:34px 36px;">
+      <div style="position:absolute; left:54px; bottom:-22px; width:0; height:0; border-left:18px solid transparent; border-right:18px solid transparent; border-top:24px solid #15233F;"></div>
+      <div style="position:absolute; left:58px; bottom:-14px; width:0; height:0; border-left:13px solid transparent; border-right:13px solid transparent; border-top:17px solid #fff;"></div>
+      <p style="font-size:20px; line-height:1.65; margin:0; font-weight:600; color:#28354f;">Desarrollador Web y Licenciado en Ciencias de la Informática. Me especializo en construir <b style="color:#1E7FC2;">interfaces modernas y optimizadas</b>: componentes escalables, mantenimiento de sitios de alto tráfico y mejora de rendimiento. Me gusta el análisis, la calidad de código y las buenas prácticas... y que las cosas se sientan vivas. 🌊</p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:24px;">
+        <span style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; background:#FFE89B; border:2px solid #15233F; border-radius:50px; padding:7px 15px;">📍 Ciudad de México</span>
+        <span style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; background:#BEE9FF; border:2px solid #15233F; border-radius:50px; padding:7px 15px;">🎓 Lic. Ciencias de la Informática</span>
+        <span style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; background:#FFD1CC; border:2px solid #15233F; border-radius:50px; padding:7px 15px;">🗣️ Español · Inglés B1</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCIA -->
+  <section id="experiencia" data-screen-label="Experiencia" style="position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:60px 24px;">
+    <div data-reveal style="display:flex; align-items:center; gap:14px; margin-bottom:34px;">
+      <span style="font-family:'Bangers',cursive; font-size:30px; letter-spacing:2px; color:#fff; background:#36BFF0; border:3px solid #15233F; border-radius:14px; box-shadow:4px 4px 0 #15233F; padding:6px 18px; transform:rotate(2deg);">EXPERIENCIA</span>
+      <div style="flex:1; height:6px; border-radius:6px; background:repeating-linear-gradient(90deg,#15233F 0 14px,transparent 14px 26px);"></div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:24px;">
+      <sc-for list="{{ work }}" as="job" hint-placeholder-count="3">
+        <div data-reveal style="position:relative; background:#fff; border:3px solid #15233F; border-radius:22px; box-shadow:7px 7px 0 #15233F; padding:26px 28px; transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s;" style-hover="transform:translate(-2px,-4px) rotate(-.4deg); box-shadow:11px 13px 0 #15233F;">
+          <div style="position:absolute; top:-14px; left:24px; font-family:'Fredoka',sans-serif; font-weight:700; font-size:14px; color:#fff; background:{{ job.color }}; border:3px solid #15233F; border-radius:50px; padding:4px 14px; box-shadow:2px 2px 0 #15233F;">{{ job.period }}</div>
+          <h3 style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:24px; margin:10px 0 2px;">{{ job.name }}</h3>
+          <div style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:16px; color:#1E7FC2; margin-bottom:12px;">{{ job.position }}</div>
+          <p style="font-size:16px; line-height:1.55; font-weight:600; color:#3a4663; margin:0 0 14px;">{{ job.summary }}</p>
+          <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px;">
+            <sc-for list="{{ job.highlights }}" as="h" hint-placeholder-count="3">
+              <li style="display:flex; gap:10px; align-items:flex-start; font-size:15px; line-height:1.45; font-weight:600; color:#28354f;"><span style="flex:none; margin-top:3px; width:14px; height:14px; border-radius:50%; background:#FFD23F; border:2px solid #15233F;"></span><span>{{ h }}</span></li>
+            </sc-for>
+          </ul>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- PROYECTOS -->
+  <section id="proyectos" data-screen-label="Proyectos" style="position:relative; z-index:1; max-width:1120px; margin:0 auto; padding:60px 24px;">
+    <div data-reveal style="display:flex; align-items:center; gap:14px; margin-bottom:34px;">
+      <span style="font-family:'Bangers',cursive; font-size:30px; letter-spacing:2px; color:#15233F; background:#FFD23F; border:3px solid #15233F; border-radius:14px; box-shadow:4px 4px 0 #15233F; padding:6px 18px; transform:rotate(-2deg);">PROYECTOS</span>
+      <div style="flex:1; height:6px; border-radius:6px; background:repeating-linear-gradient(90deg,#15233F 0 14px,transparent 14px 26px);"></div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:26px;">
+      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="6">
+        <div data-reveal style="display:flex; flex-direction:column; background:#fff; border:3px solid #15233F; border-radius:24px; box-shadow:7px 7px 0 #15233F; overflow:hidden; transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s;" style-hover="transform:translate(-3px,-6px); box-shadow:12px 15px 0 #15233F;">
+          <div style="position:relative; aspect-ratio:16/10; border-bottom:3px solid #15233F; background:{{ p.tint }}; overflow:hidden;">
+            <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ true }}">
+              <img src="{{ p.img }}" alt="{{ p.name }}" style="width:100%; height:100%; object-fit:cover; object-position:top center;">
+            </sc-if>
+            <sc-if value="{{ p.noImg }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute; inset:0; display:grid; place-items:center; background-image:repeating-linear-gradient(45deg,rgba(21,35,63,.12) 0 12px,transparent 12px 24px);">
+                <span style="font-family:monospace; font-size:13px; font-weight:700; color:#15233F; background:#fff; border:2px dashed #15233F; border-radius:10px; padding:8px 14px;">{{ p.placeholder }}</span>
+              </div>
+            </sc-if>
+          </div>
+          <div style="padding:20px 22px 22px; display:flex; flex-direction:column; flex:1;">
+            <h3 style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:21px; margin:0 0 8px; line-height:1.1;">{{ p.name }}</h3>
+            <p style="font-size:15px; line-height:1.5; font-weight:600; color:#3a4663; margin:0 0 16px; flex:1;">{{ p.description }}</p>
+            <div style="display:flex; gap:7px; flex-wrap:wrap; margin-bottom:16px;">
+              <sc-for list="{{ p.technologies }}" as="tech" hint-placeholder-count="4">
+                <span style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:12.5px; background:#EAF6FF; border:2px solid #15233F; border-radius:50px; padding:4px 11px;">{{ tech }}</span>
+              </sc-for>
+            </div>
+            <sc-if value="{{ p.hasUrl }}" hint-placeholder-val="{{ false }}">
+              <a href="{{ p.url }}" target="_blank" rel="noopener" style="align-self:flex-start; font-family:'Fredoka',sans-serif; font-weight:700; font-size:15px; color:#fff; text-decoration:none; background:#2FB86B; border:3px solid #15233F; border-radius:13px; box-shadow:3px 3px 0 #15233F; padding:9px 18px; transition:transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s;" style-hover="transform:translate(-1px,-3px); box-shadow:5px 7px 0 #15233F;" style-active="transform:translate(1px,1px); box-shadow:1px 1px 0 #15233F;">Ver sitio ↗</a>
+            </sc-if>
+            <sc-if value="{{ p.noUrl }}" hint-placeholder-val="{{ false }}">
+              <span style="align-self:flex-start; font-family:'Fredoka',sans-serif; font-weight:600; font-size:14px; color:#7a8499; background:#f0f2f6; border:2px dashed #aeb6c6; border-radius:13px; padding:8px 16px;">Proyecto interno 🔒</span>
+            </sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" data-screen-label="Skills" style="position:relative; z-index:1; background:#15233F; border-top:5px solid #15233F; border-bottom:5px solid #15233F; margin-top:50px; padding:64px 24px 70px;">
+    <div style="max-width:1080px; margin:0 auto;">
+      <div data-reveal style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+        <span style="font-family:'Bangers',cursive; font-size:30px; letter-spacing:2px; color:#15233F; background:#FFD23F; border:3px solid #fff; border-radius:14px; box-shadow:4px 4px 0 rgba(255,255,255,.35); padding:6px 18px; transform:rotate(-2deg);">MI CAJA DE HERRAMIENTAS</span>
+      </div>
+      <p data-reveal style="font-size:17px; font-weight:600; color:#bcd3e8; max-width:560px; margin:0 0 34px;">Las tecnologías con las que construyo todos los días. Pásales el mouse y dales una pokeada. 👆</p>
+      <div style="display:flex; flex-direction:column; gap:30px;">
+        <sc-for list="{{ skillGroups }}" as="group" hint-placeholder-count="5">
+          <div data-reveal>
+            <div style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:17px; color:{{ group.color }}; margin-bottom:14px; display:flex; align-items:center; gap:10px;"><span style="width:13px; height:13px; border-radius:50%; background:{{ group.color }}; border:2px solid #fff;"></span>{{ group.title }}</div>
+            <div style="display:flex; gap:14px; flex-wrap:wrap;">
+              <sc-for list="{{ group.items }}" as="skill" hint-placeholder-count="5">
+                <div style="display:flex; flex-direction:column; align-items:center; gap:7px; width:88px;">
+                  <div style="display:grid; place-items:center; width:64px; height:64px; background:#fff; border:3px solid #15233F; border-radius:50%; box-shadow:0 5px 0 rgba(0,0,0,.25); animation:bobSmall 4s ease-in-out infinite; transition:transform .18s cubic-bezier(.34,1.56,.64,1);" style-hover="transform:translateY(-7px) scale(1.12) rotate(-6deg);">
+                    <sc-if value="{{ skill.icon }}" hint-placeholder-val="{{ true }}">
+                      <img src="{{ skill.icon }}" alt="{{ skill.name }}" style="width:36px; height:36px; object-fit:contain;">
+                    </sc-if>
+                    <sc-if value="{{ skill.noIcon }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-family:'Bangers',cursive; font-size:24px; color:#1E7FC2;">{{ skill.letter }}</span>
+                    </sc-if>
+                  </div>
+                  <span style="font-family:'Nunito',sans-serif; font-weight:700; font-size:12.5px; color:#dce9f5; text-align:center; line-height:1.1;">{{ skill.name }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCACION -->
+  <section id="educacion" data-screen-label="Educación" style="position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:66px 24px 50px;">
+    <div data-reveal style="display:flex; align-items:center; gap:14px; margin-bottom:30px;">
+      <span style="font-family:'Bangers',cursive; font-size:30px; letter-spacing:2px; color:#fff; background:#FF6F61; border:3px solid #15233F; border-radius:14px; box-shadow:4px 4px 0 #15233F; padding:6px 18px; transform:rotate(2deg);">EDUCACIÓN</span>
+      <div style="flex:1; height:6px; border-radius:6px; background:repeating-linear-gradient(90deg,#15233F 0 14px,transparent 14px 26px);"></div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:24px;">
+      <sc-for list="{{ education }}" as="ed" hint-placeholder-count="2">
+        <div data-reveal style="background:#fff; border:3px solid #15233F; border-radius:22px; box-shadow:7px 7px 0 #15233F; padding:24px 26px; transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s;" style-hover="transform:translate(-2px,-4px) rotate(.5deg); box-shadow:11px 13px 0 #15233F;">
+          <div style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:14px; color:#fff; background:#36BFF0; border:2px solid #15233F; border-radius:50px; padding:4px 13px; display:inline-block; box-shadow:2px 2px 0 #15233F; margin-bottom:12px;">{{ ed.years }}</div>
+          <h3 style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:18px; margin:0 0 6px; line-height:1.2;">{{ ed.area }}</h3>
+          <div style="font-size:15px; font-weight:700; color:#1E7FC2; margin-bottom:4px;">{{ ed.studyType }}</div>
+          <div style="font-size:14px; font-weight:600; color:#5a6477;">{{ ed.institution }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" data-screen-label="Contacto" style="position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:30px 24px 90px;">
+    <div data-reveal style="position:relative; background:#FFD23F; border:4px solid #15233F; border-radius:30px; box-shadow:10px 10px 0 #15233F; padding:52px 40px; text-align:center; overflow:hidden;">
+      <div style="position:absolute; top:-30px; right:-30px; width:140px; height:140px; border-radius:50%; background:#FF6F61; border:4px solid #15233F; opacity:.9;"></div>
+      <div style="position:absolute; bottom:-40px; left:-26px; width:110px; height:110px; border-radius:50%; background:#36BFF0; border:4px solid #15233F; opacity:.9;"></div>
+      <div style="position:relative; z-index:2;">
+        <h2 style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:clamp(34px,5vw,54px); margin:0 0 10px; color:#15233F; text-shadow:4px 4px 0 #fff;">¿Construimos algo juntos?</h2>
+        <p style="font-size:19px; font-weight:700; color:#3a4663; margin:0 auto 30px; max-width:480px;">Estoy abierto a nuevos proyectos y oportunidades. ¡Mándame un mensaje y le caemos!</p>
+        <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+          <a href="/cdn-cgi/l/email-protection#c0a7a1a2b2a9a5acb0a9aef2f1f2f180a7ada1a9aceea3afad" style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:18px; color:#fff; text-decoration:none; background:#FF6F61; border:3px solid #15233F; border-radius:15px; box-shadow:5px 5px 0 #15233F; padding:14px 26px; transition:transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s;" style-hover="transform:translate(-2px,-4px) rotate(-1deg); box-shadow:8px 11px 0 #15233F;" style-active="transform:translate(2px,2px); box-shadow:2px 2px 0 #15233F;">✉️ Escríbeme un correo</a>
+          <a href="https://github.com/Gapuccino" target="_blank" rel="noopener" style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:18px; color:#fff; text-decoration:none; background:#15233F; border:3px solid #15233F; border-radius:15px; box-shadow:5px 5px 0 rgba(21,35,63,.4); padding:14px 26px; transition:transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s;" style-hover="transform:translate(-2px,-4px) rotate(1deg);">🐙 Mi GitHub</a>
+        </div>
+        <div style="display:flex; gap:18px; flex-wrap:wrap; justify-content:center; margin-top:26px; font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; color:#15233F;">
+          <span>📞 +52 55 4307 4944</span>
+          <span>📍 Ciudad de México, MX</span>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center; font-family:'Fredoka',sans-serif; font-weight:600; font-size:14px; color:#5a6477; margin-top:30px;">Hecho con burbujas, squash & stretch y mucho café ☕ · {{ year }}</p>
+  </section>
+
+  <!-- MASCOT -->
+  <sc-if value="{{ showMascot }}" hint-placeholder-val="{{ true }}">
+    <div onClick="{{ jump }}" class="mascot-root" title="¡Pícame!" style="position:fixed; right:26px; bottom:26px; z-index:60; cursor:pointer; user-select:none;">
+      <div class="mascot-body" style="position:relative; width:74px; height:86px; background:#FFD23F; border:3px solid #15233F; border-radius:16px; box-shadow:4px 5px 0 rgba(21,35,63,.3); animation:bobSmall 2.8s ease-in-out infinite;">
+        <div style="position:absolute; top:11px; left:11px; width:9px; height:9px; border-radius:50%; background:#e9b933;"></div>
+        <div style="position:absolute; top:30px; left:24px; width:8px; height:8px; border-radius:50%; background:#e9b933;"></div>
+        <div style="position:absolute; top:18px; right:13px; width:11px; height:11px; border-radius:50%; background:#e9b933;"></div>
+        <div style="position:absolute; bottom:14px; left:16px; width:8px; height:8px; border-radius:50%; background:#e9b933;"></div>
+        <div style="position:absolute; top:16px; left:13px; display:flex; gap:5px;">
+          <div style="width:20px; height:22px; background:#fff; border:2.5px solid #15233F; border-radius:50%; display:grid; place-items:center; animation:blink 4.2s ease-in-out infinite;"><div class="mascot-pupil" style="width:8px; height:8px; border-radius:50%; background:#15233F;"></div></div>
+          <div style="width:20px; height:22px; background:#fff; border:2.5px solid #15233F; border-radius:50%; display:grid; place-items:center; animation:blink 4.2s ease-in-out infinite;"><div class="mascot-pupil" style="width:8px; height:8px; border-radius:50%; background:#15233F;"></div></div>
+        </div>
+        <div style="position:absolute; top:46px; left:50%; transform:translateX(-50%); width:24px; height:12px; border:2.5px solid #15233F; border-top:none; border-radius:0 0 14px 14px;"></div>
+        <div style="position:absolute; bottom:-9px; left:14px; width:12px; height:14px; background:#FFD23F; border:3px solid #15233F; border-radius:0 0 6px 6px;"></div>
+        <div style="position:absolute; bottom:-9px; right:14px; width:12px; height:14px; background:#FFD23F; border:3px solid #15233F; border-radius:0 0 6px 6px;"></div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 1200, &quot;height&quot;: 2400 },
+  &quot;greeting&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;¡Hola, soy! 👋&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;showMascot&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot; },
+  &quot;bubbleDensity&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 14, &quot;min&quot;: 0, &quot;max&quot;: 30, &quot;tsType&quot;: &quot;number&quot; }
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    // Reveal on scroll (set hidden via JS so no-JS still shows content)
+    const els = Array.from(document.querySelectorAll('[data-reveal]'));
+    els.forEach((el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(28px) scale(.92)';
+      el.style.willChange = 'transform, opacity';
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          el.style.animation = 'popReveal .6s cubic-bezier(.34,1.56,.64,1) forwards';
+          io.unobserve(el);
+        }
+      });
+    }, { threshold: 0.16 });
+    els.forEach((el) => io.observe(el));
+
+    // Mascot eyes follow cursor
+    this._onMove = (ev) => {
+      const pupils = document.querySelectorAll('.mascot-pupil');
+      if (!pupils.length) return;
+      pupils.forEach((pupil) => {
+        const eye = pupil.parentElement;
+        const r = eye.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const ang = Math.atan2(ev.clientY - cy, ev.clientX - cx);
+        const dist = 4;
+        pupil.style.transform = 'translate(' + Math.cos(ang) * dist + 'px,' + Math.sin(ang) * dist + 'px)';
+      });
+    };
+    window.addEventListener('mousemove', this._onMove);
+  }
+
+  componentWillUnmount() {
+    if (this._onMove) window.removeEventListener('mousemove', this._onMove);
+  }
+
+  renderVals() {
+    const count = Math.max(0, Math.min(40, this.props.bubbleDensity ?? 14));
+    const bubbles = [];
+    for (let i = 0; i < count; i++) {
+      bubbles.push({
+        left: ((i * 37 + 5) % 100) + '%',
+        size: (14 + ((i * 13) % 44)) + 'px',
+        dur: (9 + ((i * 7) % 11)) + 's',
+        delay: '-' + ((i * 1.7) % 12).toFixed(1) + 's',
+        op: (0.22 + ((i % 5) * 0.11)).toFixed(2),
+      });
+    }
+
+    const heroTags = [
+      { label: '⚛️ React', color: '#36BFF0', top: '4%', left: '-4%', rot: '-8deg', dur: '5.5s', delay: '0s' },
+      { label: '🚀 Astro', color: '#FF6F61', top: '0%', left: '64%', rot: '7deg', dur: '6s', delay: '-1s' },
+      { label: '🐍 Python', color: '#2FB86B', top: '46%', left: '88%', rot: '5deg', dur: '5s', delay: '-2s' },
+      { label: '🐘 Postgres', color: '#15233F', top: '84%', left: '70%', rot: '-5deg', dur: '6.5s', delay: '-1.5s' },
+      { label: '⚡ Next.js', color: '#1E7FC2', top: '80%', left: '-8%', rot: '6deg', dur: '5.8s', delay: '-3s' },
+    ];
+
+    const work = [
+      {
+        name: 'Echopoint', position: 'Desarrollador Fullstack', period: 'Abr 2026 — Actual', color: '#2FB86B',
+        summary: 'Desarrollo integral de una plataforma SaaS multi-tenant white-label para el sector financiero: broker, CRM a medida y landing de conversión.',
+        highlights: [
+          'SaaS multi-tenant white-label end-to-end para brokers con Next.js 14 (App Router) y Supabase',
+          'Aislamiento de datos por tenant con Row Level Security (RLS) en PostgreSQL',
+          'Arquitectura Feature-Driven (FDA) para escalar los módulos del CRM',
+        ],
+      },
+      {
+        name: 'Metro World News (Publimetro)', position: 'Desarrollador Web / Frontend', period: 'Sep 2025 — Mar 2026', color: '#36BFF0',
+        summary: 'Desarrollo de componentes y optimización de rendimiento web para 13 sitios de alto tráfico.',
+        highlights: [
+          'Custom Blocks en React 18 dentro de Arc XP',
+          'Optimización WPO para 13 sitios, mejorando LCP, TBT y CLS',
+          'Depuración técnica y documentación para entornos productivos',
+        ],
+      },
+      {
+        name: 'INEA CDMX', position: 'Desarrollador Frontend (Servicio Social)', period: 'Feb 2025 — Ago 2025', color: '#FF6F61',
+        summary: 'Desarrollo e implementación de interfaces responsivas y optimización de carga de contenido educativo.',
+        highlights: [
+          'Interfaces responsivas con React, HTML5 y CSS3',
+          'Integración con Strapi reduciendo 40% el tiempo de carga',
+          'Actividades ágiles y control de entregables',
+        ],
+      },
+    ];
+
+    const projects = [
+      {
+        name: 'Sistema de Fichajes de Fútbol', img: 'public/fichajes.webp', tint: '#BEE9FF',
+        description: 'App integral para la gestión del mercado de fichajes y seguimiento de jugadores ecuatorianos en el exterior.',
+        technologies: ['Astro', 'TypeScript', 'Tailwind', 'PostgreSQL', 'Drizzle', 'Lucia Auth'],
+        url: 'https://www.metroecuador.com.ec/deportes/fichajes/',
+      },
+      {
+        name: 'Publimetro Shortener', img: 'public/shortener/dash.webp', tint: '#FFE89B',
+        description: 'Acortador de URLs con dashboard administrativo y autenticación. Backend FastAPI desacoplado del frontend Astro.',
+        technologies: ['FastAPI', 'Python', 'Astro', 'SQLite'],
+        url: '',
+      },
+      {
+        name: 'Metro Push Notifications', img: '', placeholder: 'screenshot del dashboard', tint: '#FFD1CC',
+        description: 'App web para gestión y envío de notificaciones push con Firebase Cloud Messaging y Service Workers.',
+        technologies: ['Astro', 'React', 'Tailwind', 'Firebase', 'Framer Motion'],
+        url: '',
+      },
+      {
+        name: 'Plataforma educativa — INEA CDMX', img: 'public/inea.webp', tint: '#D6F5E3',
+        description: 'Plataforma educativa para más de 500 usuarios con módulos accesibles y diseño responsivo.',
+        technologies: ['React', 'HTML5', 'CSS3', 'Strapi'],
+        url: 'https://inea-web-frontend.vercel.app/',
+      },
+      {
+        name: 'Compraventa de inmuebles — UPIICSA', img: 'public/bienes.webp', tint: '#E3E0FF',
+        description: 'Sistema web académico para compraventa de inmuebles con backlog y sprints bajo metodología Scrum.',
+        technologies: ['Scrum', 'JavaScript', 'HTML5', 'CSS3'],
+        url: 'https://bienes-raices-five-olive.vercel.app/',
+      },
+      {
+        name: 'Festival de Música', img: 'public/festival.webp', tint: '#FFE0B2',
+        description: 'Sitio para un festival de música: artistas, horarios y compra de boletos en línea.',
+        technologies: ['Astro', 'JavaScript', 'CSS3'],
+        url: 'https://festivalms.vercel.app/',
+      },
+    ].map((p) => ({
+      ...p,
+      hasImg: !!p.img,
+      noImg: !p.img,
+      hasUrl: !!p.url,
+      noUrl: !p.url,
+    }));
+
+    const skillGroups = [
+      { title: 'Frontend', color: '#36BFF0', items: [
+        { name: 'React 18', icon: 'public/iconos/REACT.webp' },
+        { name: 'JavaScript', icon: 'public/iconos/JS.webp' },
+        { name: 'HTML5', icon: 'public/iconos/HTML.webp' },
+        { name: 'CSS3', icon: 'public/iconos/CSS.webp' },
+        { name: 'Astro', icon: 'public/iconos/ASTRO.webp' },
+        { name: 'Tailwind', icon: 'public/iconos/Tailwind.webp' },
+        { name: 'Bootstrap', icon: 'public/iconos/Bootstrap.webp' },
+        { name: 'jQuery', icon: 'public/iconos/JQUERY.webp' },
+      ]},
+      { title: 'Backend', color: '#2FB86B', items: [
+        { name: 'Python', icon: 'public/iconos/PYTHON.webp' },
+        { name: 'FastAPI', icon: 'public/iconos/Fatapi.webp' },
+        { name: 'REST APIs', icon: '', letter: 'API' },
+      ]},
+      { title: 'Bases de Datos', color: '#FFD23F', items: [
+        { name: 'PostgreSQL', icon: 'public/iconos/Postgresql.webp' },
+        { name: 'MySQL', icon: 'public/iconos/MYSQL.webp' },
+        { name: 'SQL Server', icon: 'public/iconos/SQLSERVER.webp' },
+        { name: 'SQLite', icon: 'public/iconos/Sqlite.webp' },
+      ]},
+      { title: 'CMS & Performance', color: '#FF6F61', items: [
+        { name: 'Arc XP', icon: 'public/iconos/ARCXP.webp' },
+        { name: 'Strapi', icon: 'public/iconos/STRAPI.webp' },
+        { name: 'Core Web Vitals', icon: 'public/iconos/CWV.webp' },
+        { name: 'Lighthouse', icon: 'public/iconos/Lighthouse.webp' },
+      ]},
+      { title: 'Herramientas & Métodos', color: '#BEE9FF', items: [
+        { name: 'Git', icon: 'public/iconos/GIT.webp' },
+        { name: 'GitHub', icon: 'public/iconos/GITHUB.webp' },
+        { name: 'VS Code', icon: 'public/iconos/visual-studio-code-icon.webp' },
+        { name: 'Linux', icon: 'public/iconos/UBUNTU-LINUX.webp' },
+        { name: 'Docker', icon: 'public/iconos/DOCKER.webp' },
+        { name: 'AWS', icon: 'public/iconos/AWS.webp' },
+        { name: 'Scrum', icon: 'public/iconos/Scrum.webp' },
+        { name: 'Kanban', icon: 'public/iconos/Kanban.webp' },
+      ]},
+    ].map((g) => ({
+      ...g,
+      items: g.items.map((s) => ({ ...s, noIcon: !s.icon, letter: s.letter || s.name.charAt(0) })),
+    }));
+
+    const education = [
+      { years: '2021 — 2025', area: 'Ciencias de la Informática', studyType: 'Licenciatura', institution: 'UPIICSA — Instituto Politécnico Nacional' },
+      { years: '2017 — 2020', area: 'Técnico en Informática', studyType: 'Técnico', institution: 'CECyT 12 José María Morelos — IPN' },
+    ];
+
+    const jump = () => {
+      const m = document.querySelector('.mascot-body');
+      if (!m) return;
+      m.animate([
+        { transform: 'translateY(0) scale(1,1)' },
+        { transform: 'translateY(-4px) scale(1.12,.86)' },
+        { transform: 'translateY(-46px) scale(.9,1.14)' },
+        { transform: 'translateY(0) scale(1.1,.9)' },
+        { transform: 'translateY(0) scale(1,1)' },
+      ], { duration: 620, easing: 'cubic-bezier(.34,1.56,.64,1)' });
+    };
+
+    return {
+      greeting: this.props.greeting ?? '¡Hola, soy! 👋',
+      showMascot: this.props.showMascot ?? true,
+      bubbles, heroTags, work, projects, skillGroups, education, jump,
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

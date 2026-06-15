@@ -1,735 +1,484 @@
 ---
-import GitHub from "@/icons/GitHub.astro";
-import Section from "../Section.astro";
 import cv from "@cv";
 
-interface Project {
+interface ProjectExt {
   name: string;
-  url?: string;
   description?: string;
-  highlights?: string[];
-  isActive?: boolean;
-  github?: string;
-  iframe?: string;
-  images?: string[];
+  url?: string;
   technologies?: string[];
+  images?: string[];
+  highlights?: string[];
   additionalLinks?: { label: string; url: string }[];
 }
 
-const list = ((cv as any).projects || []) as Project[];
-const total = list.length;
+const projects = ((cv as any).projects || []) as ProjectExt[];
 
-const PROJECT_IMAGES: Record<string, string> = {
-  "Publimetro Shortener": "/shortener/dash.webp",
-  "Sistema web de compraventa de inmuebles – UPIICSA": "/bienes.webp",
-  "Plataforma educativa web – INEA CDMX": "/inea.webp",
-  "Festival de Música": "/festival.webp",
-  "Portafolio Minimalista": "/portafolio.webp",
-  "Sistema de Fichajes de Fútbol": "/fichajes.webp",
-  "Metro Push Notifications": "/Noti.webp",
+/* Tint per project (order matches cv.json projects array) */
+const TINTS = ['#FFD1CC','#BEE9FF','#FFE89B','#D6F5E3','#E3E0FF','#FFE0B2','#F0F4FF'];
+
+/* Placeholder label when no image is available */
+const PLACEHOLDER: Record<string, string> = {
+  'Metro Push Notifications': 'Push dashboard — interno',
+  'Publimetro Shortener':     'Dashboard — proyecto interno',
 };
 ---
 
-<Section title="Proyectos">
-  <div class="reel-wrap" role="region" aria-label="Proyectos" aria-roledescription="carrusel">
+<section id="proyectos" class="projects" aria-label="Proyectos">
+  <div class="section-header" data-reveal>
+    <span class="section-badge" style="background:var(--yellow); color:var(--navy);">PROYECTOS</span>
+    <div class="section-line"></div>
+  </div>
 
-    <!-- Slide track -->
-    <div class="reel" id="projects-reel" aria-live="polite" aria-atomic="false">
-      {
-        list.map(({ url, description, name, isActive, github, iframe, images, technologies = [], additionalLinks }, i) => {
-          const cover = PROJECT_IMAGES[name];
-          const hasGallery = !!images && images.length > 0;
-          return (
-            <div
-              class:list={["reel__slide", i === 0 && "is-active", i === 0 && "is-entering"]}
-              data-index={i}
-              aria-hidden={i !== 0 ? "true" : "false"}
-              aria-roledescription="diapositiva"
-              aria-label={`${i + 1} de ${total}: ${name}`}
-            >
-              <article class="card">
-                <div class="card__thumb">
-                  {cover
-                    ? <img src={cover} alt={`Vista previa de ${name}`} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
-                    : <span class="thumb__fallback mono">{name}</span>
-                  }
-                </div>
-                <div class="card__body">
-                  <header class="card__header">
-                    <h3 class="card__title">
-                      <span>{name}</span>
-                      {isActive && <span class="live-dot" title="En activo" aria-hidden="true" />}
-                    </h3>
-                    {github && (
-                      <a class="ic" href={github} target="_blank" rel="noopener" title={`Código de ${name}`}>
-                        <GitHub />
-                      </a>
-                    )}
-                  </header>
-                  {description && <p class="desc">{description}</p>}
-                  {technologies.length > 0 && (
-                    <ul class="tech">
-                      {technologies.map((t) => <li class="mono">{t}</li>)}
-                    </ul>
-                  )}
-                  <div class="card__links">
-                    {url && (
-                      <a class="lnk" href={url} target="_blank" rel="noopener">
-                        Visitar sitio <span aria-hidden="true">↗</span>
-                      </a>
-                    )}
-                    {iframe && (
-                      <button class="lnk view-demo-btn" data-iframe={iframe} data-title={name}>
-                        Ver demo
-                      </button>
-                    )}
-                    {hasGallery && (
-                      <button class="lnk view-images-btn" data-images={JSON.stringify(images)} data-title={name}>
-                        Ver capturas
-                      </button>
-                    )}
-                    {additionalLinks?.map((link) => (
-                      <a class="lnk" href={link.url} target="_blank" rel="noopener">
-                        {link.label} <span aria-hidden="true">↗</span>
-                      </a>
-                    ))}
+  <div class="carousel-container">
+    <button class="carousel-btn prev-btn" aria-label="Proyecto anterior">
+      <!-- Left arrow -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="3.2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+
+    <div class="carousel-track" data-carousel-track>
+      {projects.map((p, i) => {
+        const img   = p.images?.[0];
+        const tint  = TINTS[i % TINTS.length];
+        const links = p.additionalLinks ?? [];
+        return (
+          <article class="project-card hover-lift">
+            <!-- Screenshot / Placeholder -->
+            <div class="card-thumb" style={`background:${tint};`}>
+              {img
+                ? <img src={img} alt={`Vista previa de ${p.name}`} loading="lazy" decoding="async" class="thumb-img" />
+                : (
+                  <div class="thumb-placeholder">
+                    <span class="placeholder-label">{PLACEHOLDER[p.name] ?? 'sin captura de pantalla'}</span>
                   </div>
-                </div>
-              </article>
+                )
+              }
             </div>
-          );
-        })
-      }
+
+            <!-- Content -->
+            <div class="card-body">
+              <h3 class="card-title">{p.name}</h3>
+              {p.description && <p class="card-desc">{p.description}</p>}
+
+              {p.technologies && p.technologies.length > 0 && (
+                <ul class="tech-tags" aria-label="Tecnologías usadas">
+                  {p.technologies.map((t) => (
+                    <li class="tech-tag">{t}</li>
+                  ))}
+                </ul>
+              )}
+
+              <div class="card-actions">
+                {p.url
+                  ? (
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="btn-cartoon btn-green"
+                      aria-label={`Ver sitio de ${p.name}`}
+                    >
+                      <!-- External link -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                      </svg>
+                      Ver sitio
+                    </a>
+                  )
+                  : (
+                    <span class="internal-badge">
+                      <!-- Lock -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0110 0v4"/>
+                      </svg>
+                      Proyecto interno
+                    </span>
+                  )
+                }
+                {links.map((lk) => (
+                  <a
+                    href={lk.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-cartoon btn-blue"
+                    aria-label={lk.label}
+                  >
+                    {lk.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </article>
+        );
+      })}
     </div>
 
-    <!-- Nav footer: prev | dots | counter | next -->
-    <div class="reel__nav">
-      <button class="reel__arrow" id="reel-prev" aria-label="Proyecto anterior">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-
-      <div class="reel__dots" role="tablist" aria-label="Seleccionar proyecto">
-        {
-          list.map((p, i) => (
-            <button
-              class:list={["reel__dot", i === 0 && "is-active"]}
-              data-goto={i}
-              role="tab"
-              aria-selected={i === 0 ? "true" : "false"}
-              aria-label={p.name}
-            />
-          ))
-        }
-      </div>
-
-      <div class="reel__counter" aria-live="polite" aria-atomic="true">
-        <span id="reel-current">01</span><span class="reel__sep" aria-hidden="true">/</span><span>{String(total).padStart(2, "0")}</span>
-      </div>
-
-      <button class="reel__arrow" id="reel-next" aria-label="Proyecto siguiente">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Timeline bar (Remotion-inspired playhead) -->
-    <div class="reel__timeline" aria-hidden="true">
-      <div class="reel__timeline-fill" id="reel-fill" style={`transform: scaleX(${1 / total})`}></div>
-    </div>
-
+    <button class="carousel-btn next-btn" aria-label="Siguiente proyecto">
+      <!-- Right arrow -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="3.2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
   </div>
-</Section>
 
-<!-- Modal -->
-<dialog id="project-modal" class="no-print">
-  <div class="modal">
-    <button id="close-modal-btn" type="button" aria-label="Cerrar">&times;</button>
-    <iframe id="modal-iframe" src="" title="Vista del proyecto"></iframe>
-    <div id="modal-gallery"></div>
+  <div class="carousel-dots" aria-hidden="true">
+    {projects.map((_, i) => (
+      <button class={`carousel-dot ${i === 0 ? 'active' : ''}`} data-index={i} aria-label={`Ir al proyecto ${i + 1}`}></button>
+    ))}
   </div>
-</dialog>
-
-<script is:inline>
-  function initCarousel() {
-    const reel = document.getElementById("projects-reel");
-    if (!reel) return;
-
-    const slides = Array.from(reel.querySelectorAll(".reel__slide"));
-    const prevBtn = document.getElementById("reel-prev");
-    const nextBtn = document.getElementById("reel-next");
-    const currentEl = document.getElementById("reel-current");
-    const fill = document.getElementById("reel-fill");
-    const dots = Array.from(document.querySelectorAll(".reel__dot"));
-    const total = slides.length;
-    const reelWrap = reel.closest(".reel-wrap");
-    let current = 0;
-    let busy = false;
-    const DURATION = 560;
-    const AUTOPLAY_DELAY = 5000;
-    let autoTimer = null;
-
-    function startAuto() {
-      if (autoTimer) clearInterval(autoTimer);
-      autoTimer = setInterval(() => goTo((current + 1) % total, 1), AUTOPLAY_DELAY);
-    }
-
-    function stopAuto() {
-      clearInterval(autoTimer);
-      autoTimer = null;
-    }
-
-    function goTo(idx, dir) {
-      const target = ((idx % total) + total) % total;
-      if (busy || target === current) return;
-      busy = true;
-
-      const outSlide = slides[current];
-      const inSlide = slides[target];
-
-      outSlide.classList.remove("is-active", "is-entering");
-      outSlide.classList.add(dir > 0 ? "is-exit-left" : "is-exit-right");
-      outSlide.setAttribute("aria-hidden", "true");
-
-      inSlide.style.setProperty("--slide-from", String(dir));
-      void inSlide.offsetHeight;
-      inSlide.classList.add("is-active", "is-entering");
-      inSlide.setAttribute("aria-hidden", "false");
-
-      dots[current]?.classList.remove("is-active");
-      dots[current]?.setAttribute("aria-selected", "false");
-      dots[target]?.classList.add("is-active");
-      dots[target]?.setAttribute("aria-selected", "true");
-
-      if (currentEl) currentEl.textContent = String(target + 1).padStart(2, "0");
-      if (fill) fill.style.transform = `scaleX(${(target + 1) / total})`;
-
-      current = target;
-
-      setTimeout(() => {
-        outSlide.classList.remove("is-exit-left", "is-exit-right");
-        inSlide.classList.remove("is-entering");
-        busy = false;
-      }, DURATION);
-    }
-
-    setTimeout(() => slides[0]?.classList.remove("is-entering"), 900);
-
-    prevBtn?.addEventListener("click", () => { stopAuto(); goTo(current - 1, -1); startAuto(); });
-    nextBtn?.addEventListener("click", () => { stopAuto(); goTo(current + 1, 1); startAuto(); });
-
-    dots.forEach((dot) => {
-      dot.addEventListener("click", () => {
-        const idx = parseInt(dot.dataset.goto ?? "0", 10);
-        stopAuto();
-        goTo(idx, idx > current ? 1 : -1);
-        startAuto();
-      });
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (!reel.closest("[role='region']")?.contains(document.activeElement) &&
-          document.activeElement !== document.body) return;
-      if (e.key === "ArrowLeft") { stopAuto(); goTo(current - 1, -1); startAuto(); }
-      if (e.key === "ArrowRight") { stopAuto(); goTo(current + 1, 1); startAuto(); }
-    });
-
-    let tx0 = 0;
-    reel.addEventListener("touchstart", (e) => { tx0 = e.touches[0].clientX; }, { passive: true });
-    reel.addEventListener("touchend", (e) => {
-      const dx = e.changedTouches[0].clientX - tx0;
-      if (Math.abs(dx) > 48) {
-        stopAuto();
-        if (dx < 0) goTo(current + 1, 1);
-        else goTo(current - 1, -1);
-        startAuto();
-      }
-    }, { passive: true });
-
-    if (reelWrap) {
-      reelWrap.addEventListener("mouseenter", stopAuto);
-      reelWrap.addEventListener("mouseleave", startAuto);
-      reelWrap.addEventListener("focusin", stopAuto);
-      reelWrap.addEventListener("focusout", startAuto);
-    }
-
-    startAuto();
-  }
-
-  function initProjectModal() {
-    const modal = document.getElementById("project-modal");
-    const iframe = document.getElementById("modal-iframe");
-    const gallery = document.getElementById("modal-gallery");
-    if (!modal || !iframe || !gallery) return;
-
-    const open = () => { modal.showModal(); document.body.style.overflow = "hidden"; };
-    const shut = () => {
-      modal.close();
-      iframe.src = "";
-      iframe.style.display = "none";
-      gallery.style.display = "none";
-      document.body.style.overflow = "";
-    };
-
-    document.querySelectorAll(".view-demo-btn").forEach((btn) => {
-      btn.onclick = (e) => {
-        e.preventDefault();
-        const u = btn.getAttribute("data-iframe");
-        if (!u) return;
-        gallery.style.display = "none";
-        iframe.style.display = "block";
-        iframe.src = u;
-        open();
-      };
-    });
-
-    document.querySelectorAll(".view-images-btn").forEach((btn) => {
-      btn.onclick = (e) => {
-        e.preventDefault();
-        const raw = btn.getAttribute("data-images");
-        if (!raw) return;
-        const imgs = JSON.parse(raw);
-        iframe.style.display = "none";
-        gallery.style.display = "flex";
-        gallery.innerHTML = imgs.map((img) => `<img src="${img}" alt="" loading="lazy" />`).join("");
-        open();
-      };
-    });
-
-    document.getElementById("close-modal-btn")?.addEventListener("click", shut);
-    modal.addEventListener("click", (e) => { if (e.target === modal) shut(); });
-  }
-
-  initCarousel();
-  initProjectModal();
-  document.addEventListener("astro:page-load", () => { initCarousel(); initProjectModal(); });
-</script>
+</section>
 
 <style>
-  /* ─── Wrapper ─── */
-  .reel-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
-  }
-
-  /* ─── Track ─── */
-  .reel {
+  .projects {
     position: relative;
-    overflow: hidden;
-    height: 300px;
+    z-index: 1;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: clamp(40px, 6vw, 64px) 24px;
   }
 
-  /* ─── Slides ─── */
-  .reel__slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(calc(var(--slide-from, 1) * 56px)) scale(0.975);
-    filter: blur(6px);
-    transition:
-      opacity 0.5s var(--ease-out),
-      transform 0.55s var(--ease-out),
-      filter 0.45s var(--ease-out);
-    will-change: transform, opacity, filter;
-  }
-
-  .reel__slide.is-active {
-    position: absolute;
-    inset: 0;
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(0) scale(1);
-    filter: blur(0);
-  }
-
-  .reel__slide.is-exit-left {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-56px) scale(0.975);
-    filter: blur(6px);
-    transition:
-      opacity 0.38s cubic-bezier(0.4, 0, 1, 1),
-      transform 0.38s cubic-bezier(0.4, 0, 1, 1),
-      filter 0.32s cubic-bezier(0.4, 0, 1, 1);
-  }
-
-  .reel__slide.is-exit-right {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(56px) scale(0.975);
-    filter: blur(6px);
-    transition:
-      opacity 0.38s cubic-bezier(0.4, 0, 1, 1),
-      transform 0.38s cubic-bezier(0.4, 0, 1, 1),
-      filter 0.32s cubic-bezier(0.4, 0, 1, 1);
-  }
-
-  /* ─── Card: 2-col on desktop ─── */
-  .card {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    overflow: hidden;
-    height: 100%;
-  }
-
-  @media (max-width: 600px) {
-    .reel { height: 480px; }
-    .card {
-      grid-template-columns: 1fr;
-      grid-template-rows: 200px 1fr;
+  @media (min-width: 681px) {
+    .projects {
+      padding: clamp(40px, 6vw, 64px) 80px;
     }
   }
 
-  /* ─── Thumb ─── */
-  .card__thumb {
+  .carousel-container {
     position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, var(--accent-tint), var(--bg-2));
+    width: 100%;
   }
 
-  .card__thumb img {
+  .carousel-track {
+    display: flex;
+    gap: 26px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding: 12px 10px 24px 10px; /* leaves room for shadows */
+    width: 100%;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Buttons */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--yellow);
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    color: var(--navy);
+    transition: transform .15s var(--ease-pop), box-shadow .15s, opacity .2s, background-color .15s;
+  }
+
+  .carousel-btn:hover:not(:disabled) {
+    transform: translateY(-50%) translateY(-3px) scale(1.06);
+    box-shadow: var(--shadow-sm);
+    background: var(--yellow-lt);
+  }
+
+  .carousel-btn:active:not(:disabled) {
+    transform: translateY(-50%) translateY(1px) scale(0.97);
+    box-shadow: 1px 1px 0 var(--navy);
+  }
+
+  .carousel-btn:disabled {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .prev-btn {
+    left: -64px;
+  }
+
+  .next-btn {
+    right: -64px;
+  }
+
+  /* Dots */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .carousel-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--navy);
+    cursor: pointer;
+    padding: 0;
+    transition: transform .15s var(--ease-pop), background-color .15s, box-shadow .15s;
+  }
+
+  .carousel-dot:hover {
+    transform: scale(1.18);
+    background: var(--yellow-lt);
+  }
+
+  .carousel-dot.active {
+    background: var(--yellow);
+    transform: scale(1.3);
+    box-shadow: 2px 2px 0 var(--navy);
+  }
+
+  /* Card */
+  .project-card {
+    flex: 0 0 calc(33.333% - 18px);
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* Thumbnail */
+  .card-thumb {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-bottom: var(--border);
+    overflow: hidden;
+  }
+
+  .thumb-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: top center;
     display: block;
   }
 
-  .thumb__fallback {
+  .thumb-placeholder {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1.5rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--accent-ink);
+    display: grid;
+    place-items: center;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(21, 35, 63, .1) 0 10px,
+      transparent 10px 20px
+    );
   }
 
-  /* ─── Body ─── */
-  .card__body {
-    padding: 1.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .card__header {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .card__title {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    font-size: 1.1rem;
+  .placeholder-label {
+    font-family: monospace;
+    font-size: 13px;
     font-weight: 700;
+    color: var(--navy);
+    background: #fff;
+    border: 2px dashed var(--navy);
+    border-radius: 10px;
+    padding: 8px 14px;
+    text-align: center;
+  }
+
+  /* Body */
+  .card-body {
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 10px;
+  }
+
+  .card-title {
+    font-family: var(--ff-title);
+    font-size: clamp(17px, 2vw, 21px);
+    font-weight: 700;
+    line-height: 1.1;
     margin: 0;
-    line-height: 1.25;
   }
 
-  .card__title > span:first-child { flex: 1; }
-
-  .live-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-    flex-shrink: 0;
-    box-shadow: 0 0 0 3px var(--accent-tint);
-    animation: pulse-dot 2.4s ease-in-out infinite;
-  }
-
-  @keyframes pulse-dot {
-    0%, 100% { box-shadow: 0 0 0 3px var(--accent-tint); }
-    50%       { box-shadow: 0 0 0 5px var(--accent-tint); }
-  }
-
-  .ic {
-    display: inline-flex;
-    color: var(--ink-3);
-    transition: color 0.18s var(--ease-out);
-    flex-shrink: 0;
-  }
-  .ic:hover { color: var(--ink); }
-  .ic :global(svg) { width: 18px; height: 18px; }
-
-  .desc {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: var(--ink-2);
-  }
-
-  .tech {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-  .tech li {
-    font-size: 0.7rem;
-    color: var(--ink-3);
-    background: var(--bg-2);
-    border: 1px solid var(--line);
-    padding: 0.2rem 0.5rem;
-    border-radius: 5px;
-  }
-
-  .card__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: auto;
-    padding-top: 0.5rem;
-  }
-
-  .lnk {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
+  .card-desc {
+    font-family: var(--ff-body);
+    font-size: 14px;
     font-weight: 600;
-    color: var(--accent-ink);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    transition: gap 0.18s var(--ease-out);
-  }
-  .lnk:hover {
-    gap: 0.55rem;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-  /* ─── Stagger entrance animations ─── */
-  .is-entering .card__thumb img {
-    animation: revealThumb 0.7s var(--ease-out) both;
-  }
-  .is-entering .card__header {
-    animation: fadeUp 0.5s 0.08s var(--ease-out) both;
-  }
-  .is-entering .desc {
-    animation: fadeUp 0.5s 0.16s var(--ease-out) both;
-  }
-  .is-entering .tech {
-    animation: fadeUp 0.5s 0.24s var(--ease-out) both;
-  }
-  .is-entering .card__links {
-    animation: fadeUp 0.5s 0.32s var(--ease-out) both;
-  }
-
-  @keyframes revealThumb {
-    from { opacity: 0; transform: scale(1.06); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ─── Nav bar ─── */
-  .reel__nav {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .reel__arrow {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: 1px solid var(--line);
-    background: var(--surface);
-    color: var(--ink-2);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition:
-      background 0.2s var(--ease-out),
-      border-color 0.2s var(--ease-out),
-      color 0.2s var(--ease-out),
-      transform 0.2s var(--ease-out);
-  }
-  .reel__arrow:hover:not(:disabled) {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-    transform: scale(1.1);
-  }
-  .reel__arrow:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-
-  /* ─── Dots ─── */
-  .reel__dots {
-    display: flex;
-    gap: 0.45rem;
-    align-items: center;
+    line-height: 1.5;
+    color: #3a4663;
     flex: 1;
   }
 
-  .reel__dot {
-    height: 6px;
-    width: 6px;
-    border-radius: 3px;
-    border: none;
-    background: var(--line-2);
-    cursor: pointer;
-    padding: 0;
-    transition:
-      background 0.28s var(--ease-out),
-      width 0.32s var(--ease-out),
-      transform 0.22s var(--ease-out);
-  }
-  .reel__dot.is-active {
-    background: var(--accent);
-    width: 22px;
-  }
-  .reel__dot:hover:not(.is-active) {
-    background: var(--ink-3);
-    transform: scaleY(1.5);
+  /* Tech tags */
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
-  /* ─── Counter ─── */
-  .reel__counter {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--ink-3);
-    letter-spacing: 0.06em;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .reel__sep { margin: 0 0.15em; opacity: 0.5; }
-
-  /* ─── Timeline (Remotion-style playhead) ─── */
-  .reel__timeline {
-    height: 2px;
-    background: var(--line);
-    border-radius: 1px;
-    overflow: hidden;
-  }
-  .reel__timeline-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 1px;
-    transform-origin: left;
-    transition: transform 0.52s var(--ease-out);
+  .tech-tag {
+    font-family: var(--ff-title);
+    font-weight: 600;
+    font-size: 12px;
+    background: #EAF6FF;
+    border: 2px solid var(--navy);
+    border-radius: var(--radius-pill);
+    padding: 3px 10px;
+    line-height: 1.4;
   }
 
-  /* ─── Reduced motion ─── */
-  @media (prefers-reduced-motion: reduce) {
-    .reel__slide,
-    .reel__slide.is-exit-left,
-    .reel__slide.is-exit-right {
-      transition: opacity 0.15s linear !important;
-      transform: none !important;
-      filter: none !important;
-    }
-    .is-entering .card__thumb img,
-    .is-entering .card__header,
-    .is-entering .desc,
-    .is-entering .tech,
-    .is-entering .card__links {
-      animation: none !important;
-    }
-    .reel__timeline-fill {
-      transition: transform 0.15s linear !important;
-    }
-    .live-dot {
-      animation: none !important;
+  /* Actions */
+  .card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .btn-green { background: var(--green); color: #fff; font-size: 14px; padding: 8px 16px; }
+  .btn-blue  { background: var(--blue);  color: var(--navy); font-size: 14px; padding: 8px 16px; }
+
+  .internal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--ff-title);
+    font-weight: 600;
+    font-size: 13px;
+    color: #7a8499;
+    background: #f0f2f6;
+    border: 2px dashed #aeb6c6;
+    border-radius: 12px;
+    padding: 7px 14px;
+  }
+
+  /* Responsive breakpoints */
+  @media (max-width: 991px) {
+    .project-card {
+      flex: 0 0 calc(50% - 13px);
+      scroll-snap-align: start;
     }
   }
 
-  /* ─── Modal ─── */
-  dialog {
-    padding: 0;
-    border: none;
-    background: transparent;
-    max-width: min(94vw, 960px);
-    width: 100%;
-  }
-  dialog::backdrop {
-    background: oklch(0.99 0.005 50 / 0.72);
-    backdrop-filter: blur(10px);
-  }
-  .modal {
-    position: relative;
-    background: var(--surface);
-    border: 1px solid var(--line-2);
-    border-radius: 16px;
-    padding: 1rem;
-    box-shadow: 0 30px 70px oklch(0.2 0.02 45 / 0.22);
-  }
-  #close-modal-btn {
-    position: absolute;
-    top: -14px;
-    right: -14px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    border: 2px solid var(--surface);
-    font-size: 1.3rem;
-    line-height: 1;
-    cursor: pointer;
-    z-index: 2;
-    box-shadow: 0 6px 16px oklch(0.2 0.02 45 / 0.25);
-    transition: transform 0.18s var(--ease-out);
-  }
-  #close-modal-btn:hover { transform: scale(1.08); }
-  #modal-iframe {
-    display: none;
-    width: 100%;
-    height: 70vh;
-    border: none;
-    border-radius: 10px;
-  }
-  #modal-gallery {
-    display: none;
-    flex-direction: column;
-    gap: 1rem;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  #modal-gallery :global(img) {
-    width: 100%;
-    border-radius: 10px;
-    border: 1px solid var(--line);
-  }
-
-  /* ─── Print ─── */
-  @media print {
-    .reel__nav,
-    .reel__timeline,
-    dialog {
-      display: none;
+  @media (max-width: 680px) {
+    .carousel-btn {
+      display: none; /* On smaller devices, touch swipe gesture is standard and sufficient */
     }
-    .reel__slide {
-      position: static !important;
-      opacity: 1 !important;
-      transform: none !important;
-      filter: none !important;
+    .carousel-track {
+      gap: 20px;
     }
-    .reel__slide:not(.is-active) {
-      display: none;
+    .project-card {
+      flex: 0 0 100%;
     }
   }
 </style>
+
+<script>
+  const initCarousel = () => {
+    const track = document.querySelector('[data-carousel-track]') as HTMLElement | null;
+    const prevBtn = document.querySelector('.prev-btn') as HTMLButtonElement | null;
+    const nextBtn = document.querySelector('.next-btn') as HTMLButtonElement | null;
+    const dots = Array.from(document.querySelectorAll('.carousel-dot')) as HTMLButtonElement[];
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const getCardWidth = () => {
+      const card = track.firstElementChild as HTMLElement | null;
+      if (!card) return 0;
+      const cardWidth = card.getBoundingClientRect().width;
+      const trackStyle = window.getComputedStyle(track);
+      const gap = parseFloat(trackStyle.gap) || 0;
+      return cardWidth + gap;
+    };
+
+    const updateCarouselState = () => {
+      const scrollLeft = track.scrollLeft;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      
+      // Infinite mode: buttons are never disabled
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+
+      // Update active dot indicators
+      const cardWidth = getCardWidth();
+      if (cardWidth > 0) {
+        const activeIndex = Math.round(scrollLeft / cardWidth);
+        const maxVisibleDots = Math.round(maxScroll / cardWidth) + 1;
+
+        dots.forEach((dot, idx) => {
+          // Hide redundant dots that scroll past maxScroll
+          if (idx >= maxVisibleDots) {
+            dot.style.display = 'none';
+          } else {
+            dot.style.display = '';
+          }
+
+          if (idx === activeIndex) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+    };
+
+    prevBtn.addEventListener('click', () => {
+      const cardWidth = getCardWidth();
+      const scrollLeft = track.scrollLeft;
+      if (scrollLeft <= 15) {
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        track.scrollTo({ left: maxScroll, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const cardWidth = getCardWidth();
+      const scrollLeft = track.scrollLeft;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (scrollLeft >= maxScroll - 15) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: cardWidth, behavior: 'smooth' });
+      }
+    });
+
+    // Listeners for manual scrolling/swiping
+    track.addEventListener('scroll', updateCarouselState, { passive: true });
+    window.addEventListener('resize', updateCarouselState, { passive: true });
+
+    // Initial state
+    updateCarouselState();
+
+    // Dot navigation
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const index = parseInt(dot.getAttribute('data-index') || '0', 10);
+        const cardWidth = getCardWidth();
+        track.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+      });
+    });
+  };
+
+  // Run on startup
+  initCarousel();
+</script>

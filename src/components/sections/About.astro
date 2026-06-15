@@ -1,20 +1,143 @@
 ---
-import Section from "../Section.astro"
+import cv from "@cv";
 
-import { basics } from "@cv"
-const { summary } = basics
+const { summary, location } = cv.basics;
+const { city } = location;
+const { languages, education } = cv;
+
+const edu = education[0];
+const eduLabel = edu ? `${edu.studyType} en ${edu.area}` : '';
+
+const langsLabel = (languages ?? [])
+  .map((l) => {
+    const fluency = l.fluency && l.fluency !== 'Nativo' ? ` (${l.fluency})` : '';
+    return `${l.language}${fluency}`;
+  })
+  .join(' · ');
 ---
 
-<Section title="Sobre mí">
-  <p class="lead">{summary}</p>
-</Section>
+<section id="sobremi" class="about" aria-label="Sobre mí">
+  <div class="section-header" data-reveal>
+    <span class="section-badge" style="background:var(--green); color:#fff;">SOBRE MÍ</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="speech-bubble" data-reveal>
+    <p class="bubble-text">{summary}</p>
+
+    <div class="chips">
+      <span class="chip chip--yellow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        {city}, MX
+      </span>
+
+      {eduLabel && (
+        <span class="chip chip--blue">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+          {eduLabel}
+        </span>
+      )}
+
+      {langsLabel && (
+        <span class="chip chip--coral">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/>
+          </svg>
+          {langsLabel}
+        </span>
+      )}
+    </div>
+  </div>
+</section>
 
 <style>
-  .lead {
-    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
-    line-height: 1.6;
-    color: var(--ink);
-    max-width: var(--measure);
-    font-weight: 400;
+  .about {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(48px, 8vw, 72px) 24px clamp(36px, 6vw, 56px);
   }
+
+  .speech-bubble {
+    position: relative;
+    background: #fff;
+    border: var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: clamp(22px, 4vw, 34px) clamp(20px, 4vw, 36px) 28px;
+    margin-bottom: 32px;
+  }
+
+  /* Tail — outer navy border */
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    left: 54px;
+    bottom: -23px;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-top: 24px solid var(--navy);
+  }
+
+  /* Tail — inner white fill */
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    left: 58px;
+    bottom: -14px;
+    width: 0;
+    height: 0;
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-top: 17px solid #fff;
+  }
+
+  .bubble-text {
+    font-family: var(--ff-body);
+    font-size: clamp(15px, 1.9vw, 19px);
+    font-weight: 600;
+    line-height: 1.65;
+    color: #28354f;
+    margin-bottom: 22px;
+  }
+
+  .chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--ff-title);
+    font-weight: 600;
+    font-size: 14px;
+    border: 2px solid var(--navy);
+    border-radius: var(--radius-pill);
+    padding: 7px 15px;
+    line-height: 1;
+  }
+
+  .chip--yellow { background: var(--yellow-lt); }
+  .chip--blue   { background: #BEE9FF; }
+  .chip--coral  { background: #FFD1CC; }
 </style>
