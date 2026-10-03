@@ -6,7 +6,7 @@
     "email": "gabrielpin2121@gmail.com",
     "phone": "+52 55 4307 4944",
     "url": "",
-    "summary": "Desarrollador Web y Licenciado en Ciencias de la Informática, especializado en la construcción de interfaces modernas y optimizadas. Experiencia en el desarrollo de componentes escalables, mantenimiento de sitios de alto tráfico y mejora de rendimiento (Core Web Vitals). Competente en la integración de Frontend con lógica de Backend y manejo de CMS empresariales. Enfocado en la capacidad de análisis, calidad de código y buenas prácticas.",
+    "summary": "Desarrollador Web y Pasante en Ciencias de la Informática, especializado en la construcción de interfaces modernas y optimizadas. Experiencia en el desarrollo de componentes escalables, mantenimiento de sitios de alto tráfico y mejora de rendimiento (Core Web Vitals). Competente en la integración de Frontend con lógica de Backend y manejo de CMS empresariales. Enfocado en la capacidad de análisis, calidad de código y buenas prácticas.",
     "location": {
       "city": "Ciudad de México",
       "countryCode": "MX",
@@ -22,11 +22,25 @@
   },
   "work": [
     {
+      "name": "INBI School of English",
+      "position": "Desarrollador de Software",
+      "url": "https://www.inbi.mx/",
+      "startDate": "2026-09-03",
+      "endDate": null,
+      "summary": "Desarrollo y mantenimiento evolutivo del ERP interno institucional para la gestión académica, control escolar y administración operativa.",
+      "highlights": [
+        "Desarrollo y mantenimiento de módulos clave del ERP para control escolar, matrículas y gestión académica",
+        "Optimización de consultas y base de datos para asegurar el rendimiento, consistencia e integridad de la información institucional",
+        "Implementación de funcionalidades y mejoras de UI para agilizar los flujos operativos de personal administrativo y docente",
+        "Automatización de procesos internos y generación de reportes para reducir tiempos de gestión operativa"
+      ]
+    },
+    {
       "name": "Echopoint",
       "position": "Desarrollador Fullstack",
       "url": "https://echopoint-intsolutions.com/",
       "startDate": "2026-04-15",
-      "endDate": null,
+      "endDate": "2026-07-15 (Proyecto)",
       "summary": "Desarrollo integral de una plataforma SaaS multi-tenant white-label para el sector financiero: broker, CRM a medida y landing de conversión.",
       "highlights": [
         "Desarrollo end-to-end de un SaaS multi-tenant white-label para brokers con Next.js 14 (App Router) y Supabase",

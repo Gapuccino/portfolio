@@ -25,7 +25,11 @@ const METRO_SITES = [
       work.map(
         ({ name, startDate, endDate, position, summary, highlights, url }) => {
           const startYear = new Date(startDate).getFullYear();
-          const isCurrent = endDate == null;
+          const isCurrent =
+            endDate == null ||
+            endDate === "" ||
+            (typeof endDate === "string" &&
+              endDate.trim().toLowerCase() === "actual");
           const endYear = isCurrent
             ? "Actual"
             : new Date(endDate).getFullYear();
@@ -84,7 +88,9 @@ const METRO_SITES = [
             <li>
               <a href={site.url} target="_blank" rel="noopener noreferrer">
                 <span class="mono">
-                  {site.url.replace(/^https?:\/\/(www\.)?/, "").replace("/", "")}
+                  {site.url
+                    .replace(/^https?:\/\/(www\.)?/, "")
+                    .replace("/", "")}
                 </span>
               </a>
             </li>
@@ -164,15 +170,6 @@ const METRO_SITES = [
     align-items: center;
     gap: 0.6rem;
     flex-wrap: wrap;
-  }
-
-  .is-current .org::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-    flex-shrink: 0;
   }
 
   .link {

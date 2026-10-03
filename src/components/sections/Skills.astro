@@ -120,21 +120,13 @@ const groups = ((cv as any).skills || []) as SkillGroup[];
     background: var(--surface);
     border: 1px solid var(--line-2);
     padding: 0.35rem 0.7rem;
-    border-radius: 7px;
-    transition:
-      border-color 0.18s var(--ease-out),
-      color 0.18s var(--ease-out),
-      transform 0.18s var(--ease-out);
+    border-radius: 4px;
+    cursor: default;
   }
   .skill-icon {
     width: 1.2em;
     height: 1.2em;
     object-fit: contain;
-  }
-  .tag:hover {
-    border-color: var(--accent);
-    color: var(--accent-ink);
-    transform: translateY(-2px);
   }
 
   @media (width <= 640px) {
